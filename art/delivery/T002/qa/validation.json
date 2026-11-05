@@ -1,0 +1,15 @@
+{
+  "assets": 216,
+  "requirements": 22,
+  "transparent_pngs": 200,
+  "ground_tiles": 16,
+  "all_tile_pairs_seam_checked": 256,
+  "sRGB_embedded": true,
+  "file_size_limit_mb": 20,
+  "all_checks_passed": true,
+  "not_runtime_verified": [
+    "Godot skeleton joint assembly and 10px joint occlusion",
+    "Phaser/Godot integration by programmer",
+    "Art director approval of proportion, texture weight, and fire loop cadence"
+  ]
+}

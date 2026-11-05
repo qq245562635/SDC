@@ -1,0 +1,32 @@
+{
+  "id": "lubu_poses",
+  "req": "C06",
+  "category": "char",
+  "subject": "lubu",
+  "cols": 4,
+  "rows": 2,
+  "parts": [
+    "sweep",
+    "thrust",
+    "charge",
+    "backswing",
+    "smash",
+    "summon",
+    "broken",
+    "down"
+  ],
+  "heights": [
+    560,
+    560,
+    560,
+    560,
+    560,
+    560,
+    560,
+    560
+  ],
+  "ref": "key_art_01.png",
+  "transparent": true,
+  "prompt": "STYLE: 2D hand-drawn action comic game art, Chinese ink-wash inspired, bold dark-brown ink outlines (#2B1D16), flat colors with one hard cel-shadow tone, subtle rice-paper texture, slightly chibi proportions (head-to-body 1:3), strong readable silhouettes, ink splatter accents, top-left light source, top-down three-quarter view at 45 degrees, Late Eastern Han dynasty China setting, original designs, suitable for a top-down action roguelike.\nLu Bu with dark iron and bronze armor, red cloak, two pheasant feather plumes, crescent halberd. Eight full-body combat key poses: wide horizontal sweep, straight thrust, charging forward on crimson horse, turning horseback backswing; furious overhead halberd ground smash, commanding summoning gesture, staggered guard-broken, fallen defeated. Horse only for charge and backswing. Original design consistent with reference.\nDelivery layout: 4 columns x 2 rows. Every cell contains exactly its stated object, optically centered with at least 10% transparent padding. Objects never cross cell boundaries. Use uniform logical cell dimensions. No visible grid, borders or labels. True transparent PNG except ground tiles which must be opaque. Keep rice-paper grain inside painted shapes only; completely transparent empty space, no paper backdrop or matte. Original designs only, no imitation, no watermark or logo. Reference image is a style and identity guide; preserve design language while making only the requested new asset. Target production game sprites, fixed top-left light.\nAbsolutely no ground platforms, dirt patches or cast ground shadows under figures. Transparent everywhere beyond body, equipment and horse.",
+  "saved_source": "art/delivery/T002/sources/lubu_poses.png"
+}
