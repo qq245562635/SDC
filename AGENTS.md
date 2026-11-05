@@ -10,7 +10,7 @@
 | 主程 | Claude 2 号 | 写代码实现 | `prototype/`、`game/`（Godot 工程）、`tools/` |
 | 主美 | Codex | 出图 | `art/`（`art/prompts/` 除外） |
 
-不要改别人目录下的文件；需要改时在 PR 或任务里提给对应角色。
+不要改别人目录下的文件；需要改时在 PR 或任务里提给对应角色。只以自己的角色发言：验收评论和任务板只由主策写，别的代理不要代写。
 
 对接主美：
 - 主通道是任务板加 PR。主美在 Codex 应用里按 `docs/tasks/` 领任务干活。
@@ -41,5 +41,5 @@
 
 - 代码：原型用 Phaser 3（WebGL）；正式版用 Godot 4 + GDScript。数值以 `docs/02-系统详细策划案-v0.1.md` 为准，任务文档里另写的以任务为准。
 - 美术：每条提示词前拼接 `docs/01-总策划案.md` 的“风格总纲 STYLE”；PNG 透明底（场景大图除外）；命名 `类别_名称_部件_序号.png`；按 `art/char`、`art/env`、`art/prop`、`art/ui`、`art/icon`、`art/vfx` 分类；规格见 `docs/03-Demo美术需求清单.md`。不模仿已有游戏、动画或画师，不出文字、水印、Logo。
-- 精灵：概念图更新后，主程运行 `python3 tools/extract_sprites.py` 重新切图到 `prototype/webgl/assets/`。
+- 美术同步：`art/` 有更新并合并后，主程运行 `python3 tools/sync_art.py`，按 `art/delivery/*/assets.json` 缩放复制到 `prototype/webgl/assets/art/`。不要手改 `assets/art/`。
 - 文字精简，少写套话，节省 token。
