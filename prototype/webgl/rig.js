@@ -8,11 +8,13 @@
 // 骨骼静止位置全部由数据算出，不做手调；动作只叠加相对静止姿势的偏移。单位：1080p 显示像素、弧度。
 // 角色朝右；rot 为正 = 顺时针：手臂/腿往后摆，身体往前倾。
 // 腿的 rot 相对地面：身体前倾时腿自动抵消身体转角，脚不跟着甩（clip.free = true 时不抵消，例如翻滚）。
+// 拆件的腿是按站姿画的（近侧腿迈开）。轨道 legs.straight = 1 时按 sync_art 量出的倾角 ax 把两条腿先摆竖直，再叠步态，
+// 这样走、跑时两腿对称；待机、出手保持原站姿（= 0）。它和其他轨道一样参与交叉过渡。
 (() => {
 'use strict';
 const ART = window.ART, RIGS = window.RIGS;
 const ATTACH = { head: 'neck', arm_l: 'shoulder_l', arm_r: 'shoulder_r', leg_l: 'hip_l', leg_r: 'hip_r' };
-const DEF = { x: 0, y: 0, rot: 0, sx: 1, sy: 1 };
+const DEF = { x: 0, y: 0, rot: 0, sx: 1, sy: 1, straight: 0 };
 const TAU = Math.PI * 2;
 const wrap = a => a - TAU * Math.round(a / TAU);
 
@@ -30,6 +32,8 @@ function skeleton(c) {
   bones.weapon = { parent: 'arm_r', rest: rel(P.arm_r.hand, P.arm_r.j), part: P.weapon, pivot: P.weapon.grip };
   // 背饰按 rest_position 跟身体走
   if (P.back) bones.back = { parent: 'body', rest: rel(P.back.r, b.r), part: P.back, pivot: P.back.j };
+  // 腿摆竖直后比站姿长，身体抬高这么多，脚才落在地面上
+  bones.body.lift = Math.max(...['leg_l', 'leg_r'].map(l => P[l].ln * (1 - Math.cos(P[l].ax))));
   return bones;
 }
 
@@ -55,6 +59,7 @@ function gait({ len, leg, arm, armR = arm, bob, lean = 0, weapon = 0 }) {
     'arm_l.rot': [[0, arm], [h, -arm], [len, arm]],
     'arm_r.rot': [[0, -armR], [h, armR], [len, -armR]],
     'weapon.rot': [[0, weapon], [len, weapon]],
+    'legs.straight': [[0, 1], [len, 1]],
     'body.y': [[0, 0], [q, -bob], [h, 0], [h + q, -bob], [len, 0]],
     'body.rot': [[0, lean], [len, lean]],
     'head.rot': [[0, -lean * 0.6], [len, -lean * 0.6]],
@@ -90,7 +95,23 @@ const down = () => clip(0.6, false, {
 // 主角：刀在近侧（后侧）手里。动作长度 = 游戏里的出手时长，命中帧对齐 hitAt
 const HERO = {
   idle: idle(),
-  run: gait({ len: 0.5, leg: 0.6, arm: 0.7, armR: 0.5, bob: 4, lean: 0.12 }),
+  // 跑：参照 C01 跑步关键姿势——身体明显前倾、大步、远侧拳前后猛摆、刀手收在身前。
+  // 腿只有一段，往前收腿时纵向压短（sy）假装屈膝；身体在两脚交叉时最高
+  run: clip(0.5, true, {
+    'legs.straight': [[0, 1], [0.5, 1]],
+    'leg_l.rot': [[0, -0.9], [0.25, 0.8], [0.5, -0.9]],
+    'leg_r.rot': [[0, 0.8], [0.25, -0.9], [0.5, 0.8]],
+    'leg_l.sy': [[0, 1], [0.125, 1], [0.375, 0.78], [0.5, 1]],
+    'leg_r.sy': [[0, 1], [0.125, 0.78], [0.25, 1], [0.5, 1]],
+    'arm_l.rot': [[0, 0.75], [0.25, -1.35], [0.5, 0.75]],
+    'arm_r.rot': [[0, -1.05], [0.25, -0.35], [0.5, -1.05]],
+    'weapon.rot': [[0, 0.35], [0.25, 0.15], [0.5, 0.35]],
+    'body.rot': [[0, 0.3], [0.125, 0.26], [0.25, 0.3], [0.375, 0.26], [0.5, 0.3]],
+    'body.y': [[0, 2], [0.125, -5], [0.25, 2], [0.375, -5], [0.5, 2]],
+    'root.x': [[0, 4], [0.5, 4]],
+    'head.rot': [[0, -0.18], [0.125, -0.14], [0.25, -0.18], [0.375, -0.14], [0.5, -0.18]],
+    'back.rot': [[0, 0], [0.125, -0.05], [0.25, 0], [0.375, -0.05], [0.5, 0]],
+  }),
   // 一段：从后上方横劈到前方（命中 0.07）
   attack1: clip(0.22, false, {
     'arm_r.rot': [[0, 1.3], [0.07, -1.7], [0.22, -1.3]],
@@ -290,12 +311,12 @@ class RigSprite extends Phaser.GameObjects.Container {
   }
   play(name, o) { this.anim.play(name, o); return this; }
   tick(dt) {
-    const p = this.anim.advance(dt), counter = this.anim.clip.free ? 0 : (p['body.rot'] || 0);
+    const p = this.anim.advance(dt), counter = this.anim.clip.free ? 0 : (p['body.rot'] || 0), straight = p['legs.straight'] || 0;
     for (const [name, b] of Object.entries(this.bones)) {
       const n = this.nodes[name], v = (prop) => p[`${name}.${prop}`];
       const x = v('x'), y = v('y'), r = v('rot'), sx = v('sx'), sy = v('sy');
-      n.setPosition(b.rest[0] + (x || 0), b.rest[1] + (y || 0));
-      n.setRotation((r || 0) - (b.leg ? counter : 0));
+      n.setPosition(b.rest[0] + (x || 0), b.rest[1] + (y || 0) - (b.lift || 0) * straight);
+      n.setRotation((r || 0) + (b.leg ? b.part.ax * straight - counter : 0));
       n.setScale(sx === undefined ? 1 : sx, sy === undefined ? 1 : sy);
     }
     return this;
