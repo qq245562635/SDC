@@ -1,0 +1,25 @@
+{
+  "checks": [
+    {
+      "file": "art/char/char_baoju_idle_01.png",
+      "rgba": true,
+      "transparent": true,
+      "visible_silhouette_not_clipped": true,
+      "bytes": 84336
+    },
+    {
+      "file": "art/char/char_baoju_walk_01.png",
+      "rgba": true,
+      "transparent": true,
+      "visible_silhouette_not_clipped": true,
+      "bytes": 85366
+    },
+    {
+      "file": "art/char/char_baoju_loaded_01.png",
+      "rgba": true,
+      "transparent": true,
+      "visible_silhouette_not_clipped": true,
+      "bytes": 97391
+    }
+  ]
+}

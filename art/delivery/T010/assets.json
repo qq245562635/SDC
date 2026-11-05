@@ -1,0 +1,93 @@
+{
+  "task": "T010",
+  "generator": "built-in imagegen",
+  "base_commit": "2b33845b655c9e402005e755b339db44566be34b",
+  "units": "pixels at 2x display scale",
+  "notes": [
+    "Three state key poses; walk is a pose reference, not a seamless animation loop.",
+    "Shared canvas, source scale and ground-plane anchor [192, 300]. Mirror for left facing.",
+    "Visible silhouette bounds use alpha >= 32; generated antialiased alpha is preserved.",
+    "Size and anchor are proposed art delivery choices: detailed T010 specs are not yet in docs/03.",
+    "No runtime files changed. Programmer must extend sync_art.py to read T010/assets.json."
+  ],
+  "assets": [
+    {
+      "file": "art/char/char_baoju_idle_01.png",
+      "requirement": "T010",
+      "role": "sprite",
+      "state": "idle",
+      "size_px": [
+        384,
+        320
+      ],
+      "display_scale": 0.5,
+      "origin_normalized": [
+        0.5,
+        0.9375
+      ],
+      "content_bbox": [
+        78,
+        33,
+        353,
+        302
+      ],
+      "content_bbox_alpha_threshold": 32,
+      "facing": "right",
+      "mirror_x": true,
+      "source": "art/delivery/T010/sources/char_baoju_idle_01.png",
+      "sha256": "f0e92e1ef2ccc5900857023a684cb96359d80242ab20d42326c587c2a53f0a44"
+    },
+    {
+      "file": "art/char/char_baoju_walk_01.png",
+      "requirement": "T010",
+      "role": "pose_reference",
+      "state": "walk",
+      "size_px": [
+        384,
+        320
+      ],
+      "display_scale": 0.5,
+      "origin_normalized": [
+        0.5,
+        0.9375
+      ],
+      "content_bbox": [
+        68,
+        35,
+        353,
+        298
+      ],
+      "content_bbox_alpha_threshold": 32,
+      "facing": "right",
+      "mirror_x": true,
+      "source": "art/delivery/T010/sources/char_baoju_walk_01.png",
+      "sha256": "0a836edf76bfb9660fc36d03c6bb549c30b47c966f1d8298ac596a308a19fbf0"
+    },
+    {
+      "file": "art/char/char_baoju_loaded_01.png",
+      "requirement": "T010",
+      "role": "sprite",
+      "state": "loaded",
+      "size_px": [
+        384,
+        320
+      ],
+      "display_scale": 0.5,
+      "origin_normalized": [
+        0.5,
+        0.9375
+      ],
+      "content_bbox": [
+        77,
+        32,
+        353,
+        303
+      ],
+      "content_bbox_alpha_threshold": 32,
+      "facing": "right",
+      "mirror_x": true,
+      "source": "art/delivery/T010/sources/char_baoju_loaded_01.png",
+      "sha256": "c0df1011f260022bb12c8e9e1801065688b03c81bc874cefac36a748fd3125ca"
+    }
+  ]
+}
