@@ -1,0 +1,278 @@
+{
+  "task": "T012",
+  "measure": "Existing sync_art.leg_axis alpha>128 farthest 15% estimator, source pixel units",
+  "width_note": "Visible leg width is fitted as a matching pair; canvas and vertical extent are held constant. Old stride silhouette width is not a straight-leg width.",
+  "results": [
+    {
+      "file": "art/char/char_hero_leg_l_01.png",
+      "old_axis_degrees": 12.6495,
+      "new_axis_degrees": -0.0054,
+      "old_oblique_radial_length_source_px": 58.9273,
+      "new_radial_length_source_px": 59.0958,
+      "old_canvas_size": [
+        60,
+        81
+      ],
+      "new_canvas_size": [
+        60,
+        81
+      ],
+      "visible_leg_width_px": 35,
+      "hip_pivot_unchanged": true,
+      "z_unchanged": true,
+      "sole_core_height_range_source_px": 0,
+      "registration": {
+        "left": 5.005619834710744,
+        "top": 4.0,
+        "resized_size": [
+          35,
+          73
+        ]
+      }
+    },
+    {
+      "file": "art/char/char_hero_leg_r_01.png",
+      "old_axis_degrees": -10.9862,
+      "new_axis_degrees": 0.0145,
+      "old_oblique_radial_length_source_px": 68.2182,
+      "new_radial_length_source_px": 68.246,
+      "old_canvas_size": [
+        46,
+        91
+      ],
+      "new_canvas_size": [
+        46,
+        91
+      ],
+      "visible_leg_width_px": 36,
+      "hip_pivot_unchanged": true,
+      "z_unchanged": true,
+      "sole_core_height_range_source_px": 0,
+      "registration": {
+        "left": 7.443440860215052,
+        "top": 4.0,
+        "resized_size": [
+          36,
+          83
+        ]
+      }
+    },
+    {
+      "file": "art/char/char_soldier_blue_leg_l_01.png",
+      "old_axis_degrees": 29.911,
+      "new_axis_degrees": 0.0009,
+      "old_oblique_radial_length_source_px": 60.0549,
+      "new_radial_length_source_px": 53.0351,
+      "old_canvas_size": [
+        68,
+        75
+      ],
+      "new_canvas_size": [
+        68,
+        75
+      ],
+      "visible_leg_width_px": 39,
+      "hip_pivot_unchanged": true,
+      "z_unchanged": true,
+      "sole_core_height_range_source_px": 0,
+      "registration": {
+        "left": 2.251501831501831,
+        "top": 4.0,
+        "resized_size": [
+          39,
+          67
+        ]
+      }
+    },
+    {
+      "file": "art/char/char_soldier_blue_leg_r_01.png",
+      "old_axis_degrees": -53.95,
+      "new_axis_degrees": 0.013,
+      "old_oblique_radial_length_source_px": 90.5203,
+      "new_radial_length_source_px": 56.946,
+      "old_canvas_size": [
+        124,
+        79
+      ],
+      "new_canvas_size": [
+        124,
+        79
+      ],
+      "visible_leg_width_px": 40,
+      "hip_pivot_unchanged": true,
+      "z_unchanged": true,
+      "sole_core_height_range_source_px": 0,
+      "registration": {
+        "left": 66.79035460992908,
+        "top": 4.0,
+        "resized_size": [
+          40,
+          71
+        ]
+      }
+    },
+    {
+      "file": "art/char/char_soldier_yellow_leg_l_01.png",
+      "old_axis_degrees": 29.911,
+      "new_axis_degrees": 0.0009,
+      "old_oblique_radial_length_source_px": 60.0549,
+      "new_radial_length_source_px": 53.0351,
+      "old_canvas_size": [
+        68,
+        75
+      ],
+      "new_canvas_size": [
+        68,
+        75
+      ],
+      "visible_leg_width_px": 39,
+      "hip_pivot_unchanged": true,
+      "z_unchanged": true,
+      "sole_core_height_range_source_px": 0,
+      "registration": {
+        "left": 2.251501831501831,
+        "top": 4.0,
+        "resized_size": [
+          39,
+          67
+        ]
+      }
+    },
+    {
+      "file": "art/char/char_soldier_yellow_leg_r_01.png",
+      "old_axis_degrees": -53.95,
+      "new_axis_degrees": 0.013,
+      "old_oblique_radial_length_source_px": 90.5203,
+      "new_radial_length_source_px": 56.946,
+      "old_canvas_size": [
+        124,
+        79
+      ],
+      "new_canvas_size": [
+        124,
+        79
+      ],
+      "visible_leg_width_px": 40,
+      "hip_pivot_unchanged": true,
+      "z_unchanged": true,
+      "sole_core_height_range_source_px": 0,
+      "registration": {
+        "left": 66.79035460992908,
+        "top": 4.0,
+        "resized_size": [
+          40,
+          71
+        ]
+      }
+    },
+    {
+      "file": "art/char/char_soldier_red_leg_l_01.png",
+      "old_axis_degrees": 29.911,
+      "new_axis_degrees": 0.0009,
+      "old_oblique_radial_length_source_px": 60.0549,
+      "new_radial_length_source_px": 53.0351,
+      "old_canvas_size": [
+        68,
+        75
+      ],
+      "new_canvas_size": [
+        68,
+        75
+      ],
+      "visible_leg_width_px": 39,
+      "hip_pivot_unchanged": true,
+      "z_unchanged": true,
+      "sole_core_height_range_source_px": 0,
+      "registration": {
+        "left": 2.251501831501831,
+        "top": 4.0,
+        "resized_size": [
+          39,
+          67
+        ]
+      }
+    },
+    {
+      "file": "art/char/char_soldier_red_leg_r_01.png",
+      "old_axis_degrees": -53.95,
+      "new_axis_degrees": 0.013,
+      "old_oblique_radial_length_source_px": 90.5203,
+      "new_radial_length_source_px": 56.946,
+      "old_canvas_size": [
+        124,
+        79
+      ],
+      "new_canvas_size": [
+        124,
+        79
+      ],
+      "visible_leg_width_px": 40,
+      "hip_pivot_unchanged": true,
+      "z_unchanged": true,
+      "sole_core_height_range_source_px": 0,
+      "registration": {
+        "left": 66.79035460992908,
+        "top": 4.0,
+        "resized_size": [
+          40,
+          71
+        ]
+      }
+    },
+    {
+      "file": "art/char/char_archer_leg_l_01.png",
+      "old_axis_degrees": 6.2501,
+      "new_axis_degrees": 0.1728,
+      "old_oblique_radial_length_source_px": 53.5301,
+      "new_radial_length_source_px": 54.7123,
+      "old_canvas_size": [
+        44,
+        77
+      ],
+      "new_canvas_size": [
+        44,
+        77
+      ],
+      "visible_leg_width_px": 31,
+      "hip_pivot_unchanged": true,
+      "z_unchanged": true,
+      "sole_core_height_range_source_px": 0,
+      "registration": {
+        "left": 2.5006161137440737,
+        "top": 4.0,
+        "resized_size": [
+          31,
+          69
+        ]
+      }
+    },
+    {
+      "file": "art/char/char_archer_leg_r_01.png",
+      "old_axis_degrees": -34.3934,
+      "new_axis_degrees": -0.0041,
+      "old_oblique_radial_length_source_px": 75.2652,
+      "new_radial_length_source_px": 65.7608,
+      "old_canvas_size": [
+        77,
+        90
+      ],
+      "new_canvas_size": [
+        77,
+        90
+      ],
+      "visible_leg_width_px": 32,
+      "hip_pivot_unchanged": true,
+      "z_unchanged": true,
+      "sole_core_height_range_source_px": 0,
+      "registration": {
+        "left": 40.33426229508197,
+        "top": 4.0,
+        "resized_size": [
+          32,
+          82
+        ]
+      }
+    }
+  ],
+  "runtime_confirmation": "Pending programmer rig.html walk/run check."
+}

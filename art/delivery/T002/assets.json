@@ -278,13 +278,13 @@
         0.1799077922077922
       ],
       "content_bbox": [
+        3,
         4,
-        4,
-        40,
+        34,
         73
       ],
-      "source": "art/delivery/T004/sources/archer_hidden_parts.png",
-      "sha256": "e1c8dc44e19837ad5d7ea6f02d8499182e1d15bf38efac025ebe51784882d293",
+      "source": "art/delivery/T012/sources/archer_leg_l_crop.png",
+      "sha256": "682c2acdc393c4ca866cee43bd2d70c08a8660dbd77cffc6c431adb4fe63d097",
       "overlap_target_px": 10,
       "character": "archer",
       "part": "leg_l",
@@ -297,14 +297,7 @@
         38.45,
         -72.1471
       ],
-      "reference_rect": [
-        207,
-        200,
-        288,
-        283
-      ],
-      "visible_source": "art/char/char_archer_idle_01.png",
-      "method": "Complete AI-repainted side cutout; measured anatomical pivots and fitted rest transforms. No baked-in neighboring limbs or weapon pixels."
+      "method": "T012 matched trousers and boots; neutral vertical leg, horizontal sole; resampled into unchanged canvas and translated around unchanged hip pivot. No baked stride rotation."
     },
     {
       "file": "art/char/char_archer_leg_r_01.png",
@@ -320,13 +313,13 @@
         0.16503222222222222
       ],
       "content_bbox": [
+        40,
         4,
-        4,
-        73,
+        72,
         86
       ],
-      "source": "art/delivery/T004/sources/archer_hidden_parts.png",
-      "sha256": "a5b3f1994c36634a85801841ebdd107e5b710a6fbc0f5af0de9f19813e67f660",
+      "source": "art/delivery/T012/sources/archer_leg_r_crop.png",
+      "sha256": "561108b1dd8d2908255e64bd24e7261b2b00797d9f7a8a97f3191669db53250f",
       "overlap_target_px": 10,
       "character": "archer",
       "part": "leg_r",
@@ -339,14 +332,7 @@
         -10.3,
         -72.1471
       ],
-      "reference_rect": [
-        149,
-        203,
-        215,
-        294
-      ],
-      "visible_source": "art/char/char_archer_idle_01.png",
-      "method": "Complete AI-repainted side cutout; measured anatomical pivots and fitted rest transforms. No baked-in neighboring limbs or weapon pixels."
+      "method": "T012 matched trousers and boots; neutral vertical leg, horizontal sole; resampled into unchanged canvas and translated around unchanged hip pivot. No baked stride rotation."
     },
     {
       "file": "art/char/char_archer_weapon_01.png",
@@ -2237,13 +2223,13 @@
         0.1633
       ],
       "content_bbox": [
+        5,
         4,
-        4,
-        56,
+        40,
         77
       ],
-      "source": "art/delivery/T004/sources/hero_hidden_parts.png",
-      "sha256": "1f7b8cbab73a085118d68e85ee9b5ed8ef38e606bdf2f4c0f6dc7e4a017f7a58",
+      "source": "art/delivery/T012/sources/hero_leg_l_crop.png",
+      "sha256": "c220acac8df4c363e02df48226050d9329530522bdc1cc7b971bb07a3c7cad93",
       "overlap_target_px": 10,
       "character": "hero",
       "part": "leg_l",
@@ -2256,14 +2242,7 @@
         46.32,
         -72.7727
       ],
-      "reference_rect": [
-        221,
-        188,
-        293,
-        282
-      ],
-      "visible_source": "art/char/char_hero_idle_01.png",
-      "method": "Complete AI-repainted side cutout; measured anatomical pivots and fitted rest transforms. No baked-in neighboring limbs or weapon pixels."
+      "method": "T012 matched trousers and boots; neutral vertical leg, horizontal sole; resampled into unchanged canvas and translated around unchanged hip pivot. No baked stride rotation."
     },
     {
       "file": "art/char/char_hero_leg_r_01.png",
@@ -2279,13 +2258,13 @@
         0.14691978021978022
       ],
       "content_bbox": [
+        7,
         4,
-        4,
-        42,
+        43,
         87
       ],
-      "source": "art/delivery/T004/sources/hero_hidden_parts.png",
-      "sha256": "87621aacef539cc7eb87437822b15e3486fccf1ab86290f26e2f109189b6bc30",
+      "source": "art/delivery/T012/sources/hero_leg_r_crop.png",
+      "sha256": "db94aa511ef4cf072cf02b8ede33e846cea0a375c15c046b789606a6530d0ee4",
       "overlap_target_px": 10,
       "character": "hero",
       "part": "leg_r",
@@ -2298,14 +2277,7 @@
         -14.48,
         -75.6303
       ],
-      "reference_rect": [
-        164,
-        193,
-        238,
-        294
-      ],
-      "visible_source": "art/char/char_hero_idle_01.png",
-      "method": "Complete AI-repainted side cutout; measured anatomical pivots and fitted rest transforms. No baked-in neighboring limbs or weapon pixels."
+      "method": "T012 matched trousers and boots; neutral vertical leg, horizontal sole; resampled into unchanged canvas and translated around unchanged hip pivot. No baked stride rotation."
     },
     {
       "file": "art/char/char_hero_weapon_01.png",
@@ -5924,13 +5896,13 @@
         0.18436533333333335
       ],
       "content_bbox": [
+        2,
         4,
-        4,
-        64,
+        41,
         71
       ],
-      "source": "art/delivery/T004/sources/soldier_hidden_parts.png",
-      "sha256": "d9e1d121814bb97e91541d0fce44bd36d8c074c30f5107b4dc9e70ebe40ea5b8",
+      "source": "art/delivery/T012/sources/soldier_blue_leg_l_crop.png",
+      "sha256": "1734afe6d24a46b1034ea91f12c75cbe89464f4a5f5c164b3ed60e50e82c8d2d",
       "overlap_target_px": 10,
       "character": "soldier_blue",
       "part": "leg_l",
@@ -5943,14 +5915,7 @@
         22.72,
         -64.1726
       ],
-      "reference_rect": [
-        208,
-        198,
-        271,
-        282
-      ],
-      "visible_source": "art/char/char_soldier_blue_idle_01.png",
-      "method": "Complete AI-repainted side cutout; measured anatomical pivots and fitted rest transforms. No baked-in neighboring limbs or weapon pixels."
+      "method": "T012 matched trousers and boots; neutral vertical leg, horizontal sole; resampled into unchanged canvas and translated around unchanged hip pivot. No baked stride rotation."
     },
     {
       "file": "art/char/char_soldier_blue_leg_r_01.png",
@@ -5966,13 +5931,13 @@
         0.1709341772151899
       ],
       "content_bbox": [
+        67,
         4,
-        4,
-        120,
+        107,
         75
       ],
-      "source": "art/delivery/T004/sources/soldier_hidden_parts.png",
-      "sha256": "99747984d337b00804cfa3c4e356983d38f57a52274f2dad8b31e5d6a6969bea",
+      "source": "art/delivery/T012/sources/soldier_blue_leg_r_crop.png",
+      "sha256": "bda41dc314fa3cfb94ba97eb33f8b6268f4d3ea36bce71e14cfae1a4469d773e",
       "overlap_target_px": 10,
       "character": "soldier_blue",
       "part": "leg_r",
@@ -5985,14 +5950,7 @@
         -39.92,
         -64.4962
       ],
-      "reference_rect": [
-        99,
-        208,
-        187,
-        292
-      ],
-      "visible_source": "art/char/char_soldier_blue_idle_01.png",
-      "method": "Complete AI-repainted side cutout; measured anatomical pivots and fitted rest transforms. No baked-in neighboring limbs or weapon pixels."
+      "method": "T012 matched trousers and boots; neutral vertical leg, horizontal sole; resampled into unchanged canvas and translated around unchanged hip pivot. No baked stride rotation."
     },
     {
       "file": "art/char/char_soldier_blue_weapon_01.png",
@@ -6252,13 +6210,13 @@
         0.18436533333333335
       ],
       "content_bbox": [
+        2,
         4,
-        4,
-        64,
+        41,
         71
       ],
-      "source": "art/delivery/T004/sources/soldier_hidden_parts.png",
-      "sha256": "d9e1d121814bb97e91541d0fce44bd36d8c074c30f5107b4dc9e70ebe40ea5b8",
+      "source": "art/delivery/T012/sources/soldier_blue_leg_l_crop.png",
+      "sha256": "1734afe6d24a46b1034ea91f12c75cbe89464f4a5f5c164b3ed60e50e82c8d2d",
       "overlap_target_px": 10,
       "character": "soldier_yellow",
       "part": "leg_l",
@@ -6271,14 +6229,7 @@
         22.72,
         -63.1726
       ],
-      "reference_rect": [
-        208,
-        199,
-        271,
-        282
-      ],
-      "visible_source": "art/char/char_soldier_yellow_idle_01.png",
-      "method": "Complete AI-repainted side cutout; measured anatomical pivots and fitted rest transforms. No baked-in neighboring limbs or weapon pixels."
+      "method": "T012 matched trousers and boots; neutral vertical leg, horizontal sole; resampled into unchanged canvas and translated around unchanged hip pivot. No baked stride rotation."
     },
     {
       "file": "art/char/char_soldier_yellow_leg_r_01.png",
@@ -6294,13 +6245,13 @@
         0.1709341772151899
       ],
       "content_bbox": [
+        67,
         4,
-        4,
-        120,
+        107,
         75
       ],
-      "source": "art/delivery/T004/sources/soldier_hidden_parts.png",
-      "sha256": "99747984d337b00804cfa3c4e356983d38f57a52274f2dad8b31e5d6a6969bea",
+      "source": "art/delivery/T012/sources/soldier_blue_leg_r_crop.png",
+      "sha256": "bda41dc314fa3cfb94ba97eb33f8b6268f4d3ea36bce71e14cfae1a4469d773e",
       "overlap_target_px": 10,
       "character": "soldier_yellow",
       "part": "leg_r",
@@ -6313,14 +6264,7 @@
         -39.92,
         -63.4962
       ],
-      "reference_rect": [
-        98,
-        208,
-        187,
-        293
-      ],
-      "visible_source": "art/char/char_soldier_yellow_idle_01.png",
-      "method": "Complete AI-repainted side cutout; measured anatomical pivots and fitted rest transforms. No baked-in neighboring limbs or weapon pixels."
+      "method": "T012 matched trousers and boots; neutral vertical leg, horizontal sole; resampled into unchanged canvas and translated around unchanged hip pivot. No baked stride rotation."
     },
     {
       "file": "art/char/char_soldier_yellow_weapon_01.png",
@@ -6580,13 +6524,13 @@
         0.18436533333333335
       ],
       "content_bbox": [
+        2,
         4,
-        4,
-        64,
+        41,
         71
       ],
-      "source": "art/delivery/T004/sources/soldier_hidden_parts.png",
-      "sha256": "d9e1d121814bb97e91541d0fce44bd36d8c074c30f5107b4dc9e70ebe40ea5b8",
+      "source": "art/delivery/T012/sources/soldier_blue_leg_l_crop.png",
+      "sha256": "1734afe6d24a46b1034ea91f12c75cbe89464f4a5f5c164b3ed60e50e82c8d2d",
       "overlap_target_px": 10,
       "character": "soldier_red",
       "part": "leg_l",
@@ -6599,14 +6543,7 @@
         22.72,
         -63.1726
       ],
-      "reference_rect": [
-        208,
-        198,
-        272,
-        282
-      ],
-      "visible_source": "art/char/char_soldier_red_idle_01.png",
-      "method": "Complete AI-repainted side cutout; measured anatomical pivots and fitted rest transforms. No baked-in neighboring limbs or weapon pixels."
+      "method": "T012 matched trousers and boots; neutral vertical leg, horizontal sole; resampled into unchanged canvas and translated around unchanged hip pivot. No baked stride rotation."
     },
     {
       "file": "art/char/char_soldier_red_leg_r_01.png",
@@ -6622,13 +6559,13 @@
         0.1709341772151899
       ],
       "content_bbox": [
+        67,
         4,
-        4,
-        120,
+        107,
         75
       ],
-      "source": "art/delivery/T004/sources/soldier_hidden_parts.png",
-      "sha256": "99747984d337b00804cfa3c4e356983d38f57a52274f2dad8b31e5d6a6969bea",
+      "source": "art/delivery/T012/sources/soldier_blue_leg_r_crop.png",
+      "sha256": "bda41dc314fa3cfb94ba97eb33f8b6268f4d3ea36bce71e14cfae1a4469d773e",
       "overlap_target_px": 10,
       "character": "soldier_red",
       "part": "leg_r",
@@ -6641,14 +6578,7 @@
         -39.92,
         -63.4962
       ],
-      "reference_rect": [
-        99,
-        208,
-        187,
-        293
-      ],
-      "visible_source": "art/char/char_soldier_red_idle_01.png",
-      "method": "Complete AI-repainted side cutout; measured anatomical pivots and fitted rest transforms. No baked-in neighboring limbs or weapon pixels."
+      "method": "T012 matched trousers and boots; neutral vertical leg, horizontal sole; resampled into unchanged canvas and translated around unchanged hip pivot. No baked stride rotation."
     },
     {
       "file": "art/char/char_soldier_red_weapon_01.png",
