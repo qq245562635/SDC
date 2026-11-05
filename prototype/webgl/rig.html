@@ -15,24 +15,23 @@
 <script src="https://cdn.jsdelivr.net/npm/phaser@3.80.1/dist/phaser.min.js"></script>
 <script src="assets/art/manifest.js"></script>
 <script>
-// T003 拼装验证：用 C01 / C02 拆件按 assets.json 的 joint_pivot_hint 拼站姿，加摆臂。
-// 交付只给了各部件自己的关节点，没给部件之间的挂点，下面 RIG 里的挂点是程序按包围盒估的。
+// T004 拼装验证：只用 assets.json 的 joint_pivot / attach / hand / grip / z / rest_position，不做任何手调。
+// 层级：脚底 → 身体（静止位置）→ 头、四肢挂在身体 attach 上 → 武器 grip 挂在近侧臂 hand 上；背饰按 rest_position 跟身体走。
 (() => {
 'use strict';
-const W = 1280, H = 720, S = 1.6; // S：相对 1080p 显示尺寸放大，方便看接缝
+const W = 1280, H = 720;
 const FONT = '"Noto Serif SC","Source Han Serif SC","SimSun",serif';
-const ART = window.ART;
-const PARTS = ['back', 'leg_l', 'leg_r', 'arm_l', 'body', 'head', 'weapon', 'arm_r'];
+const ART = window.ART, RIGS = window.RIGS;
+const LIMBS = { head: 'neck', arm_l: 'shoulder_l', arm_r: 'shoulder_r', leg_l: 'hip_l', leg_r: 'hip_r' };
 const LUBU = ['front', 'side', 'backview', 'sweep', 'thrust', 'charge', 'backswing', 'smash', 'summon', 'broken', 'down'];
-
-// 内容包围盒（显示像素，相对图片左上）
-const box = k => { const m = ART[k]; return { x0: m.b[0], y0: m.b[1], x1: m.b[2], y1: m.b[3], w: m.b[2] - m.b[0], h: m.b[3] - m.b[1] }; };
+const BIG = [['hero', '主角 C01'], ['soldier_blue', '联军兵 C02 蓝'], ['archer', '弓手 C03']];
+const SMALL = [['soldier_yellow', 'C02 黄'], ['soldier_red', 'C02 红']];
 
 class Rig extends Phaser.Scene {
   constructor() { super('rig'); }
   preload() {
-    for (const c of ['hero', 'soldier_blue']) {
-      PARTS.filter(p => ART[`${c}_${p}`]).forEach(p => this.load.image(`${c}_${p}`, `assets/art/${c}_${p}.png`));
+    for (const c of Object.keys(RIGS)) {
+      RIGS[c].parts.forEach(k => this.load.image(k, `assets/art/${k}.png`));
       this.load.image(`${c}_idle`, `assets/art/${c}_idle.png`);
     }
     LUBU.forEach(p => this.load.image(`lubu_${p}`, `assets/art/lubu_${p}.png`));
@@ -40,86 +39,101 @@ class Rig extends Phaser.Scene {
 
   create() {
     this.add.rectangle(0, 0, W, H, 0xD9C9A3).setOrigin(0);
-    this.showJoints = true; this.swing = true; this.mirror = false;
-    this.rigs = [this.build('hero', 230, 330, '主角 C01'), this.build('soldier_blue', 700, 330, '联军兵 C02')];
-    // 对照：同尺寸的待机关键姿势
-    [['hero_idle', 430], ['soldier_blue_idle', 900]].forEach(([k, x]) => {
-      const m = ART[k];
-      this.add.image(x, 330, k).setOrigin(m.o[0], m.o[1]).setScale(S);
-      this.add.text(x, 350, '待机姿势图（对照）', { fontFamily: FONT, fontSize: '15px', color: '#2B1D16' }).setOrigin(0.5, 0);
-    });
-    // 吕布：只验证素材能显示
+    this.showJoints = true; this.swing = true; this.mirror = false; this.gripErr = 0;
+    this.labels = []; this.rigs = []; this.refs = [];
+    BIG.forEach(([c, name], i) => this.pair(c, name, 120 + i * 420, 360, 1.6));
+    SMALL.forEach(([c, name], i) => this.pair(c, name, 80 + i * 220, 640, 1));
     LUBU.forEach((p, i) => {
-      const k = `lubu_${p}`, m = ART[k], x = 70 + i * 114;
-      this.add.image(x, 640, k).setOrigin(m.o[0], m.o[1]).setScale(0.38);
-      this.add.text(x, 648, p, { fontFamily: FONT, fontSize: '12px', color: '#2B1D16' }).setOrigin(0.5, 0);
+      const k = `lubu_${p}`, m = ART[k], x = 500 + i * 72;
+      this.labels.push(this.add.image(x, 640, k).setOrigin(m.o[0], m.o[1]).setScale(0.26));
+      this.labels.push(this.add.text(x, 646, p, { fontFamily: FONT, fontSize: '11px', color: '#2B1D16' }).setOrigin(0.5, 0));
     });
-    this.add.text(20, 470, '吕布 C06 关键姿势（缩小显示）', { fontFamily: FONT, fontSize: '15px', color: '#6E4526' });
-    this.add.text(20, 14, 'T003 拆件拼装调试　　空格 摆臂开关　J 关节点开关　M 镜像', { fontFamily: FONT, fontSize: '18px', color: '#2B1D16' });
+    this.labels.push(this.add.text(20, 14, 'T004 拆件拼装（只读 assets.json，无手调）　空格 摆动　J 关节点　M 镜像　O 叠图', { fontFamily: FONT, fontSize: '18px', color: '#2B1D16' }));
+    this.info = this.add.text(20, 40, '', { fontFamily: FONT, fontSize: '14px', color: '#6E4526' });
+    this.labels.push(this.info);
     this.input.keyboard.on('keydown-SPACE', () => { this.swing = !this.swing; });
     this.input.keyboard.on('keydown-J', () => { this.showJoints = !this.showJoints; });
-    this.input.keyboard.on('keydown-M', () => { this.mirror = !this.mirror; this.rigs.forEach(r => r.root.setScale(this.mirror ? -1 : 1, 1)); });
+    this.input.keyboard.on('keydown-M', () => { this.mirror = !this.mirror; this.rigs.forEach(r => r.root.setScale(this.mirror ? -r.s : r.s, r.s)); });
+    this.input.keyboard.on('keydown-O', () => { this.refs.forEach(o => o.setVisible(!o.visible)); });
     this.dots = this.add.graphics().setDepth(100);
     window.__rig = this;
   }
 
-  // 部件：按关节点做原点，返回 Image
-  part(c, p) {
-    const k = `${c}_${p}`, m = ART[k];
-    if (!m) return this.add.container(0, 0); // 缺件（联军兵没有背饰）
-    return this.add.image(0, 0, k).setOrigin(m.p[0], m.p[1]);
+  // 左：拆件拼装；右：拼装上叠半透明待机姿势图
+  pair(c, name, x, y, s) {
+    const dx = 190 * s / 1.6, fs = s > 1 ? '16px' : '12px';
+    this.rigs.push(this.build(c, x, y, s), this.build(c, x + dx, y, s));
+    const m = ART[`${c}_idle`];
+    this.refs.push(this.add.image(x + dx, y, `${c}_idle`).setOrigin(m.o[0], m.o[1]).setScale(s).setAlpha(0.45).setDepth(50));
+    this.labels.push(this.add.text(x, y + 8, name, { fontFamily: FONT, fontSize: fs, color: '#2B1D16' }).setOrigin(0.5, 0));
+    this.labels.push(this.add.text(x + dx, y + 8, '叠待机图', { fontFamily: FONT, fontSize: fs, color: '#2B1D16' }).setOrigin(0.5, 0));
   }
 
-  // 挂点按包围盒估：腿顶在髋，身体底在髋，头底在身体顶，手臂顶在肩，武器握把在手
-  build(c, x, y, label) {
-    const root = this.add.container(x, y).setScale(1);
-    const g = this.add.container(0, 0).setScale(S);
-    root.add(g);
-    const leg = box(`${c}_leg_l`), body = box(`${c}_body`), arm = box(`${c}_arm_r`);
-    const ov = 5; // 10px（2 倍图）重叠 = 显示 5px
-    const legLen = leg.h * (1 - 0.15) - ov;
-    const hipY = -legLen;
-    const bodyTop = hipY - body.h * 0.85 + ov;
-    const shoulderY = bodyTop + body.h * 0.22;
-    const shoulderX = body.w * 0.42;
-    const r = {
-      c, root, g,
-      back: this.part(c, 'back').setPosition(-body.w * 0.12, bodyTop + body.h * 0.62),
-      leg_l: this.part(c, 'leg_l').setPosition(-body.w * 0.18, hipY),
-      leg_r: this.part(c, 'leg_r').setPosition(body.w * 0.18, hipY),
-      body: this.part(c, 'body').setPosition(0, hipY + ov),
-      head: this.part(c, 'head').setPosition(0, bodyTop + ov),
-      armL: this.add.container(-shoulderX, shoulderY),
-      armR: this.add.container(shoulderX, shoulderY),
-    };
-    r.armL.add(this.part(c, 'arm_l'));
-    const armLen = arm.h * 0.7;
-    r.weapon = this.part(c, 'weapon').setPosition(0, armLen).setAngle(-20);
-    r.armR.add([r.weapon, this.part(c, 'arm_r')]);
-    // 前后顺序：背饰、远侧腿、近侧腿、远侧臂、身体、头、武器、近侧臂
-    g.add([r.back, r.leg_l, r.leg_r, r.armL, r.body, r.head, r.armR]);
-    r.joints = [[0, hipY], [0, bodyTop], [-shoulderX, shoulderY], [shoulderX, shoulderY]];
-    this.add.text(x, y + 20, label + '（拆件拼装）', { fontFamily: FONT, fontSize: '16px', color: '#2B1D16' }).setOrigin(0.5, 0);
-    this.add.ellipse(x, y, 70 * S, 16 * S, 0x2B1D16, 0.25).setDepth(-1);
+  // 图片原点放在给定的像素点上（关节或握把）
+  img(k, pivot) {
+    const m = ART[k];
+    return this.add.image(0, 0, k).setOrigin(pivot[0] / m.w, pivot[1] / m.h);
+  }
+
+  build(c, x, y, s) {
+    const R = RIGS[c], P = {};
+    R.parts.forEach(k => { P[k.slice(c.length + 1)] = ART[k]; });
+    const root = this.add.container(x, y).setScale(s); // 原点 = 脚底
+    const b = P.body;
+    const body = this.add.container(R.body[0], R.body[1]); // 原点 = 身体关节
+    root.add(body);
+    const r = { c, s, root, body, limbs: {} };
+    const kids = [{ z: b.z, o: this.img(`${c}_body`, b.j) }];
+    for (const [p, key] of Object.entries(LIMBS)) {
+      const at = b.a[key];
+      const node = this.add.container(at[0] - b.j[0], at[1] - b.j[1]);
+      node.add(this.img(`${c}_${p}`, P[p].j));
+      r.limbs[p] = node;
+      kids.push({ z: P[p].z, o: node });
+    }
+    // 武器：grip 对齐近侧臂 hand，跟着近侧臂转，画在近侧臂下面
+    const ar = P.arm_r;
+    r.hand = [ar.hand[0] - ar.j[0], ar.hand[1] - ar.j[1]];
+    r.weapon = this.img(`${c}_weapon`, P.weapon.grip).setPosition(r.hand[0], r.hand[1]);
+    r.limbs.arm_r.addAt(r.weapon, 0);
+    if (P.back) kids.push({ z: P.back.z, o: this.img(`${c}_back`, P.back.j).setPosition(P.back.r[0] - b.r[0], P.back.r[1] - b.r[1]) });
+    kids.sort((u, v) => u.z - v.z).forEach(k => body.add(k.o));
     return r;
   }
 
   update(time) {
-    const t = time / 1000, a = this.swing ? Math.sin(t * 4) : 0;
+    const a = this.swing ? Math.sin(time / 250) * 0.35 : 0; // ±20°
     const d = this.dots; d.clear();
     for (const r of this.rigs) {
-      r.armL.setRotation(a * 0.45);
-      r.armR.setRotation(-a * 0.45);
-      r.leg_l.setRotation(-a * 0.25);
-      r.leg_r.setRotation(a * 0.25);
-      r.head.setRotation(a * 0.04);
+      const L = r.limbs;
+      L.arm_l.setRotation(-a); L.arm_r.setRotation(a);
+      L.leg_l.setRotation(a * 0.7); L.leg_r.setRotation(-a * 0.7);
+      L.head.setRotation(a * 0.08);
+      if (!r.root.visible) continue;
+      // 运行时检查：手 hand 与武器 grip 的世界坐标距离
+      const hand = L.arm_r.getWorldTransformMatrix().transformPoint(r.hand[0], r.hand[1]);
+      const grip = r.weapon.getWorldTransformMatrix().transformPoint(0, 0);
+      this.gripErr = Math.max(this.gripErr, Math.hypot(hand.x - grip.x, hand.y - grip.y));
       if (!this.showJoints) continue;
-      const sx = r.root.scaleX;
-      for (const [jx, jy] of r.joints) {
-        d.fillStyle(0xE74C3C, 1); d.fillCircle(r.root.x + jx * S * sx, r.root.y + jy * S, 4);
+      for (const n of [r.body, ...Object.values(L)]) {
+        const m = n.getWorldTransformMatrix();
+        d.fillStyle(0xE74C3C, 1); d.fillCircle(m.tx, m.ty, 3);
       }
-      d.lineStyle(1, 0x3EC6E0, 0.8); d.lineBetween(r.root.x - 60, r.root.y, r.root.x + 60, r.root.y);
+      d.fillStyle(0x3EC6E0, 1); d.fillCircle(hand.x, hand.y, 2.5);
     }
+    this.info.setText(`手-握把最大偏差 ${this.gripErr.toFixed(3)} px（运行时累计）`);
+  }
+
+  // 截图量轮廓用：只留某个角色的拼装（rig）或待机图（ref），放在同一脚底点
+  isolate(c, which) {
+    this.showJoints = false; this.swing = false;
+    this.labels.forEach(o => o.setVisible(false));
+    const i = this.rigs.findIndex(q => q.c === c), r = this.rigs[i];
+    this.rigs.forEach((q, j) => q.root.setVisible(which === 'rig' && j === i));
+    this.refs.forEach(o => o.setVisible(false));
+    const ref = this.refs.find(o => o.texture.key === `${c}_idle`);
+    if (which === 'ref') ref.setVisible(true).setAlpha(1).setX(r.root.x);
+    return { x: r.root.x, y: r.root.y, s: r.s };
   }
 }
 
