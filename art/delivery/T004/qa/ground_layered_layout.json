@@ -1,0 +1,648 @@
+{
+  "seed": 40043,
+  "preview_size": [
+    1280,
+    720
+  ],
+  "tile_size": [
+    128,
+    128
+  ],
+  "base_indices_1based": [
+    [
+      4,
+      3,
+      1,
+      3,
+      1,
+      4,
+      1,
+      1,
+      2,
+      3
+    ],
+    [
+      4,
+      4,
+      3,
+      1,
+      1,
+      4,
+      2,
+      3,
+      3,
+      3
+    ],
+    [
+      3,
+      1,
+      4,
+      2,
+      2,
+      4,
+      3,
+      2,
+      2,
+      4
+    ],
+    [
+      3,
+      4,
+      4,
+      2,
+      1,
+      3,
+      4,
+      4,
+      3,
+      3
+    ],
+    [
+      4,
+      1,
+      2,
+      4,
+      3,
+      2,
+      1,
+      1,
+      2,
+      2
+    ],
+    [
+      4,
+      4,
+      4,
+      3,
+      2,
+      4,
+      1,
+      4,
+      1,
+      1
+    ]
+  ],
+  "decal_count": 40,
+  "decals": [
+    {
+      "file": "art/env/env_decal_stone_01.png",
+      "position": [
+        836.6122,
+        593.7099
+      ],
+      "rotation_degrees": 0.0,
+      "scale": 0.9072,
+      "origin_normalized": [
+        0.5,
+        0.78
+      ],
+      "z": 1
+    },
+    {
+      "file": "art/env/env_decal_crack_01.png",
+      "position": [
+        1042.0058,
+        273.0979
+      ],
+      "rotation_degrees": 239.8352,
+      "scale": 1.1167,
+      "origin_normalized": [
+        0.5,
+        0.5
+      ],
+      "z": 0
+    },
+    {
+      "file": "art/env/env_decal_stone_02.png",
+      "position": [
+        272.6315,
+        639.6467
+      ],
+      "rotation_degrees": 0.0,
+      "scale": 0.7737,
+      "origin_normalized": [
+        0.5,
+        0.78
+      ],
+      "z": 1
+    },
+    {
+      "file": "art/env/env_decal_mud_01.png",
+      "position": [
+        401.3472,
+        659.377
+      ],
+      "rotation_degrees": 72.2911,
+      "scale": 0.9286,
+      "origin_normalized": [
+        0.5,
+        0.5
+      ],
+      "z": 0
+    },
+    {
+      "file": "art/env/env_decal_stone_01.png",
+      "position": [
+        743.5267,
+        171.9701
+      ],
+      "rotation_degrees": 0.0,
+      "scale": 1.0359,
+      "origin_normalized": [
+        0.5,
+        0.78
+      ],
+      "z": 1
+    },
+    {
+      "file": "art/env/env_decal_stone_02.png",
+      "position": [
+        211.8502,
+        449.9342
+      ],
+      "rotation_degrees": 0.0,
+      "scale": 1.0272,
+      "origin_normalized": [
+        0.5,
+        0.78
+      ],
+      "z": 1
+    },
+    {
+      "file": "art/env/env_decal_ink_01.png",
+      "position": [
+        296.279,
+        362.0231
+      ],
+      "rotation_degrees": 188.749,
+      "scale": 0.8192,
+      "origin_normalized": [
+        0.5,
+        0.5
+      ],
+      "z": 0
+    },
+    {
+      "file": "art/env/env_decal_footprint_01.png",
+      "position": [
+        232.9515,
+        531.9297
+      ],
+      "rotation_degrees": 270.2987,
+      "scale": 0.7661,
+      "origin_normalized": [
+        0.5,
+        0.5
+      ],
+      "z": 0
+    },
+    {
+      "file": "art/env/env_decal_rut_01.png",
+      "position": [
+        655.4447,
+        271.9274
+      ],
+      "rotation_degrees": 0.0,
+      "scale": 1.1573,
+      "origin_normalized": [
+        0.5,
+        0.5
+      ],
+      "z": 0
+    },
+    {
+      "file": "art/env/env_decal_rut_02.png",
+      "position": [
+        1144.4774,
+        614.9659
+      ],
+      "rotation_degrees": 0.0,
+      "scale": 0.8636,
+      "origin_normalized": [
+        0.5,
+        0.5
+      ],
+      "z": 0
+    },
+    {
+      "file": "art/env/env_decal_ink_02.png",
+      "position": [
+        830.8185,
+        69.2665
+      ],
+      "rotation_degrees": 356.6011,
+      "scale": 0.8311,
+      "origin_normalized": [
+        0.5,
+        0.5
+      ],
+      "z": 0
+    },
+    {
+      "file": "art/env/env_decal_ink_01.png",
+      "position": [
+        164.996,
+        162.3066
+      ],
+      "rotation_degrees": 298.7121,
+      "scale": 1.24,
+      "origin_normalized": [
+        0.5,
+        0.5
+      ],
+      "z": 0
+    },
+    {
+      "file": "art/env/env_decal_grass_01.png",
+      "position": [
+        941.4879,
+        60.1726
+      ],
+      "rotation_degrees": 0.0,
+      "scale": 1.1093,
+      "origin_normalized": [
+        0.5,
+        0.85
+      ],
+      "z": 1
+    },
+    {
+      "file": "art/env/env_decal_grass_02.png",
+      "position": [
+        217.1648,
+        244.3833
+      ],
+      "rotation_degrees": 0.0,
+      "scale": 0.9345,
+      "origin_normalized": [
+        0.5,
+        0.85
+      ],
+      "z": 1
+    },
+    {
+      "file": "art/env/env_decal_stone_01.png",
+      "position": [
+        1199.3411,
+        367.7207
+      ],
+      "rotation_degrees": 0.0,
+      "scale": 0.7925,
+      "origin_normalized": [
+        0.5,
+        0.78
+      ],
+      "z": 1
+    },
+    {
+      "file": "art/env/env_decal_ink_02.png",
+      "position": [
+        353.3805,
+        210.9277
+      ],
+      "rotation_degrees": 17.3542,
+      "scale": 1.2374,
+      "origin_normalized": [
+        0.5,
+        0.5
+      ],
+      "z": 0
+    },
+    {
+      "file": "art/env/env_decal_stone_02.png",
+      "position": [
+        1201.6411,
+        475.3842
+      ],
+      "rotation_degrees": 0.0,
+      "scale": 1.2397,
+      "origin_normalized": [
+        0.5,
+        0.78
+      ],
+      "z": 1
+    },
+    {
+      "file": "art/env/env_decal_grass_01.png",
+      "position": [
+        312.4439,
+        84.4688
+      ],
+      "rotation_degrees": 0.0,
+      "scale": 0.8268,
+      "origin_normalized": [
+        0.5,
+        0.85
+      ],
+      "z": 1
+    },
+    {
+      "file": "art/env/env_decal_crack_02.png",
+      "position": [
+        1147.254,
+        306.2581
+      ],
+      "rotation_degrees": 260.3063,
+      "scale": 1.1418,
+      "origin_normalized": [
+        0.5,
+        0.5
+      ],
+      "z": 0
+    },
+    {
+      "file": "art/env/env_decal_crack_01.png",
+      "position": [
+        700.4176,
+        523.957
+      ],
+      "rotation_degrees": 256.5386,
+      "scale": 1.0299,
+      "origin_normalized": [
+        0.5,
+        0.5
+      ],
+      "z": 0
+    },
+    {
+      "file": "art/env/env_decal_footprint_02.png",
+      "position": [
+        897.5962,
+        405.4901
+      ],
+      "rotation_degrees": 158.3649,
+      "scale": 1.021,
+      "origin_normalized": [
+        0.5,
+        0.5
+      ],
+      "z": 0
+    },
+    {
+      "file": "art/env/env_decal_grass_02.png",
+      "position": [
+        1056.7429,
+        589.6284
+      ],
+      "rotation_degrees": 0.0,
+      "scale": 0.8053,
+      "origin_normalized": [
+        0.5,
+        0.85
+      ],
+      "z": 1
+    },
+    {
+      "file": "art/env/env_decal_mud_02.png",
+      "position": [
+        95.3976,
+        264.1599
+      ],
+      "rotation_degrees": 233.9963,
+      "scale": 1.1293,
+      "origin_normalized": [
+        0.5,
+        0.5
+      ],
+      "z": 0
+    },
+    {
+      "file": "art/env/env_decal_rut_01.png",
+      "position": [
+        718.2846,
+        663.3413
+      ],
+      "rotation_degrees": 0.0,
+      "scale": 1.1811,
+      "origin_normalized": [
+        0.5,
+        0.5
+      ],
+      "z": 0
+    },
+    {
+      "file": "art/env/env_decal_grass_01.png",
+      "position": [
+        723.9978,
+        313.4947
+      ],
+      "rotation_degrees": 0.0,
+      "scale": 1.118,
+      "origin_normalized": [
+        0.5,
+        0.85
+      ],
+      "z": 1
+    },
+    {
+      "file": "art/env/env_decal_footprint_01.png",
+      "position": [
+        127.4661,
+        393.6357
+      ],
+      "rotation_degrees": 102.7986,
+      "scale": 0.8537,
+      "origin_normalized": [
+        0.5,
+        0.5
+      ],
+      "z": 0
+    },
+    {
+      "file": "art/env/env_decal_rut_02.png",
+      "position": [
+        70.0507,
+        46.1918
+      ],
+      "rotation_degrees": 0.0,
+      "scale": 1.1565,
+      "origin_normalized": [
+        0.5,
+        0.5
+      ],
+      "z": 0
+    },
+    {
+      "file": "art/env/env_decal_mud_01.png",
+      "position": [
+        57.7965,
+        150.7332
+      ],
+      "rotation_degrees": 217.3727,
+      "scale": 1.136,
+      "origin_normalized": [
+        0.5,
+        0.5
+      ],
+      "z": 0
+    },
+    {
+      "file": "art/env/env_decal_mud_02.png",
+      "position": [
+        582.7515,
+        557.5623
+      ],
+      "rotation_degrees": 42.0932,
+      "scale": 0.9915,
+      "origin_normalized": [
+        0.5,
+        0.5
+      ],
+      "z": 0
+    },
+    {
+      "file": "art/env/env_decal_grass_02.png",
+      "position": [
+        50.7816,
+        462.6291
+      ],
+      "rotation_degrees": 0.0,
+      "scale": 0.9497,
+      "origin_normalized": [
+        0.5,
+        0.85
+      ],
+      "z": 1
+    },
+    {
+      "file": "art/env/env_decal_footprint_02.png",
+      "position": [
+        1103.4096,
+        202.4908
+      ],
+      "rotation_degrees": 264.6689,
+      "scale": 1.2065,
+      "origin_normalized": [
+        0.5,
+        0.5
+      ],
+      "z": 0
+    },
+    {
+      "file": "art/env/env_decal_grass_01.png",
+      "position": [
+        432.9214,
+        396.8013
+      ],
+      "rotation_degrees": 0.0,
+      "scale": 1.0413,
+      "origin_normalized": [
+        0.5,
+        0.85
+      ],
+      "z": 1
+    },
+    {
+      "file": "art/env/env_decal_grass_02.png",
+      "position": [
+        1039.0388,
+        472.8395
+      ],
+      "rotation_degrees": 0.0,
+      "scale": 1.0436,
+      "origin_normalized": [
+        0.5,
+        0.85
+      ],
+      "z": 1
+    },
+    {
+      "file": "art/env/env_decal_crack_02.png",
+      "position": [
+        500.4926,
+        640.7702
+      ],
+      "rotation_degrees": 150.283,
+      "scale": 1.0625,
+      "origin_normalized": [
+        0.5,
+        0.5
+      ],
+      "z": 0
+    },
+    {
+      "file": "art/env/env_decal_mud_01.png",
+      "position": [
+        1150.8291,
+        122.0825
+      ],
+      "rotation_degrees": 242.5406,
+      "scale": 1.1718,
+      "origin_normalized": [
+        0.5,
+        0.5
+      ],
+      "z": 0
+    },
+    {
+      "file": "art/env/env_decal_footprint_01.png",
+      "position": [
+        790.532,
+        488.3716
+      ],
+      "rotation_degrees": 322.137,
+      "scale": 1.1494,
+      "origin_normalized": [
+        0.5,
+        0.5
+      ],
+      "z": 0
+    },
+    {
+      "file": "art/env/env_decal_grass_01.png",
+      "position": [
+        460.0714,
+        178.6678
+      ],
+      "rotation_degrees": 0.0,
+      "scale": 1.1321,
+      "origin_normalized": [
+        0.5,
+        0.85
+      ],
+      "z": 1
+    },
+    {
+      "file": "art/env/env_decal_rut_01.png",
+      "position": [
+        470.3797,
+        499.8815
+      ],
+      "rotation_degrees": 0.0,
+      "scale": 0.9616,
+      "origin_normalized": [
+        0.5,
+        0.5
+      ],
+      "z": 0
+    },
+    {
+      "file": "art/env/env_decal_stone_01.png",
+      "position": [
+        663.7987,
+        136.4087
+      ],
+      "rotation_degrees": 0.0,
+      "scale": 1.2422,
+      "origin_normalized": [
+        0.5,
+        0.78
+      ],
+      "z": 1
+    },
+    {
+      "file": "art/env/env_decal_crack_01.png",
+      "position": [
+        137.1121,
+        481.8688
+      ],
+      "rotation_degrees": 44.9273,
+      "scale": 1.1913,
+      "origin_normalized": [
+        0.5,
+        0.5
+      ],
+      "z": 0
+    }
+  ]
+}

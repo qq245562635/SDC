@@ -1,6 +1,6 @@
 {
   "task": "T004",
-  "units": "pixels at 2x display size",
+  "units": "Final PNG source pixels; display_scale on each record specifies native/2x display scaling.",
   "convention": "All joint_pivot/attach/hand/grip are measured local image pixels. Body root offset and back use rest_position; head/limbs use body.attach, weapon uses arm_r.hand.",
   "rigs": [
     {
@@ -2023,6 +2023,700 @@
       ],
       "sha256": "d37efd2eb38822c0323429bc8c4fdce6231a08f9de805a0788dc69b6a6bcf7f0",
       "edge_processing": "Full AI-painted fine-soil substrate at native tile scale, no mirrored patches; shared 24px bands, 20px smooth transition; painted feature clusters scaled 0.52 and offset to avoid dark tile-sized center slabs."
+    },
+    {
+      "file": "art/env/env_ground_base_01.png",
+      "requirement": "E01",
+      "role": "ground_base",
+      "size_px": [
+        128,
+        128
+      ],
+      "display_scale": 1,
+      "origin_normalized": [
+        0.5,
+        0.5
+      ],
+      "content_bbox": [
+        0,
+        0,
+        128,
+        128
+      ],
+      "source": "art/delivery/T004/sources/ground_layers/base_1.png",
+      "sha256": "7953df0eb6a338a69167888e39d36e94615137334b246f8b8c834fee65674a5a",
+      "rotation_allowed": false,
+      "tileable_with": [
+        "env_ground_base_01.png",
+        "env_ground_base_02.png",
+        "env_ground_base_03.png",
+        "env_ground_base_04.png"
+      ]
+    },
+    {
+      "file": "art/env/env_ground_base_02.png",
+      "requirement": "E01",
+      "role": "ground_base",
+      "size_px": [
+        128,
+        128
+      ],
+      "display_scale": 1,
+      "origin_normalized": [
+        0.5,
+        0.5
+      ],
+      "content_bbox": [
+        0,
+        0,
+        128,
+        128
+      ],
+      "source": "art/delivery/T004/sources/ground_layers/base_2.png",
+      "sha256": "3490426ee275515a6ce0a9a7b3b6674e6de54bcf70d13f6a58dd54556aa9b615",
+      "rotation_allowed": false,
+      "tileable_with": [
+        "env_ground_base_01.png",
+        "env_ground_base_02.png",
+        "env_ground_base_03.png",
+        "env_ground_base_04.png"
+      ]
+    },
+    {
+      "file": "art/env/env_ground_base_03.png",
+      "requirement": "E01",
+      "role": "ground_base",
+      "size_px": [
+        128,
+        128
+      ],
+      "display_scale": 1,
+      "origin_normalized": [
+        0.5,
+        0.5
+      ],
+      "content_bbox": [
+        0,
+        0,
+        128,
+        128
+      ],
+      "source": "art/delivery/T004/sources/ground_layers/base_3.png",
+      "sha256": "6c1f6e318dc452aac9ac857534f33af013a60704cdbab92da3c1dd8b1371be7f",
+      "rotation_allowed": false,
+      "tileable_with": [
+        "env_ground_base_01.png",
+        "env_ground_base_02.png",
+        "env_ground_base_03.png",
+        "env_ground_base_04.png"
+      ]
+    },
+    {
+      "file": "art/env/env_ground_base_04.png",
+      "requirement": "E01",
+      "role": "ground_base",
+      "size_px": [
+        128,
+        128
+      ],
+      "display_scale": 1,
+      "origin_normalized": [
+        0.5,
+        0.5
+      ],
+      "content_bbox": [
+        0,
+        0,
+        128,
+        128
+      ],
+      "source": "art/delivery/T004/sources/ground_layers/base_4.png",
+      "sha256": "cfd7cba94be8c5660c2e91aa9f82d8174a812c7089967ebb4b7ef7f0fa431c85",
+      "rotation_allowed": false,
+      "tileable_with": [
+        "env_ground_base_01.png",
+        "env_ground_base_02.png",
+        "env_ground_base_03.png",
+        "env_ground_base_04.png"
+      ]
+    },
+    {
+      "file": "art/env/env_decal_grass_01.png",
+      "requirement": "E01",
+      "role": "ground_decal",
+      "size_px": [
+        88,
+        66
+      ],
+      "display_scale": 1,
+      "origin_normalized": [
+        0.5,
+        0.85
+      ],
+      "content_bbox": [
+        4,
+        4,
+        83,
+        62
+      ],
+      "source": "art/delivery/T004/sources/ground_layers/grass_1.png",
+      "sha256": "0caa1b03670e6add1459610f76ec9b044ec451e7747be058a608495086c54108",
+      "category": "grass",
+      "rotation_allowed": false,
+      "rotation_mode": "none",
+      "allowed_rotation_degrees": [
+        0
+      ],
+      "scale_range": [
+        0.75,
+        1.25
+      ],
+      "placement": "Free world coordinates, independent of tile grid",
+      "z": 1,
+      "source_rect": [
+        397,
+        190,
+        1154,
+        736
+      ]
+    },
+    {
+      "file": "art/env/env_decal_grass_02.png",
+      "requirement": "E01",
+      "role": "ground_decal",
+      "size_px": [
+        88,
+        54
+      ],
+      "display_scale": 1,
+      "origin_normalized": [
+        0.5,
+        0.85
+      ],
+      "content_bbox": [
+        4,
+        4,
+        84,
+        50
+      ],
+      "source": "art/delivery/T004/sources/ground_layers/grass_2.png",
+      "sha256": "7934d226a96baf33fcbd2d683c0f9cae41bc0a3a65eae3bd03458b92d4f0131e",
+      "category": "grass",
+      "rotation_allowed": false,
+      "rotation_mode": "none",
+      "allowed_rotation_degrees": [
+        0
+      ],
+      "scale_range": [
+        0.75,
+        1.25
+      ],
+      "placement": "Free world coordinates, independent of tile grid",
+      "z": 1,
+      "source_rect": [
+        293,
+        243,
+        1183,
+        758
+      ]
+    },
+    {
+      "file": "art/env/env_decal_stone_01.png",
+      "requirement": "E01",
+      "role": "ground_decal",
+      "size_px": [
+        96,
+        68
+      ],
+      "display_scale": 1,
+      "origin_normalized": [
+        0.5,
+        0.78
+      ],
+      "content_bbox": [
+        4,
+        4,
+        92,
+        64
+      ],
+      "source": "art/delivery/T004/sources/ground_layers/stone_1.png",
+      "sha256": "266ffce3e0435339aee59a63b3fef5bf6af8f90933488dadeae9d3137d282652",
+      "category": "stone",
+      "rotation_allowed": false,
+      "rotation_mode": "none",
+      "allowed_rotation_degrees": [
+        0
+      ],
+      "scale_range": [
+        0.75,
+        1.25
+      ],
+      "placement": "Free world coordinates, independent of tile grid",
+      "z": 1,
+      "source_rect": [
+        465,
+        310,
+        1045,
+        707
+      ]
+    },
+    {
+      "file": "art/env/env_decal_stone_02.png",
+      "requirement": "E01",
+      "role": "ground_decal",
+      "size_px": [
+        96,
+        58
+      ],
+      "display_scale": 1,
+      "origin_normalized": [
+        0.5,
+        0.78
+      ],
+      "content_bbox": [
+        4,
+        4,
+        92,
+        54
+      ],
+      "source": "art/delivery/T004/sources/ground_layers/stone_2.png",
+      "sha256": "67825c5ccf6971821c3a3edb3fd18598955a42d72619c8126f020f7e1b56d455",
+      "category": "stone",
+      "rotation_allowed": false,
+      "rotation_mode": "none",
+      "allowed_rotation_degrees": [
+        0
+      ],
+      "scale_range": [
+        0.75,
+        1.25
+      ],
+      "placement": "Free world coordinates, independent of tile grid",
+      "z": 1,
+      "source_rect": [
+        446,
+        307,
+        1075,
+        667
+      ]
+    },
+    {
+      "file": "art/env/env_decal_rut_01.png",
+      "requirement": "E01",
+      "role": "ground_decal",
+      "size_px": [
+        218,
+        182
+      ],
+      "display_scale": 1,
+      "origin_normalized": [
+        0.5,
+        0.5
+      ],
+      "content_bbox": [
+        4,
+        4,
+        214,
+        178
+      ],
+      "source": "art/delivery/T004/sources/ground_layers/rut_1.png",
+      "sha256": "9578cec5fd82d53043dd6004f234bb8946d526df8bd72136fca62f7054d025e6",
+      "category": "rut",
+      "rotation_allowed": true,
+      "rotation_mode": "discrete",
+      "allowed_rotation_degrees": [
+        0,
+        180
+      ],
+      "scale_range": [
+        0.75,
+        1.25
+      ],
+      "placement": "Free world coordinates, independent of tile grid",
+      "z": 0,
+      "source_rect": [
+        204,
+        40,
+        1338,
+        982
+      ]
+    },
+    {
+      "file": "art/env/env_decal_rut_02.png",
+      "requirement": "E01",
+      "role": "ground_decal",
+      "size_px": [
+        218,
+        167
+      ],
+      "display_scale": 1,
+      "origin_normalized": [
+        0.5,
+        0.5
+      ],
+      "content_bbox": [
+        4,
+        4,
+        214,
+        163
+      ],
+      "source": "art/delivery/T004/sources/ground_layers/rut_2.png",
+      "sha256": "3770662da97629f7a2b8d35506e6b48b49e23dc6330bd618c20e1ad6d28c10c1",
+      "category": "rut",
+      "rotation_allowed": true,
+      "rotation_mode": "discrete",
+      "allowed_rotation_degrees": [
+        0,
+        180
+      ],
+      "scale_range": [
+        0.75,
+        1.25
+      ],
+      "placement": "Free world coordinates, independent of tile grid",
+      "z": 0,
+      "source_rect": [
+        250,
+        127,
+        1294,
+        915
+      ]
+    },
+    {
+      "file": "art/env/env_decal_footprint_01.png",
+      "requirement": "E01",
+      "role": "ground_decal",
+      "size_px": [
+        183,
+        146
+      ],
+      "display_scale": 1,
+      "origin_normalized": [
+        0.5,
+        0.5
+      ],
+      "content_bbox": [
+        4,
+        4,
+        179,
+        142
+      ],
+      "source": "art/delivery/T004/sources/ground_layers/footprint_1.png",
+      "sha256": "ca33ee74470ce3d32863d52b71c58a7e67f0a9ce9c792c484f60eaa9dbae3b4e",
+      "category": "footprint",
+      "rotation_allowed": true,
+      "rotation_mode": "free",
+      "allowed_rotation_degrees": null,
+      "scale_range": [
+        0.75,
+        1.25
+      ],
+      "placement": "Free world coordinates, independent of tile grid",
+      "z": 0,
+      "source_rect": [
+        254,
+        101,
+        1308,
+        935
+      ]
+    },
+    {
+      "file": "art/env/env_decal_footprint_02.png",
+      "requirement": "E01",
+      "role": "ground_decal",
+      "size_px": [
+        183,
+        139
+      ],
+      "display_scale": 1,
+      "origin_normalized": [
+        0.5,
+        0.5
+      ],
+      "content_bbox": [
+        4,
+        4,
+        179,
+        135
+      ],
+      "source": "art/delivery/T004/sources/ground_layers/footprint_2.png",
+      "sha256": "29bf41d823eb04b8c5b0a5b10053ee8f5f6b9e488eae1b895f59b6e72d5a59ef",
+      "category": "footprint",
+      "rotation_allowed": true,
+      "rotation_mode": "free",
+      "allowed_rotation_degrees": null,
+      "scale_range": [
+        0.75,
+        1.25
+      ],
+      "placement": "Free world coordinates, independent of tile grid",
+      "z": 0,
+      "source_rect": [
+        316,
+        118,
+        1266,
+        831
+      ]
+    },
+    {
+      "file": "art/env/env_decal_mud_01.png",
+      "requirement": "E01",
+      "role": "ground_decal",
+      "size_px": [
+        178,
+        94
+      ],
+      "display_scale": 1,
+      "origin_normalized": [
+        0.5,
+        0.5
+      ],
+      "content_bbox": [
+        4,
+        4,
+        174,
+        90
+      ],
+      "source": "art/delivery/T004/sources/ground_layers/mud_1.png",
+      "sha256": "86c24ef684ef7450cfe67a3a13fd591d0f8ec66d5057debffc57dff9de09c812",
+      "category": "mud",
+      "rotation_allowed": true,
+      "rotation_mode": "free",
+      "allowed_rotation_degrees": null,
+      "scale_range": [
+        0.75,
+        1.25
+      ],
+      "placement": "Free world coordinates, independent of tile grid",
+      "z": 0,
+      "source_rect": [
+        344,
+        314,
+        1184,
+        740
+      ]
+    },
+    {
+      "file": "art/env/env_decal_mud_02.png",
+      "requirement": "E01",
+      "role": "ground_decal",
+      "size_px": [
+        178,
+        85
+      ],
+      "display_scale": 1,
+      "origin_normalized": [
+        0.5,
+        0.5
+      ],
+      "content_bbox": [
+        5,
+        4,
+        173,
+        80
+      ],
+      "source": "art/delivery/T004/sources/ground_layers/mud_2.png",
+      "sha256": "ac454cff4bcb98bc45a4c0b36d8a452b9a528a8770b44436d7443057c76ea477",
+      "category": "mud",
+      "rotation_allowed": true,
+      "rotation_mode": "free",
+      "allowed_rotation_degrees": null,
+      "scale_range": [
+        0.75,
+        1.25
+      ],
+      "placement": "Free world coordinates, independent of tile grid",
+      "z": 0,
+      "source_rect": [
+        201,
+        147,
+        1546,
+        753
+      ]
+    },
+    {
+      "file": "art/env/env_decal_crack_01.png",
+      "requirement": "E01",
+      "role": "ground_decal",
+      "size_px": [
+        163,
+        111
+      ],
+      "display_scale": 1,
+      "origin_normalized": [
+        0.5,
+        0.5
+      ],
+      "content_bbox": [
+        4,
+        5,
+        158,
+        107
+      ],
+      "source": "art/delivery/T004/sources/ground_layers/crack_1.png",
+      "sha256": "8a0472b3340c4c5148d387682b2020ea9a10a44f07ab05a403a0dd288a8ec024",
+      "category": "crack",
+      "rotation_allowed": true,
+      "rotation_mode": "free",
+      "allowed_rotation_degrees": null,
+      "scale_range": [
+        0.75,
+        1.25
+      ],
+      "placement": "Free world coordinates, independent of tile grid",
+      "z": 0,
+      "source_rect": [
+        240,
+        116,
+        1302,
+        820
+      ]
+    },
+    {
+      "file": "art/env/env_decal_crack_02.png",
+      "requirement": "E01",
+      "role": "ground_decal",
+      "size_px": [
+        163,
+        126
+      ],
+      "display_scale": 1,
+      "origin_normalized": [
+        0.5,
+        0.5
+      ],
+      "content_bbox": [
+        4,
+        4,
+        158,
+        121
+      ],
+      "source": "art/delivery/T004/sources/ground_layers/crack_2.png",
+      "sha256": "51e12593d53003ab74c32aa73a593f305190b1b1ca3e2891ab08fdeecedf6a1c",
+      "category": "crack",
+      "rotation_allowed": true,
+      "rotation_mode": "free",
+      "allowed_rotation_degrees": null,
+      "scale_range": [
+        0.75,
+        1.25
+      ],
+      "placement": "Free world coordinates, independent of tile grid",
+      "z": 0,
+      "source_rect": [
+        307,
+        116,
+        1302,
+        874
+      ]
+    },
+    {
+      "file": "art/env/env_decal_ink_01.png",
+      "requirement": "E01",
+      "role": "ground_decal",
+      "size_px": [
+        143,
+        78
+      ],
+      "display_scale": 1,
+      "origin_normalized": [
+        0.5,
+        0.5
+      ],
+      "content_bbox": [
+        4,
+        4,
+        138,
+        74
+      ],
+      "source": "art/delivery/T004/sources/ground_layers/ink_1.png",
+      "sha256": "a7b6b0182bf013ec05bcbe0ab9f847d55fec6e2d1d2e9114fdf24ba835dd5066",
+      "category": "ink",
+      "rotation_allowed": true,
+      "rotation_mode": "free",
+      "allowed_rotation_degrees": null,
+      "scale_range": [
+        0.75,
+        1.25
+      ],
+      "placement": "Free world coordinates, independent of tile grid",
+      "z": 0,
+      "source_rect": [
+        148,
+        191,
+        1347,
+        815
+      ]
+    },
+    {
+      "file": "art/env/env_decal_ink_02.png",
+      "requirement": "E01",
+      "role": "ground_decal",
+      "size_px": [
+        143,
+        70
+      ],
+      "display_scale": 1,
+      "origin_normalized": [
+        0.5,
+        0.5
+      ],
+      "content_bbox": [
+        4,
+        4,
+        138,
+        66
+      ],
+      "source": "art/delivery/T004/sources/ground_layers/ink_2.png",
+      "sha256": "6e1d845dba50acc15732b1e11f027a4df8b472ae8b8cb7158b9e556c3e9b5361",
+      "category": "ink",
+      "rotation_allowed": true,
+      "rotation_mode": "free",
+      "allowed_rotation_degrees": null,
+      "scale_range": [
+        0.75,
+        1.25
+      ],
+      "placement": "Free world coordinates, independent of tile grid",
+      "z": 0,
+      "source_rect": [
+        317,
+        279,
+        1264,
+        716
+      ]
     }
-  ]
+  ],
+  "ground_surface": {
+    "review_comment": 6656771262,
+    "mode": "base_plus_decals",
+    "base_display_size_px": [
+      128,
+      128
+    ],
+    "base_files": [
+      "art/env/env_ground_base_01.png",
+      "art/env/env_ground_base_02.png",
+      "art/env/env_ground_base_03.png",
+      "art/env/env_ground_base_04.png"
+    ],
+    "decal_files": [
+      "art/env/env_decal_grass_01.png",
+      "art/env/env_decal_grass_02.png",
+      "art/env/env_decal_stone_01.png",
+      "art/env/env_decal_stone_02.png",
+      "art/env/env_decal_rut_01.png",
+      "art/env/env_decal_rut_02.png",
+      "art/env/env_decal_footprint_01.png",
+      "art/env/env_decal_footprint_02.png",
+      "art/env/env_decal_mud_01.png",
+      "art/env/env_decal_mud_02.png",
+      "art/env/env_decal_crack_01.png",
+      "art/env/env_decal_crack_02.png",
+      "art/env/env_decal_ink_01.png",
+      "art/env/env_decal_ink_02.png"
+    ],
+    "legacy_tiles": "env_camp_tile01_01.png through env_camp_tile16_01.png retained unchanged; programmer switches explicitly",
+    "placement": "Base tiles have no theme patterns. Place decals in continuous world space independently of tile coordinates; honor per-asset rotation_mode, allowed_rotation_degrees, origin_normalized and scale_range."
+  }
 }

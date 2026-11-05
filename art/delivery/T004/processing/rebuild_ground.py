@@ -1,3 +1,4 @@
+raise SystemExit('Superseded by build_ground_layers.py; old tiles must remain unchanged.')
 from pathlib import Path
 from PIL import Image, ImageCms
 from scipy import ndimage as ndi

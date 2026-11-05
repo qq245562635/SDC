@@ -1,0 +1,73 @@
+{
+  "review_comment": 6656771262,
+  "base_count": 4,
+  "decal_count": 14,
+  "categories": {
+    "grass": 2,
+    "stone": 2,
+    "rut": 2,
+    "footprint": 2,
+    "mud": 2,
+    "crack": 2,
+    "ink": 2
+  },
+  "base_size_px": [
+    128,
+    128
+  ],
+  "seam_pairs_horizontal": 16,
+  "seam_pairs_vertical": 16,
+  "measurement": "Base only. Outer 8px ring vs inner 112x112; all pixels, Rec.709 weighted RGB. Decals are separate and excluded by construction.",
+  "bases": [
+    {
+      "file": "art/env/env_ground_base_01.png",
+      "mean_rgb": [
+        147.078,
+        112.23,
+        80.615
+      ],
+      "edge_mean_luminance": 117.0879,
+      "inner_mean_luminance": 117.438,
+      "edge_inner_difference_percent": 0.299
+    },
+    {
+      "file": "art/env/env_ground_base_02.png",
+      "mean_rgb": [
+        147.042,
+        112.345,
+        80.524
+      ],
+      "edge_mean_luminance": 117.4541,
+      "inner_mean_luminance": 117.4152,
+      "edge_inner_difference_percent": 0.0331
+    },
+    {
+      "file": "art/env/env_ground_base_03.png",
+      "mean_rgb": [
+        146.989,
+        112.091,
+        81.069
+      ],
+      "edge_mean_luminance": 117.0664,
+      "inner_mean_luminance": 117.3327,
+      "edge_inner_difference_percent": 0.2275
+    },
+    {
+      "file": "art/env/env_ground_base_04.png",
+      "mean_rgb": [
+        146.819,
+        112.205,
+        80.85
+      ],
+      "edge_mean_luminance": 117.107,
+      "inner_mean_luminance": 117.3594,
+      "edge_inner_difference_percent": 0.2156
+    }
+  ],
+  "room_preview_size": [
+    1280,
+    720
+  ],
+  "room_decal_count": 40,
+  "runtime_confirmation": "Pending programmer; room is an art-data composition, not a screenshot of game runtime."
+}
