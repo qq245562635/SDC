@@ -50,6 +50,149 @@ const ITEM_ICON = {
 const SOUL_SEAL = { '关羽': 'blade', '赵云': 'spear', '张飞': 'spear', '黄忠': 'bow', '马超': 'spear' };
 const DOOR_ICON = { soul: 'door_spirit', chest: 'door_supplies', elite: 'door_danger', heal: 'door_merchant', anchor: 'anchor_ring' };
 
+// ---------- 触屏（T007）：index.html 判定平台，?touch=1 / 0 可强制 ----------
+const TOUCH = !!window.TOUCH;
+const HOLD_HEAVY = 0.4; // 攻击键按住多久算重击（秒）
+const CAN_FULLSCREEN = !!(document.fullscreenEnabled || document.webkitFullscreenEnabled);
+
+// 左半屏浮动摇杆 + 右侧按键，支持多点触控。每根手指（pointer.id）各管一个控件。
+class TouchPad {
+  constructor(scene) {
+    this.s = scene;
+    this.btns = {};
+    this.owner = {};       // pointer.id -> 'stick' 或按键名
+    this.stick = null;     // { id, ox, oy, x, y }
+    this.mx = 0; this.my = 0; this.moving = false;
+    this.atkHeld = false; this.atkT = 0; this.atkHeavy = false;
+    const D = 8800;
+    this.stickG = scene.add.graphics().setDepth(D);
+    const btn = (name, x, y, r, label, icon) => {
+      const c = scene.add.container(x, y).setDepth(D);
+      c.add(scene.add.circle(0, 0, r, 0x16110d, 0.42));
+      c.add(ui(scene, 0, 0, 'hud_slot_frame', r * 2.15).setAlpha(0.8));
+      if (icon) c.add(ui(scene, 0, -3, icon, r * 1.15));
+      const t = scene.add.text(0, icon ? r * 0.5 : 0, label, { fontFamily: FONT, fontSize: Math.round(r * (icon ? 0.42 : 0.6)) + 'px', color: '#F3E9D2', stroke: '#2B1D16', strokeThickness: 4, fontStyle: 'bold' }).setOrigin(0.5);
+      const ring = scene.add.graphics();
+      c.add([t, ring]);
+      this.btns[name] = { name, x, y, r, c, t, ring };
+    };
+    // 直径都不小于 64（720p 画面）
+    btn('attack', 1160, 600, 60, '攻');
+    btn('roll', 1035, 505, 42, '滚');
+    btn('search', 1160, 450, 38, '搜');
+    btn('torch', 1020, 642, 34, '', 'modern_flashlight');
+    btn('roar', 905, 652, 34, '', 'door_spirit');
+    btn('bag', 1235, 105, 32, '包');
+    btn('pause', 1162, 105, 32, '停');
+    if (CAN_FULLSCREEN) btn('full', 1089, 105, 32, '全屏');
+    scene.input.on('pointerdown', p => this.down(p));
+    scene.input.on('pointermove', p => this.move(p));
+    scene.input.on('pointerup', p => this.up(p));
+    scene.input.on('pointerupoutside', p => this.up(p));
+  }
+
+  blocked() { return this.s.panel || this.s.over; }
+
+  hit(p) {
+    for (const b of Object.values(this.btns)) {
+      if (b.c.visible && Math.hypot(p.x - b.x, p.y - b.y) <= b.r + 10) return b.name;
+    }
+    return null;
+  }
+
+  down(p) {
+    if (this.blocked()) return;
+    const s = this.s, name = this.hit(p);
+    if (name) {
+      this.owner[p.id] = name;
+      this.flash(name);
+      if (name === 'attack') { this.atkHeld = true; this.atkT = 0; this.atkHeavy = false; }
+      else if (name === 'roll') s.tryDodge(this.mx, this.my, this.moving);
+      else if (name === 'search') s.tryOpenChest();
+      else if (name === 'torch') s.useTorch();
+      else if (name === 'roar') s.roar();
+      else if (name === 'bag') s.toggleBag();
+      else if (name === 'pause') s.togglePause();
+      return;
+    }
+    if (p.x < W / 2 && !this.stick) {
+      this.stick = { id: p.id, ox: p.x, oy: p.y, x: p.x, y: p.y };
+      this.owner[p.id] = 'stick';
+    }
+  }
+
+  move(p) {
+    const st = this.stick;
+    if (!st || st.id !== p.id) return;
+    st.x = p.x; st.y = p.y;
+  }
+
+  up(p) {
+    const what = this.owner[p.id];
+    delete this.owner[p.id];
+    if (what === 'stick') this.stick = null;
+    if (what === 'attack') {
+      // 没到重击时间就是点按：出一下连击；到了时间的重击/蓄力在 update 里已经处理
+      if (this.atkHeld && !this.atkHeavy && !this.blocked()) this.s.tryLight(false);
+      this.atkHeld = false;
+    }
+    if (what === 'full') this.toggleFullscreen(); // 全屏必须在手指抬起时请求
+  }
+
+  toggleFullscreen() {
+    const sc = this.s.scale;
+    if (sc.isFullscreen) { sc.stopFullscreen(); return; }
+    sc.startFullscreen();
+    if (screen.orientation && screen.orientation.lock) screen.orientation.lock('landscape').catch(() => {});
+  }
+
+  flash(name) {
+    const c = this.btns[name].c;
+    this.s.tweens.add({ targets: c, scale: 0.9, duration: 60, yoyo: true });
+  }
+
+  // 每帧：摇杆向量、长按重击、按键显隐
+  update(dt) {
+    const s = this.s, h = s.hero;
+    if (this.blocked()) { this.stick = null; this.atkHeld = false; this.owner = {}; }
+    const st = this.stick, R0 = 70;
+    this.mx = 0; this.my = 0; this.moving = false;
+    const g = this.stickG; g.clear();
+    if (st) {
+      let dx = st.x - st.ox, dy = st.y - st.oy;
+      const l = Math.hypot(dx, dy);
+      if (l > 10) { this.mx = dx / l; this.my = dy / l; this.moving = true; }
+      if (l > R0) { dx *= R0 / l; dy *= R0 / l; }
+      g.fillStyle(0x16110d, 0.3); g.fillCircle(st.ox, st.oy, R0);
+      g.lineStyle(3, 0xF3E9D2, 0.5); g.strokeCircle(st.ox, st.oy, R0);
+      g.fillStyle(0xF3E9D2, 0.55); g.fillCircle(st.ox + dx, st.oy + dy, 30);
+    }
+    if (this.atkHeld && !this.atkHeavy) {
+      this.atkT += dt;
+      if (this.atkT >= HOLD_HEAVY) { this.atkHeavy = true; s.heavyDown(false); }
+    }
+    const B = this.btns, hide = !!s.over;
+    Object.values(B).forEach(b => b.c.setVisible(!hide));
+    const c = s.nearChest();
+    B.search.c.setVisible(!hide && !!c && !c.opened);
+    B.torch.c.setVisible(!hide && h.torch > 0);
+    B.torch.t.setText('×' + h.torch);
+    B.roar.c.setVisible(!hide && s.has('hou'));
+    // 将魂技冷却圈 = 怒气
+    const rg = B.roar.ring; rg.clear();
+    rg.lineStyle(4, h.rage >= 100 ? 0xF39C12 : 0x8E5E33, 1);
+    rg.beginPath(); rg.arc(0, 0, B.roar.r + 3, -Math.PI / 2, -Math.PI / 2 + Math.PI * 2 * h.rage / 100); rg.strokePath();
+    // 攻击键按住时画重击进度
+    const ag = B.attack.ring; ag.clear();
+    if (this.atkHeld) {
+      ag.lineStyle(5, this.atkHeavy ? 0xF1C40F : 0xF3E9D2, 0.9);
+      ag.beginPath(); ag.arc(0, 0, B.attack.r + 4, -Math.PI / 2, -Math.PI / 2 + Math.PI * 2 * Math.min(1, this.atkT / HOLD_HEAVY)); ag.strokePath();
+    }
+    // 翻滚次数
+    B.roll.c.setAlpha(h.dodges > 0 ? 1 : 0.45);
+  }
+}
+
 // ---------- 数据 ----------
 const RAR = [
   { n: '凡', c: 0xD9D9D9, t: 0.5 }, { n: '良', c: 0x6AB04C, t: 1 }, { n: '精', c: 0x3A8DDE, t: 2 },
@@ -156,9 +299,11 @@ class Title extends Phaser.Scene {
     g.fillGradientStyle(0x16110d, 0x16110d, 0x16110d, 0x16110d, 0, 0, 0.92, 0.92); g.fillRect(0, H * 0.45, W, H * 0.55);
     this.add.text(W / 2, 470, '逃离三国', { fontFamily: FONT, fontSize: '96px', color: '#F3E9D2', stroke: '#2B1D16', strokeThickness: 12, fontStyle: 'bold' }).setOrigin(0.5);
     this.add.text(W / 2, 545, '虎牢关 · WebGL 玩法原型', { fontFamily: FONT, fontSize: '26px', color: '#3EC6E0', stroke: '#2B1D16', strokeThickness: 6 }).setOrigin(0.5);
-    const go = this.add.text(W / 2, 610, '点击或按 Enter 开始', { fontFamily: FONT, fontSize: '28px', color: '#F3E9D2', stroke: '#2B1D16', strokeThickness: 6 }).setOrigin(0.5);
+    const go = this.add.text(W / 2, 610, TOUCH ? '点击开始' : '点击或按 Enter 开始', { fontFamily: FONT, fontSize: '28px', color: '#F3E9D2', stroke: '#2B1D16', strokeThickness: 6 }).setOrigin(0.5);
     this.tweens.add({ targets: go, alpha: 0.35, duration: 700, yoyo: true, repeat: -1 });
-    this.add.text(W / 2, 672, 'WASD 移动　鼠标瞄准　左键/J 连击　右键/K 重击　空格 翻滚　E 搜箱　F 手电　Tab 背包　Q 大吼', { fontFamily: FONT, fontSize: '18px', color: '#CDB78A' }).setOrigin(0.5);
+    const help = TOUCH ? '左半屏按住拖动 移动　攻：点按连击，按住重击　滚：翻滚　靠近宝箱点“搜”'
+      : 'WASD 移动　鼠标瞄准　左键/J 连击　右键/K 重击　空格 翻滚　E 搜箱　F 手电　Tab 背包　Q 大吼';
+    this.add.text(W / 2, 672, help, { fontFamily: FONT, fontSize: '18px', color: '#CDB78A' }).setOrigin(0.5);
     const start = () => this.scene.start('run');
     this.input.keyboard.once('keydown-ENTER', start);
     this.input.keyboard.once('keydown-SPACE', start);
@@ -197,12 +342,21 @@ class Run extends Phaser.Scene {
     for (let i = 0; i < 4; i++) this.run.grid.push(new Array(6).fill(null));
     this.enemies = []; this.arrows = []; this.chests = []; this.doors = []; this.roomObjs = [];
     this.hitstop = 0; this.paused = false; this.panel = null; this.mouseAim = false;
-    this.input.on('pointermove', () => { this.mouseAim = true; });
-    this.input.on('pointerdown', p => {
-      if (this.panel) return;
-      if (p.rightButtonDown()) this.heavyDown(true); else this.tryLight(true);
-    });
     this.over = false;
+    if (TOUCH) {
+      this.pad = new TouchPad(this);
+      // 竖屏时自动暂停（页面上同时盖“请横屏游玩”）
+      this.portraitMq = matchMedia('(orientation: portrait)');
+      this.onPortrait = e => { if (e.matches && !this.panel && !this.over) this.togglePause(); };
+      this.portraitMq.addEventListener('change', this.onPortrait);
+      this.events.once('shutdown', () => this.portraitMq.removeEventListener('change', this.onPortrait));
+    } else {
+      this.input.on('pointermove', () => { this.mouseAim = true; });
+      this.input.on('pointerdown', p => {
+        if (this.panel) return;
+        if (p.rightButtonDown()) this.heavyDown(true); else this.tryLight(true);
+      });
+    }
     this.input.keyboard.on('keydown-TAB', () => this.toggleBag());
     this.input.keyboard.on('keydown-ESC', () => { if (this.panel && this.panel.kind === 'bag') this.toggleBag(); });
 
@@ -407,6 +561,7 @@ class Run extends Phaser.Scene {
   update(time, deltaMs) {
     const dt = Math.min(deltaMs / 1000, 0.05);
     this.drawHud();
+    if (this.pad) this.pad.update(dt);
     if (this.paused) return;
     if (this.hitstop > 0) { this.hitstop -= dt; return; }
     this.run.corrT = (this.run.corrT || 0) + dt;
@@ -441,6 +596,7 @@ class Run extends Phaser.Scene {
   }
 
   input2() {
+    if (this.pad && this.pad.moving) return { mx: this.pad.mx, my: this.pad.my, moving: true };
     const k = this.keys;
     let mx = (k.D.isDown || k.RIGHT.isDown ? 1 : 0) - (k.A.isDown || k.LEFT.isDown ? 1 : 0);
     let my = (k.S.isDown || k.DOWN.isDown ? 1 : 0) - (k.W.isDown || k.UP.isDown ? 1 : 0);
@@ -449,8 +605,22 @@ class Run extends Phaser.Scene {
     return { mx, my, moving: l > 0 };
   }
 
+  // 触屏没有鼠标：朝前方 120° 内 240px 以内最近的敌人出手，没有就朝摇杆或面朝方向
+  autoAim() {
+    const h = this.hero, pad = this.pad;
+    const base = pad && pad.moving ? Math.atan2(pad.my, pad.mx) : h.face;
+    let best = null, bd = 240;
+    for (const e of this.enemies) {
+      if (e.dead || e.spawnT > 0) continue;
+      const dx = e.x - h.x, dy = e.y - h.y, d = Math.hypot(dx, dy);
+      if (d <= bd && Math.abs(R.Angle.Wrap(Math.atan2(dy, dx) - base)) <= Math.PI / 3) { bd = d; best = e; }
+    }
+    return best ? Math.atan2(best.y - 20 - (h.y - 20), best.x - h.x) : base;
+  }
+
   aimAngle(fromMouse) {
     const h = this.hero;
+    if (TOUCH) return this.autoAim();
     if (fromMouse || this.mouseAim) {
       const p = this.input.activePointer;
       return Math.atan2(p.worldY - (h.y - 30), p.worldX - h.x);
@@ -480,7 +650,7 @@ class Run extends Phaser.Scene {
 
     // 温酒斩华雄：按住重击蓄力，松开出手
     if (h.charge >= 0) {
-      const held = h.chargeMouse ? this.input.activePointer.rightButtonDown() : k.K.isDown;
+      const held = this.pad ? this.pad.atkHeld : h.chargeMouse ? this.input.activePointer.rightButtonDown() : k.K.isDown;
       h.charge += dt;
       if (h.charge >= 1 && !h.chargeFull) { h.chargeFull = true; this.ring(h.x, h.y - 30, C.yellow, 60, 220, 4); }
       if (!held) { const full = h.charge >= 1; h.charge = -1; h.chargeFull = false; this.tryHeavy(this.mouseAim, full ? 1.8 : 1); }
@@ -1036,7 +1206,7 @@ class Run extends Phaser.Scene {
       const nm = this.add.text(x, top + 96, s.n, { fontFamily: FONT, fontSize: '28px', color: '#2B1D16', fontStyle: 'bold' }).setOrigin(0.5);
       const g = this.add.text(x, top + 130, `— ${s.g} · ${s.slot} —`, { fontFamily: FONT, fontSize: '18px', color: '#6E4526' }).setOrigin(0.5);
       const d = this.add.text(x, top + 188, s.d, { fontFamily: FONT, fontSize: '16px', color: '#2B1D16', align: 'center', lineSpacing: 5 }).setOrigin(0.5);
-      const key = this.add.text(x, top + ch - 44, `[${i + 1}]`, { fontFamily: FONT, fontSize: '18px', color: '#8E5E33' }).setOrigin(0.5);
+      const key = this.add.text(x, top + ch - 44, TOUCH ? '点击选择' : `[${i + 1}]`, { fontFamily: FONT, fontSize: '18px', color: '#8E5E33' }).setOrigin(0.5);
       card.on('pointerover', () => card.setScale(cs * 1.03).setTint(0xFFF6E0));
       card.on('pointerout', () => card.setScale(cs).clearTint());
       card.on('pointerdown', () => choose(s));
@@ -1046,6 +1216,20 @@ class Run extends Phaser.Scene {
     const kh = ev => { const n = { Digit1: 0, Digit2: 1, Digit3: 2, Numpad1: 0, Numpad2: 1, Numpad3: 2 }[ev.code]; if (n !== undefined && this.panel && this.panel.kind === 'soul' && this.panel.keys[n]) this.panel.keys[n](); };
     this.input.keyboard.on('keydown', kh);
     this.panel.off = () => this.input.keyboard.off('keydown', kh);
+  }
+
+  togglePause() {
+    if (this.over) return;
+    if (this.panel) { if (this.panel.kind === 'pause') this.closePanel(); return; }
+    this.paused = true;
+    const p = this.add.container(0, 0).setDepth(9000);
+    const dim = this.add.rectangle(W / 2, H / 2, W, H, 0x16110d, 0.72).setInteractive();
+    p.add(dim);
+    p.add(this.add.text(W / 2, H / 2 - 20, '已暂停', { fontFamily: FONT, fontSize: '56px', color: '#F3E9D2', stroke: '#2B1D16', strokeThickness: 8 }).setOrigin(0.5));
+    p.add(this.add.text(W / 2, H / 2 + 50, '点击继续', { fontFamily: FONT, fontSize: '24px', color: '#CDB78A' }).setOrigin(0.5));
+    // 晚一帧再接点击，免得按“停”的那一下直接关掉
+    this.time.delayedCall(50, () => dim.once('pointerdown', () => { if (this.panel && this.panel.kind === 'pause') this.closePanel(); }));
+    this.panel = { kind: 'pause', c: p };
   }
 
   closePanel() {
@@ -1062,10 +1246,12 @@ class Run extends Phaser.Scene {
     if (this.panel) { if (this.panel.kind === 'bag') this.closePanel(); return; }
     this.paused = true;
     const p = this.add.container(0, 0).setDepth(9000);
-    p.add(this.add.rectangle(W / 2, H / 2, W, H, 0x16110d, 0.7).setInteractive());
+    const dim = this.add.rectangle(W / 2, H / 2, W, H, 0x16110d, 0.7).setInteractive();
+    if (TOUCH) dim.on('pointerdown', () => this.toggleBag());
+    p.add(dim);
     // U02：面板自带 6×4 竹格，物品按格线对齐（原图格线 x 206–705、y 282–608）
     const pw0 = 83.2, ph0 = 81.5, gl = 206, gt = 282;
-    const panel = this.add.image(W / 2 - 80, 386, 'inventory_panel');
+    const panel = this.add.image(W / 2 - 80, 386, 'inventory_panel').setInteractive();
     const sc = 62 / pw0;
     panel.setScale(sc);
     p.add(panel);
@@ -1087,7 +1273,7 @@ class Run extends Phaser.Scene {
     const sx = pl + panel.displayWidth + 95;
     p.add(ui(this, sx, 330, 'inventory_safe', 150));
     p.add(this.add.text(sx, 420, '护心镜 2×2\n（保险格，原型未启用）', { fontFamily: FONT, fontSize: '16px', color: '#CDB78A', align: 'center' }).setOrigin(0.5, 0));
-    p.add(this.add.text(W / 2, H - 22, '死了全部丢失，撤离才算数。Tab 关闭', { fontFamily: FONT, fontSize: '18px', color: '#CDB78A' }).setOrigin(0.5));
+    p.add(this.add.text(W / 2, H - 22, TOUCH ? '死了全部丢失，撤离才算数。点空白处关闭' : '死了全部丢失，撤离才算数。Tab 关闭', { fontFamily: FONT, fontSize: '18px', color: '#CDB78A' }).setOrigin(0.5));
     this.panel = { kind: 'bag', c: p };
   }
 
@@ -1121,7 +1307,7 @@ class Run extends Phaser.Scene {
       if (icon) p.add(ui(this, x - 38, 500, icon, 48).setAlpha(win ? 1 : 0.5));
       p.add(this.add.text(icon ? x + 18 : x, 500, it.name, { fontFamily: FONT, fontSize: icon ? '15px' : '17px', color: '#2B1D16' }).setOrigin(0.5));
     });
-    const again = this.add.text(W / 2, 620, '点击或按 Enter 再来一局', { fontFamily: FONT, fontSize: '28px', color: '#F3E9D2', stroke: '#2B1D16', strokeThickness: 6 }).setOrigin(0.5);
+    const again = this.add.text(W / 2, 620, TOUCH ? '点击再来一局' : '点击或按 Enter 再来一局', { fontFamily: FONT, fontSize: '28px', color: '#F3E9D2', stroke: '#2B1D16', strokeThickness: 6 }).setOrigin(0.5);
     p.add(again);
     this.tweens.add({ targets: again, alpha: 0.4, duration: 700, yoyo: true, repeat: -1 });
     this.time.delayedCall(700, () => {
@@ -1237,7 +1423,7 @@ class Run extends Phaser.Scene {
     // 箱子提示
     const c = this.nearChest();
     if (c && !c.opened) {
-      this.hint.setText(`E 搜索${c.def.name}`).setVisible(true);
+      this.hint.setText(TOUCH ? `点“搜”搜索${c.def.name}` : `E 搜索${c.def.name}`).setVisible(true);
     } else if (this.anchor) {
       this.hint.setText('站进青色裂隙里撑住！').setVisible(true);
     } else this.hint.setVisible(false);
@@ -1318,9 +1504,10 @@ class Run extends Phaser.Scene {
     this.comboLb = st(W - 70, 252, '连击', 16).setOrigin(0.5);
     // 道具栏：强光手电、当阳一吼
     this.slotTorch = img(48, H - 46, 'hud_slot_frame', 56);
-    img(48, H - 48, 'modern_flashlight', 40);
+    const torchIcon = img(48, H - 48, 'modern_flashlight', 40);
     this.torchText = st(66, H - 32, '', 15).setOrigin(1, 0.5);
-    st(30, H - 82, 'F', 15, '#CDB78A');
+    const torchKey = st(30, H - 82, 'F', 15, '#CDB78A');
+    if (TOUCH) [this.slotTorch, torchIcon, this.torchText, torchKey].forEach(o => o.setVisible(false));
     this.slotRoar = img(110, H - 46, 'hud_slot_frame', 56);
     this.roarIcon = img(110, H - 48, 'door_spirit', 40);
     this.roarText = st(110, H - 82, 'Q', 15, '#CDB78A').setOrigin(0.5, 0);
@@ -1354,10 +1541,10 @@ class Run extends Phaser.Scene {
     this.comboText.setText(String(h.chain));
     this.torchText.setText('×' + h.torch);
     this.slotTorch.setAlpha(h.torch > 0 ? 1 : 0.4);
-    [this.slotRoar, this.roarIcon, this.roarText].forEach(o => o.setVisible(this.has('hou')));
+    [this.slotRoar, this.roarIcon, this.roarText].forEach(o => o.setVisible(!TOUCH && this.has('hou')));
     this.roarIcon.setAlpha(h.rage >= 100 ? 1 : 0.35);
     this.roomText.setText(`第 ${run.room} 间 · ${this.roomName || ''}`);
-    this.bagText.setText(`行囊 ${run.bag.length} 件 · 价值 ${run.value}　[Tab]`);
+    this.bagText.setText(`行囊 ${run.bag.length} 件 · 价值 ${run.value}${TOUCH ? '' : '　[Tab]'}`);
     this.soulText.setText(run.souls.length ? '将魂：' + run.souls.map(id => SOULS.find(s => s.id === id).n).join('  ') : '');
     // 怒气
     g.fillStyle(C.ink, 1); g.fillRect(166, 84, 128, 10);
@@ -1382,6 +1569,7 @@ const game = new Phaser.Game({
   width: W, height: H,
   backgroundColor: '#16110d',
   scale: { mode: Phaser.Scale.FIT, autoCenter: Phaser.Scale.CENTER_BOTH },
+  input: { activePointers: 4 }, // 触屏多指：摇杆 + 攻击 + 翻滚
   scene: [Title, Run],
 });
 window.__game = game;

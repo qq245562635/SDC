@@ -2,7 +2,7 @@
 <html lang="zh-CN">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
 <link rel="icon" href="data:,">
 <title>逃离三国 · 虎牢关原型</title>
 <style>
@@ -10,10 +10,28 @@
   #game { position: fixed; inset: 0; display: flex; align-items: center; justify-content: center; }
   #game canvas { image-rendering: auto; box-shadow: 0 0 40px rgba(0,0,0,.6); }
   #err { position: fixed; left: 16px; right: 16px; top: 16px; color: #f3e9d2; font: 14px/1.5 sans-serif; }
+  /* 触屏：禁止滚动、双击缩放、长按菜单和选中文字 */
+  html.touch, html.touch body, html.touch canvas { touch-action: none; overscroll-behavior: none; user-select: none; -webkit-user-select: none; -webkit-touch-callout: none; -webkit-tap-highlight-color: transparent; }
+  #rotate { display: none; position: fixed; inset: 0; z-index: 10; background: #16110d; color: #f3e9d2; font: 26px/1.6 serif; align-items: center; justify-content: center; text-align: center; }
+  @media (orientation: portrait) { html.touch #rotate { display: flex; } }
 </style>
+<script>
+  // T007 平台判断：?touch=1 / ?touch=0 强制，否则有触点且主指针是粗指针（手指）时用触屏
+  window.TOUCH = (() => {
+    const q = new URLSearchParams(location.search).get('touch');
+    if (q === '1') return true;
+    if (q === '0') return false;
+    return navigator.maxTouchPoints > 0 && matchMedia('(pointer: coarse)').matches;
+  })();
+  if (window.TOUCH) {
+    document.documentElement.classList.add('touch');
+    document.addEventListener('contextmenu', e => e.preventDefault());
+  }
+</script>
 </head>
 <body>
 <div id="game"></div>
+<div id="rotate">请横屏游玩<br>⟳</div>
 <div id="err"></div>
 <script src="https://cdn.jsdelivr.net/npm/phaser@3.80.1/dist/phaser.min.js"></script>
 <script>
