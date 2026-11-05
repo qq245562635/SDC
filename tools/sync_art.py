@@ -19,6 +19,7 @@ art/ 不在本地（例如 T002 还没合并）时，用 --art 指向主美分�
 """
 import argparse
 import json
+import math
 from pathlib import Path
 
 from PIL import Image
@@ -39,6 +40,22 @@ def key_of(name: str, keep_index=False) -> str:
     if stem.endswith('_01'):
         stem = stem[:-3]
     return stem.split('_', 1)[1]
+
+
+def leg_axis(src, pivot):
+    """腿图自带的倾角（弧度）：关节点 → 脚（离关节最远的那 15% 像素的重心）相对竖直向下的角度。
+    顺时针转这个角度，腿就竖直。拆件里近侧腿是按站姿画的（迈开的），走路时用它把两条腿摆正。
+    同时返回腿长（关节到脚，源图像素），摆正后身体要抬高 腿长 ×（1 − cos 倾角），脚才不陷进地里。"""
+    im = Image.open(src).convert('RGBA')
+    a = im.getchannel('A').load()
+    px, py = pivot
+    pts = [(x, y) for y in range(im.height) for x in range(im.width) if a[x, y] > 128]
+    d = [math.hypot(x - px, y - py) for x, y in pts]
+    far = max(d) * 0.85
+    fx = [x for (x, y), r in zip(pts, d) if r >= far]
+    fy = [y for (x, y), r in zip(pts, d) if r >= far]
+    dx, dy = sum(fx) / len(fx) - px, sum(fy) / len(fy) - py
+    return math.atan2(dx, dy), math.hypot(dx, dy)
 
 
 def main():
@@ -94,6 +111,9 @@ def main():
                     entry[f] = px(a[f])
             if 'attach' in a:
                 entry['a'] = {n: px(v) for n, v in a['attach'].items()}
+            if a.get('part', '').startswith('leg'):
+                ax, ln = leg_axis(src, a['joint_pivot'])
+                entry['ax'], entry['ln'] = round(ax, 4), round(ln * k, 2)
         if a.get('role') == 'ground_base':
             ground['base'].append(key)
         if a.get('role') == 'ground_decal':
