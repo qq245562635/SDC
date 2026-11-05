@@ -90,6 +90,8 @@ const ENEMY = {
   guard:  { name: '时空守卫', hp: 220, dmg: 20, spd: 95, range: 110, windup: 1.0, cd: 2.0, k: 1.25, r: 28, guard: 100, skin: 'soldier_blue', elite: true, tint: 0x7FE3F2 },
 };
 const CHAR_H = 140 * WS; // 普通角色显示高度
+// docs/03：营帐、宝箱在规格基础上整体按 1.5 倍显示
+const TENT_K = 1.5, CHEST_K = 1.5;
 const DOORS = {
   soul:   { n: '将魂', ic: '魂', c: C.shu },
   chest:  { n: '宝箱', ic: '宝', c: C.yellow },
@@ -178,6 +180,7 @@ class Run extends Phaser.Scene {
     this.fxG = this.add.graphics().setDepth(-4);
     this.topG = this.add.graphics().setDepth(5000);
     this.inkFx = this.add.particles(0, 0, 'ink', { speed: { min: 80, max: 320 }, scale: { start: 0.9, end: 0 }, lifespan: { min: 220, max: 520 }, gravityY: 300, emitting: false }).setDepth(4000);
+    this.redSparkFx = this.add.particles(0, 0, 'lootbeam_red_spark', { speed: { min: 40, max: 160 }, angle: { min: 200, max: 340 }, scale: { start: artScale('lootbeam_red_spark') * 0.5, end: 0 }, rotate: { min: 0, max: 360 }, lifespan: { min: 600, max: 1100 }, gravityY: -40, blendMode: 'ADD', emitting: false }).setDepth(4002);
     this.sparkFx = this.add.particles(0, 0, 'dot', { speed: { min: 60, max: 220 }, scale: { start: 1, end: 0 }, lifespan: 420, blendMode: 'ADD', emitting: false }).setDepth(4001);
 
     const hero = this.hero = {
@@ -239,12 +242,12 @@ class Run extends Phaser.Scene {
     Phaser.Utils.Array.Shuffle(spots).slice(0, nt).forEach(([tx, ty], i) => {
       tx += rnd(-30, 30); ty += rnd(-20, 20);
       const col = i === 0 ? faction : pick(['blue', 'yellow', 'red']);
-      const t = art(this, tx, ty, `tent_${col}${Math.random() < 0.4 ? '_damaged' : ''}`).setDepth(ty);
+      const t = art(this, tx, ty, `tent_${col}${Math.random() < 0.4 ? '_damaged' : ''}`, TENT_K).setDepth(ty);
       if (Math.random() < 0.5) t.setFlipX(true);
       this.roomObjs.push(t);
-      this.obstacles.push({ x: tx, y: ty - 18, r: 46 });
+      this.obstacles.push({ x: tx, y: ty - 27, r: 66 });
       // 第一顶营帐旁插帅旗（E05，旗面单独一层飘动）
-      if (i === 0) this.addBanner(tx + (t.flipX ? -62 : 62), ty + 6, faction);
+      if (i === 0) this.addBanner(tx + (t.flipX ? -90 : 90), ty + 6, faction);
     });
     // 辎重车 E06、火盆 E07 + 火焰 V03
     if (Math.random() < 0.7) {
@@ -306,13 +309,10 @@ class Run extends Phaser.Scene {
 
   addBanner(x, y, col) {
     if (this.blocked(x, y, 8)) return;
+    // 旗杆和旗面同画布、同原点（杆脚），旗面以杆为轴轻轻飘
     const pole = art(this, x, y, `banner_${col}_pole`).setDepth(y);
-    // 交付没给旗面挂点：按包围盒把旗面左上角挂到杆顶下方，以挂杆一侧为轴轻轻飘
-    const mp = ART[`banner_${col}_pole`], mc = ART[`banner_${col}_cloth`];
-    const s = artScale(`banner_${col}_cloth`);
-    const poleTop = y - (mp.o[1] * mp.h - mp.b[1]) * s;
-    const cloth = this.add.image(x - 2 * s, poleTop + 6 * s, `banner_${col}_cloth`)
-      .setOrigin(mc.b[0] / mc.w, mc.b[1] / mc.h).setScale(s).setDepth(y + 1);
+    const cloth = art(this, x, y, `banner_${col}_cloth`).setDepth(y + 1);
+    const s = cloth.scaleX;
     this.tweens.add({ targets: cloth, scaleX: s * 0.9, scaleY: s * 1.03, duration: rnd(600, 900), yoyo: true, repeat: -1, ease: 'Sine.easeInOut' });
     this.roomObjs.push(pole, cloth);
     this.obstacles.push({ x, y, r: 8 });
@@ -360,11 +360,11 @@ class Run extends Phaser.Scene {
     }
     // 固定坐标（清房奖励）若压到营帐，就沿竖直方向挪开
     for (let i = 0; i < 20 && this.blocked(x, y, 40); i++) y += i % 2 ? -i * 12 : i * 12;
-    const k = tier === 'lacquer' ? 1.15 : 1;
+    const k = CHEST_K * (tier === 'lacquer' ? 1.15 : 1);
     const spr = art(this, x, y, def.tex + '_closed', k).setDepth(y);
     const c = { tier, def, spr, x, y, k, opened: false, items: null, idx: 0, t: 0 };
     this.chests.push(c);
-    this.obstacles.push({ x, y: y - 6, r: 18 });
+    this.obstacles.push({ x, y: y - 8, r: 26 });
     if (tier === 'lacquer') this.tweens.add({ targets: spr, scale: spr.scale * 1.06, duration: 600, yoyo: true, repeat: -1 });
     return c;
   }
@@ -904,7 +904,7 @@ class Run extends Phaser.Scene {
     }
     c.idx = 0; c.t = 0;
     this.addCorrection(3);
-    c.ui = this.add.container(c.x, c.y - 70).setDepth(4500);
+    c.ui = this.add.container(c.x, c.y - 90).setDepth(4500);
     const n = c.items.length, sw = 46;
     c.ui.add(this.add.rectangle(0, 0, n * sw + 10, 56, C.paper, 0.95).setStrokeStyle(3, C.ink));
     c.slots = c.items.map((it, i) => {
@@ -953,8 +953,9 @@ class Run extends Phaser.Scene {
         this.tweens.add({ targets: beam, scaleX: bs, scaleY: bs, duration: 160, ease: 'Back.easeOut',
           onComplete: () => this.tweens.add({ targets: beam, alpha: 0, delay: 300 + it.r * 180, duration: 500, onComplete: () => beam.destroy() }) });
         if (it.r >= 3) {
-          // 红色传说的额外粒子：主美补贴图前先用程序粒子
-          this.sparkFx.setParticleTint(RAR[it.r].c); this.sparkFx.explode(it.r >= 5 ? 60 : 30, c.x, c.y - 30);
+          this.sparkFx.setParticleTint(RAR[it.r].c); this.sparkFx.explode(30, c.x, c.y - 30);
+          // 红色传说的额外粒子：V05 金红火星贴图
+          if (it.r >= 5) this.redSparkFx.explode(18, c.x, c.y - 40);
           if (it.r >= 4) this.cameras.main.flash(160, 241, 196, 15, false);
         }
         if (c.idx >= c.items.length) this.time.delayedCall(1600, () => { if (c.ui && c.ui.active) this.tweens.add({ targets: c.ui, alpha: 0, duration: 300 }); });
