@@ -1,0 +1,211 @@
+{
+  "generator": "built-in imagegen",
+  "source_commit": "6e4247b",
+  "status": "concepts awaiting art direction selection",
+  "images": [
+    {
+      "file": "char_hero_01.png",
+      "width": 1774,
+      "height": 887,
+      "mode": "RGBA",
+      "sha256": "c86a159be8ac2b2a5e0cf3e6ff0de1e2a8b709d75d2a0e66e4490475e70d1b60",
+      "alpha_extrema": [
+        0,
+        255
+      ]
+    },
+    {
+      "file": "char_hero_02.png",
+      "width": 1774,
+      "height": 887,
+      "mode": "RGBA",
+      "sha256": "27cd10f335ab0a0867b0b61bd8b86693176b0c54ba0ce86e29e12422fcda6a09",
+      "alpha_extrema": [
+        0,
+        255
+      ]
+    },
+    {
+      "file": "char_hero_03.png",
+      "width": 1774,
+      "height": 887,
+      "mode": "RGBA",
+      "sha256": "3e9a5a97c750fde887d79c353e4865dbdb99dd0e622b13afe665c630419ed948",
+      "alpha_extrema": [
+        0,
+        255
+      ]
+    },
+    {
+      "file": "char_hero_04.png",
+      "width": 1774,
+      "height": 887,
+      "mode": "RGBA",
+      "sha256": "0b0dba491b73a43d2a3abb43803f7ac4ddb509d5992ce29e43f3d8a173c8c6f5",
+      "alpha_extrema": [
+        0,
+        255
+      ]
+    },
+    {
+      "file": "char_soldier_01.png",
+      "width": 1536,
+      "height": 1024,
+      "mode": "RGBA",
+      "sha256": "9b3e8aa6577391b0fe9ce6b44edef7f43a3b18c84f730f0220f262707cd0daf6",
+      "alpha_extrema": [
+        0,
+        254
+      ]
+    },
+    {
+      "file": "char_soldier_02.png",
+      "width": 1536,
+      "height": 1024,
+      "mode": "RGBA",
+      "sha256": "ac3fb35ad47532692590d7ee56bde0017118e2e05cb99528a066749d84de7386",
+      "alpha_extrema": [
+        0,
+        254
+      ]
+    },
+    {
+      "file": "char_soldier_03.png",
+      "width": 1536,
+      "height": 1024,
+      "mode": "RGBA",
+      "sha256": "f2ad0381f58ee113ee298878e530ce7af114a6eab1e78e82ac864e0f1722719e",
+      "alpha_extrema": [
+        0,
+        254
+      ]
+    },
+    {
+      "file": "char_soldier_04.png",
+      "width": 1536,
+      "height": 1024,
+      "mode": "RGBA",
+      "sha256": "6f5c57f20eafb095f606eeb78953e8172d6c97bd9a1905109bc5fa0925d7be25",
+      "alpha_extrema": [
+        0,
+        254
+      ]
+    },
+    {
+      "file": "env_tent_01.png",
+      "width": 1536,
+      "height": 1024,
+      "mode": "RGBA",
+      "sha256": "5414b4db711f1dce795270f5e0e229a1b3f73e0ae59380ca48fd2c41606e7387",
+      "alpha_extrema": [
+        0,
+        254
+      ]
+    },
+    {
+      "file": "env_tent_02.png",
+      "width": 1536,
+      "height": 1024,
+      "mode": "RGBA",
+      "sha256": "344f5e11b92eddbcea695f2b9eb5f564eadf42c72665befe2cc34ae0ac0e1321",
+      "alpha_extrema": [
+        0,
+        254
+      ]
+    },
+    {
+      "file": "env_tent_03.png",
+      "width": 1536,
+      "height": 1024,
+      "mode": "RGBA",
+      "sha256": "116af8ad9b0468c4eba93c77b8ab36f92628063c578dafd787a6956aa0983db0",
+      "alpha_extrema": [
+        0,
+        254
+      ]
+    },
+    {
+      "file": "env_tent_04.png",
+      "width": 1536,
+      "height": 1024,
+      "mode": "RGBA",
+      "sha256": "c0abd6d04a80e81ba37be8f33711cec5afcc4e885ad307f4b122c971d161fb00",
+      "alpha_extrema": [
+        0,
+        254
+      ]
+    },
+    {
+      "file": "key_art_01.png",
+      "width": 1672,
+      "height": 941,
+      "mode": "RGB",
+      "sha256": "f3856f62229c869811a3b4ff44278d00e9f2e71ecc9170c79c0d3ba3f7f557bc"
+    },
+    {
+      "file": "key_art_02.png",
+      "width": 1672,
+      "height": 941,
+      "mode": "RGB",
+      "sha256": "999aecbe686d39023929b9e3fe2a2f7bebc745afbbc11b5be45f85c19e875ef2"
+    },
+    {
+      "file": "key_art_03.png",
+      "width": 1672,
+      "height": 941,
+      "mode": "RGB",
+      "sha256": "807c614555f0bff00557d42767b94fc6766ff2c75fc11535c406ed419e4c0d85"
+    },
+    {
+      "file": "key_art_04.png",
+      "width": 1672,
+      "height": 941,
+      "mode": "RGB",
+      "sha256": "71b293fa7fa34c45fa70a46ded9ec6886201b7b064ad51d154b30f2369f42054"
+    },
+    {
+      "file": "prop_chest_01.png",
+      "width": 1536,
+      "height": 1024,
+      "mode": "RGBA",
+      "sha256": "fb0751bab57b06861e4261f1ee729c2f1d07398a5103b8f2cb3f4df7974347ab",
+      "alpha_extrema": [
+        0,
+        254
+      ]
+    },
+    {
+      "file": "prop_chest_02.png",
+      "width": 1536,
+      "height": 1024,
+      "mode": "RGBA",
+      "sha256": "7fa30d0ee0537ae34d3d066f4e9676bb7ae69e15f3274469ff337e04ed9b1d88",
+      "alpha_extrema": [
+        0,
+        254
+      ]
+    },
+    {
+      "file": "prop_chest_03.png",
+      "width": 1536,
+      "height": 1024,
+      "mode": "RGBA",
+      "sha256": "715b295e7ed5ae4aafaf80426dea9a701710bd2418e184f1f3dfd2132038b621",
+      "alpha_extrema": [
+        0,
+        254
+      ]
+    },
+    {
+      "file": "prop_chest_04.png",
+      "width": 1536,
+      "height": 1024,
+      "mode": "RGBA",
+      "sha256": "02dd81efe7ea23e5d947783a05b892b76bd4637f444c6c0fad32181082b94bcf",
+      "alpha_extrema": [
+        0,
+        254
+      ]
+    }
+  ]
+}
