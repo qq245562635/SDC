@@ -38,8 +38,12 @@ function contentFrame(scene, key) {
   if (!tex.has('c')) { const b = ART[key].b; tex.add('c', 0, b[0], b[1], b[2] - b[0], b[3] - b[1]); }
   return 'c';
 }
-// 姿势图朝向：除翻滚外都朝右
-const POSE_FACE = { hero_roll: -1 };
+// T006：主角、联军兵、弓手用拆件骨骼动画（rig.js）；吕布暂时保持姿势图
+const { RigSprite } = window.Rig;
+const RIG_CHARS = Object.keys(window.RIGS || {});
+const isPoseArt = k => RIG_CHARS.some(c => k.startsWith(c + '_')) && !ART[k].j; // 已被拆件取代的关键姿势图
+const GROUND = window.GROUND || { base: [], decals: [] };
+const WALK_REF = { soldier: 115, archer: 105 }; // 敌人走路动作对应的基准移速 px/s（主角按 HERO_SPD）
 const RAR_KEY = ['white', 'green', 'blue', 'purple', 'gold', 'red'];
 // 原型物品 → I01 图标；对不上的保留色块
 const ITEM_ICON = {
@@ -290,18 +294,38 @@ function makeTextures(scene) {
   g.generateTexture('pet_donkey', 100, 74); g.clear();
   g.destroy();
 
-  // 地面：E01 16 块地砖随机铺（任意两块边缘都能接上）
-  const tex = scene.textures.createCanvas('ground', W, H);
+  scene.textures.createCanvas('ground', W, H);
+  paintGround(scene, []);
+}
+
+// 地面（T006）：T004 四块素土底图任意混铺，再在世界坐标里随机撒 30–50 个贴花（不按格子）。
+// avoid：[x, y, 半径] 列表，门口、出生点、撤离法阵不放。每进一间营帐重画一次。
+function paintGround(scene, avoid) {
+  const tex = scene.textures.get('ground');
   const x = tex.getContext();
   const src = k => scene.textures.get(k).getSourceImage();
-  // 每块中间颜色偏深，铺开有格子感：多用最平的 01/04，深色斑块和水坑少放
-  const weights = [10, 2, 2, 8, 3, 2, 1, 1, 1, 1, 2, 2, 1, 1, 1, 1];
-  const sum = weights.reduce((a, b) => a + b, 0);
-  const pickTile = () => { let r = Math.random() * sum; for (let i = 0; i < 16; i++) { r -= weights[i]; if (r < 0) return i; } return 0; };
   const T = 128 * WS;
   for (let ty = 0; ty * T < H; ty++) for (let tx = 0; tx * T < W; tx++) {
-    const px = Math.floor(tx * T), py = Math.floor(ty * T);
-    x.drawImage(src(`camp_tile${String(pickTile() + 1).padStart(2, '0')}`), px, py, Math.ceil(T) + 1, Math.ceil(T) + 1);
+    x.drawImage(src(pick(GROUND.base)), Math.floor(tx * T), Math.floor(ty * T), Math.ceil(T) + 1, Math.ceil(T) + 1);
+  }
+  const decals = [], n = R.Between(30, 50);
+  for (let i = 0; i < n; i++) {
+    for (let tries = 0; tries < 30; tries++) {
+      const px = rnd(ARENA.l - 30, ARENA.r + 30), py = rnd(ARENA.t - 10, H - 20);
+      if (avoid.some(([ax, ay, ar]) => Math.hypot(px - ax, py - ay) < ar)) continue;
+      if (decals.some(d => Math.hypot(px - d.x, py - d.y) < 55)) continue; // 不扎堆
+      const key = pick(GROUND.decals), m = ART[key];
+      const rot = m.rot === 'free' ? rnd(0, 360) : m.rot === 'discrete' ? pick(m.deg) : 0;
+      decals.push({ key, m, x: px, y: py, rot: rot * Math.PI / 180, k: rnd(m.sc[0], m.sc[1]) * artScale(key) });
+      break;
+    }
+  }
+  // 平面痕迹（z0）在下，草和石头（z1）在上；同层按世界 y 排
+  decals.sort((a, b) => a.m.z - b.m.z || a.y - b.y);
+  for (const d of decals) {
+    x.save(); x.translate(d.x, d.y); x.rotate(d.rot);
+    x.drawImage(src(d.key), -d.m.w * d.m.o[0] * d.k, -d.m.h * d.m.o[1] * d.k, d.m.w * d.k, d.m.h * d.k);
+    x.restore();
   }
   // 左右、下方栅栏：E03 单根木桩，从上往下画，下面的压住上面的
   const drawArt = (k, cx, by, s = 1) => {
@@ -315,14 +339,15 @@ function makeTextures(scene) {
   top.addColorStop(0, 'rgba(22,17,13,0.92)'); top.addColorStop(1, 'rgba(22,17,13,0)');
   x.fillStyle = top; x.fillRect(0, 0, W, 80);
   tex.refresh();
+  scene.groundDecals = decals.length;
 }
 
 // ---------- 标题 ----------
 class Title extends Phaser.Scene {
   constructor() { super('title'); }
   preload() {
-    // 吕布和拆件只在 rig.html 里用
-    Object.keys(ART).filter(k => !k.startsWith('lubu_') && !ART[k].p).forEach(k => this.load.image(k, `assets/art/${k}.png`));
+    // 吕布只在 rig.html 里用；主角、敌兵用拆件，不再加载关键姿势图
+    Object.keys(ART).filter(k => !k.startsWith('lubu_') && !isPoseArt(k)).forEach(k => this.load.image(k, `assets/art/${k}.png`));
     this.load.image('key_art', 'assets/key_art.jpg');
     const bar = this.add.rectangle(W / 2 - 200, H / 2, 0, 8, C.cyan).setOrigin(0, 0.5);
     this.load.on('progress', p => bar.width = 400 * p);
@@ -373,7 +398,7 @@ class Run extends Phaser.Scene {
       atk: null, combo: 0, comboWin: 0, queue: null, heavyCd: 0, rolledHit: new Set(),
       rage: 0, torch: 3, chain: 0, chainT: 0, charge: -1, chargeMouse: false, breakT: 0, dmgMul: 1, flash: 0,
     };
-    hero.spr = art(this, hero.x, hero.y, 'hero_idle');
+    hero.spr = new RigSprite(this, hero.x, hero.y, 'hero', WS);
     // 上方栅栏：E03 横栏，开营门时把门口那段藏起来换成营门
     this.rails = [];
     for (let x = 20; x < W + 40; x += 70) this.rails.push(art(this, x, ARENA.t - 8, x % 280 === 160 ? 'palisade_damaged' : 'palisade_rail').setDepth(ARENA.t - 8));
@@ -432,6 +457,8 @@ class Run extends Phaser.Scene {
     if (kind !== 'start' && this.has('laodang')) { hero.dmgMul += 0.08; this.time.delayedCall(900, () => this.toast(`老当益壮：伤害 +${Math.round((hero.dmgMul - 1) * 100)}%`, '#9FD3A8')); }
 
     this.rails.forEach(r => r.setVisible(true));
+    // 地面贴花避开两个营门、出生点和撤离法阵
+    paintGround(this, [[480, ARENA.t, 110], [800, ARENA.t, 110], [640, 640, 110], ...(kind === 'anchor' ? [[640, 400, 170]] : [])]);
     // 营帐：E04，三色随机，四成是破损版
     const nt = kind === 'anchor' ? 2 : R.Between(2, 3);
     const spots = [[230, 300], [1050, 300], [250, 560], [1040, 560], [420, 420], [880, 430]];
@@ -530,7 +557,7 @@ class Run extends Phaser.Scene {
       tries++;
     } while (tries < 30 && (Math.hypot(x - this.hero.x, y - this.hero.y) < 280 || this.blocked(x, y, def.r)));
     const skin = def.skin || pick(['soldier_blue', 'soldier_yellow', 'soldier_red']);
-    const spr = art(this, x, y, `${skin}_idle`, def.k).setAlpha(0);
+    const spr = new RigSprite(this, x, y, skin, WS * def.k).setAlpha(0);
     if (def.tint) spr.setTint(def.tint);
     const e = {
       type, def, skin, spr, x, y, r: def.r, hp: def.hp, maxHp: def.hp, guard: def.guard || 0, maxGuard: def.guard || 0, hurtT: 0,
@@ -628,7 +655,7 @@ class Run extends Phaser.Scene {
     const dt = Math.min(deltaMs / 1000, 0.05);
     this.drawHud();
     if (this.pad) this.pad.update(dt);
-    if (this.paused) return;
+    if (this.paused) { if (this.over) this.tickRigs(dt); return; } // 结算时让倒地动作播完
     if (this.hitstop > 0) { this.hitstop -= dt; return; }
     this.run.corrT = (this.run.corrT || 0) + dt;
     if (this.run.corrT >= 3) { this.run.corrT -= 3; this.addCorrection(1); }
@@ -642,6 +669,7 @@ class Run extends Phaser.Scene {
     this.updateChests(dt);
     this.updateAnchor(dt);
     this.enemies = this.enemies.filter(e => !e.dead);
+    this.tickRigs(dt);
 
     if (!this.cleared && this.roomKind !== 'anchor') {
       const alive = this.enemies.length;
@@ -655,6 +683,8 @@ class Run extends Phaser.Scene {
     }
     this.render();
   }
+
+  tickRigs(dt) { if (this.rigSet) for (const r of this.rigSet) r.tick(dt); }
 
   goDoor(d) {
     this.paused = true;
@@ -754,27 +784,23 @@ class Run extends Phaser.Scene {
     const s = h.spr;
     const dirX = h.atk ? Math.cos(h.atk.dir) : (moving ? mx : 0);
     if (dirX > 0.15) h.faceX = 1; else if (dirX < -0.15) h.faceX = -1;
-    // C01 关键姿势切换（不做逐帧动画）
-    let pose = moving ? 'run' : 'idle';
+    // C01 骨骼动作：跑的步频跟实际移速走；攻击、翻滚按出手时长播放，命中帧对齐
+    let pose = moving ? 'run' : 'idle', o = { speed: moving ? spd / HERO_SPD : 1 };
     if (h.looting && !moving) pose = 'loot';
     if (h.hurtInv > 0.3) pose = 'hurt';
-    if (h.charge >= 0) pose = 'attack3';
-    if (h.atk) pose = h.atk.kind === 'heavy' ? 'heavy' : 'attack' + h.atk.step;
-    if (h.rollT > 0) pose = 'roll';
+    if (h.charge >= 0) pose = 'charge';
+    if (h.atk) {
+      pose = h.atk.kind === 'heavy' ? 'heavy' : 'attack' + h.atk.step;
+      o = { speed: s.anim.clips[pose].len / h.atk.dur, restart: h.animAtk !== h.atk, blend: 0.04 };
+      h.animAtk = h.atk;
+    }
+    if (h.rollT > 0) { pose = 'roll'; o = { speed: s.anim.clips.roll.len / ROLL_T, restart: h.animRoll !== h.rolledHit, blend: 0.03 }; h.animRoll = h.rolledHit; }
     if (h.hp <= 0) pose = 'down';
-    this.setPose(s, 'hero_' + pose, h.faceX);
-    const bob = moving && !h.atk && h.rollT <= 0 ? Math.abs(Math.sin(this.time.now / 85)) * 4 : 0;
-    s.setPosition(h.x, h.y - bob);
-    s.setRotation(moving && !h.atk && h.rollT <= 0 ? Math.sin(this.time.now / 85) * 0.04 : 0);
+    s.play(pose, o).setFlipX(h.faceX < 0);
+    s.setPosition(h.x, h.y);
     s.setAlpha(h.hurtInv > 0 ? (Math.floor(this.time.now / 60) % 2 ? 0.45 : 1) : 1);
     s.setDepth(h.y);
     if (h.flash > 0) { h.flash -= dt; s.setTintFill(0xffffff); } else s.clearTint();
-  }
-
-  // 换姿势图；face 为 1 表示朝右，姿势图本身朝左的要反过来镜像
-  setPose(s, key, face) {
-    if (s.texture.key !== key) s.setTexture(key);
-    s.setFlipX(face * (POSE_FACE[key] || 1) < 0);
   }
 
   tryLight(fromMouse) {
@@ -947,6 +973,7 @@ class Run extends Phaser.Scene {
     if (o.dir !== undefined) { const kb = (o.kb || 120) * (e.def.elite && e.broken <= 0 ? 0.3 : 1); e.kx = Math.cos(o.dir) * kb; e.ky = Math.sin(o.dir) * kb; }
     if (e.state === 'windup' && !e.def.elite) { e.state = 'recover'; e.t = 0.35; }
     e.hurtT = 0.22;
+    e.spr.play('hurt', { restart: true, blend: 0.04 });
     this.fxImage(e.x + rnd(-8, 8), e.y - CHAR_H * e.def.k * 0.45, 'hit_splash', o.heavy ? 0.9 : 0.65, o.heavy ? 260 : 200);
     this.inkFx.explode(o.heavy ? 8 : 4, e.x, e.y - 40);
     this.floatText(e.x + rnd(-12, 12), e.y - 90, String(dmg), col, o.heavy ? 26 : 20);
@@ -961,9 +988,8 @@ class Run extends Phaser.Scene {
     const drop = art(this, e.x, e.y + 6, 'hit_droplets', 0.8).setOrigin(0.5).setDepth(-6).setAlpha(0.55).setScale(artScale('hit_droplets') * 0.8, artScale('hit_droplets') * 0.45).setFlipX(Math.random() < 0.5);
     this.roomObjs.push(drop);
     e.ui && e.ui.destroy();
-    this.setPose(e.spr, `${e.skin}_down`, e.spr.flipX ? -1 : 1);
-    e.spr.setRotation(0).clearTint();
-    this.tweens.add({ targets: e.spr, alpha: 0, delay: 500, duration: 400, onComplete: () => e.spr.destroy() });
+    e.spr.play('down', { blend: 0.05 }).setRotation(0).clearTint();
+    this.tweens.add({ targets: e.spr, alpha: 0, delay: 700, duration: 400, onComplete: () => e.spr.destroy() });
     if (e.type === 'guard') this.addCorrection(-6, '击退时空守卫，修正力 -6');
   }
 
@@ -1002,7 +1028,6 @@ class Run extends Phaser.Scene {
         }
         this.moveActor(e, mvx * def.spd * dt, mvy * def.spd * dt);
         e.moving = !!(mvx || mvy);
-        if (e.moving) e.bob = (e.bob || 0) + dt * 12;
         break;
       }
       case 'windup':
@@ -1013,7 +1038,7 @@ class Run extends Phaser.Scene {
           if (e.type === 'spear') { e.state = 'lunge'; e.t = 0.14; e.didHit = false; }
           else if (e.type === 'archer') {
             this.arrows.push({ x: e.x, y: e.y - 40, vx: Math.cos(e.dir) * 460, vy: Math.sin(e.dir) * 460, dmg: e.dmg, life: 1.6 });
-            e.state = 'recover'; e.t = 0.4;
+            e.state = 'recover'; e.t = 0.4; e.fired = true;
           } else if (e.type === 'cav') { e.state = 'charge'; e.left = 360; e.didHit = false; }
           else if (e.type === 'guard') {
             this.ring(e.x, e.y, C.cyan, 120, 260, 6);
@@ -1045,7 +1070,7 @@ class Run extends Phaser.Scene {
       }
       case 'recover':
         e.t -= dt;
-        if (e.t <= 0) { e.state = 'move'; e.cd = def.cd * rnd(0.8, 1.2); }
+        if (e.t <= 0) { e.state = 'move'; e.cd = def.cd * rnd(0.8, 1.2); e.fired = false; }
         break;
     }
     this.enemyLook(e, e.state === 'move' ? dx : Math.cos(e.dir));
@@ -1054,16 +1079,16 @@ class Run extends Phaser.Scene {
   enemyLook(e, dx) {
     const s = e.spr;
     if (dx < -0.1) e.face = -1; else if (dx > 0.1) e.face = 1;
-    // C02 / C03 关键姿势：待机、走、前摇、刺击、受击
+    // C02 / C03 骨骼动作：待机、走、前摇（弓手拉弓）、出手（刺击 / 松弦）、受击
     const archer = e.skin === 'archer';
-    let pose = e.state === 'move' && e.moving && e.spawnT <= 0 ? 'walk' : 'idle';
-    if (e.state === 'windup') pose = archer ? 'draw' : 'windup';
+    let pose = e.state === 'move' && e.moving && e.spawnT <= 0 ? 'walk' : 'idle', o;
+    if (pose === 'walk') o = { speed: e.def.spd / (WALK_REF[archer ? 'archer' : 'soldier'] * e.def.k) };
+    if (e.state === 'windup') { pose = archer ? 'draw' : 'windup'; if (archer) o = { speed: s.anim.clips.draw.len / e.def.windup }; }
     if (e.state === 'lunge' || e.state === 'charge') pose = archer ? 'draw' : 'stab';
+    if (archer && e.state === 'recover' && e.fired) pose = 'shoot';
     if (e.hurtT > 0 || e.stun > 0) pose = 'hurt';
-    this.setPose(s, `${e.skin}_${pose}`, e.face || 1);
-    const bob = pose === 'walk' ? Math.abs(Math.sin(e.bob || 0)) * 3 : 0;
-    const rot = e.state === 'windup' ? (e.face || 1) * -0.04 * Math.sin(this.time.now / 30) : 0;
-    s.setPosition(e.x, e.y - bob).setRotation(rot).setDepth(e.y);
+    s.play(pose, o).setFlipX((e.face || 1) < 0);
+    s.setPosition(e.x, e.y).setDepth(e.y);
     if (e.flash > 0) s.setTintFill(0xffffff);
     else if (e.def.tint) s.setTint(e.def.tint);
     else if (e.broken > 0) s.setTint(0xffe9a8);
@@ -1084,6 +1109,7 @@ class Run extends Phaser.Scene {
     h.hp -= dmg;
     if (!silent) {
       h.hurtInv = 0.5; h.flash = 0.08;
+      h.spr.play('hurt', { restart: true, blend: 0.04 });
       this.cameras.main.shake(140, 0.009);
       this.cameras.main.flash(90, 176, 58, 46, false);
       this.hitstop = 0.06;
@@ -1578,7 +1604,7 @@ class Run extends Phaser.Scene {
     p.add(this.add.rectangle(W / 2, H / 2, W, H, win ? 0x0d2a30 : 0x2a0d0d, 0.82));
     if (win) { this.ring(this.hero.x, this.hero.y - 30, C.cyan, 400, 700, 10); this.tweens.add({ targets: [this.hero.spr, this.pet.spr], alpha: 0, scale: 0.2, duration: 600 }); }
     else {
-      this.setPose(this.hero.spr, 'hero_down', this.hero.faceX); this.hero.spr.setRotation(0).setAlpha(1).clearTint();
+      this.hero.spr.play('down', { blend: 0.05 }).setRotation(0).setAlpha(1).clearTint();
       // 宝驹逃回庄园，背上的东西丢了
       this.pet.spr.setFlipX(this.pet.x > W / 2 ? false : true);
       this.tweens.add({ targets: this.pet.spr, x: this.pet.x > W / 2 ? W + 80 : -80, alpha: 0.6, duration: 1200, ease: 'Quad.easeIn' });

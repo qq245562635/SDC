@@ -4,122 +4,136 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <link rel="icon" href="data:,">
-<title>逃离三国 · 拆件拼装调试</title>
+<title>逃离三国 · 拆件骨骼动画调试</title>
 <style>
-  html, body { margin: 0; height: 100%; background: #16110d; overflow: hidden; }
+  html, body { margin: 0; height: 100%; background: #16110d; overflow: hidden; font: 14px "Noto Serif SC","SimSun",serif; color: #F3E9D2; }
   #game { position: fixed; inset: 0; display: flex; align-items: center; justify-content: center; }
+  #ui { position: fixed; left: 8px; top: 8px; right: 8px; display: flex; flex-wrap: wrap; gap: 4px; align-items: center; z-index: 2; }
+  #ui button { font: inherit; padding: 3px 9px; background: #2B1D16; color: #F3E9D2; border: 1px solid #6E4526; border-radius: 3px; cursor: pointer; }
+  #ui button.on { background: #B03A2E; }
+  #ui label { margin-left: 10px; }
+  #ui input { vertical-align: middle; width: 110px; }
 </style>
 </head>
 <body>
 <div id="game"></div>
+<div id="ui"></div>
 <script src="https://cdn.jsdelivr.net/npm/phaser@3.80.1/dist/phaser.min.js"></script>
 <script src="assets/art/manifest.js"></script>
+<script src="rig.js"></script>
 <script>
-// T003 拼装验证：用 C01 / C02 拆件按 assets.json 的 joint_pivot_hint 拼站姿，加摆臂。
-// 交付只给了各部件自己的关节点，没给部件之间的挂点，下面 RIG 里的挂点是程序按包围盒估的。
+// T006 骨骼动画调试：rig.js 按 T004 assets.json 拼装（无手调），按钮切换动作。
+// 每个角色左边播动作；右边保持静止姿势并叠半透明待机姿势图，用来核对拼装。
+// 键：J 关节点　M 镜像　O 叠图　空格 暂停
 (() => {
 'use strict';
-const W = 1280, H = 720, S = 1.6; // S：相对 1080p 显示尺寸放大，方便看接缝
+const W = 1280, H = 720;
 const FONT = '"Noto Serif SC","Source Han Serif SC","SimSun",serif';
-const ART = window.ART;
-const PARTS = ['back', 'leg_l', 'leg_r', 'arm_l', 'body', 'head', 'weapon', 'arm_r'];
-const LUBU = ['front', 'side', 'backview', 'sweep', 'thrust', 'charge', 'backswing', 'smash', 'summon', 'broken', 'down'];
-
-// 内容包围盒（显示像素，相对图片左上）
-const box = k => { const m = ART[k]; return { x0: m.b[0], y0: m.b[1], x1: m.b[2], y1: m.b[3], w: m.b[2] - m.b[0], h: m.b[3] - m.b[1] }; };
+const ART = window.ART, RIGS = window.RIGS, { RigSprite, CLIPS, clipsFor } = window.Rig;
+const BIG = [['hero', '主角 C01'], ['soldier_blue', '联军兵 C02 蓝'], ['archer', '弓手 C03']];
+const SMALL = [['soldier_yellow', 'C02 黄'], ['soldier_red', 'C02 红']];
+// 走路动作在各角色里叫法不同：主角“跑”，敌人“走”
+const ALIAS = { walk: { hero: 'run' }, run: { soldier: 'walk', archer: 'walk' } };
+const set = c => (c.startsWith('soldier') ? 'soldier' : c);
+const ACTIONS = [...new Set(Object.values(CLIPS).flatMap(s => Object.keys(s)))].filter(n => n !== 'rest');
 
 class Rig extends Phaser.Scene {
   constructor() { super('rig'); }
   preload() {
-    for (const c of ['hero', 'soldier_blue']) {
-      PARTS.filter(p => ART[`${c}_${p}`]).forEach(p => this.load.image(`${c}_${p}`, `assets/art/${c}_${p}.png`));
+    for (const c of Object.keys(RIGS)) {
+      RIGS[c].parts.forEach(k => this.load.image(k, `assets/art/${k}.png`));
       this.load.image(`${c}_idle`, `assets/art/${c}_idle.png`);
     }
-    LUBU.forEach(p => this.load.image(`lubu_${p}`, `assets/art/lubu_${p}.png`));
   }
 
   create() {
     this.add.rectangle(0, 0, W, H, 0xD9C9A3).setOrigin(0);
-    this.showJoints = true; this.swing = true; this.mirror = false;
-    this.rigs = [this.build('hero', 230, 330, '主角 C01'), this.build('soldier_blue', 700, 330, '联军兵 C02')];
-    // 对照：同尺寸的待机关键姿势
-    [['hero_idle', 430], ['soldier_blue_idle', 900]].forEach(([k, x]) => {
-      const m = ART[k];
-      this.add.image(x, 330, k).setOrigin(m.o[0], m.o[1]).setScale(S);
-      this.add.text(x, 350, '待机姿势图（对照）', { fontFamily: FONT, fontSize: '15px', color: '#2B1D16' }).setOrigin(0.5, 0);
-    });
-    // 吕布：只验证素材能显示
-    LUBU.forEach((p, i) => {
-      const k = `lubu_${p}`, m = ART[k], x = 70 + i * 114;
-      this.add.image(x, 640, k).setOrigin(m.o[0], m.o[1]).setScale(0.38);
-      this.add.text(x, 648, p, { fontFamily: FONT, fontSize: '12px', color: '#2B1D16' }).setOrigin(0.5, 0);
-    });
-    this.add.text(20, 470, '吕布 C06 关键姿势（缩小显示）', { fontFamily: FONT, fontSize: '15px', color: '#6E4526' });
-    this.add.text(20, 14, 'T003 拆件拼装调试　　空格 摆臂开关　J 关节点开关　M 镜像', { fontFamily: FONT, fontSize: '18px', color: '#2B1D16' });
-    this.input.keyboard.on('keydown-SPACE', () => { this.swing = !this.swing; });
-    this.input.keyboard.on('keydown-J', () => { this.showJoints = !this.showJoints; });
-    this.input.keyboard.on('keydown-M', () => { this.mirror = !this.mirror; this.rigs.forEach(r => r.root.setScale(this.mirror ? -1 : 1, 1)); });
+    this.showJoints = true; this.mirror = false; this.paused = false; this.speed = 1; this.blend = 0.12; this.action = 'idle';
+    this.labels = []; this.actors = []; this.statics = []; this.refs = [];
+    BIG.forEach(([c, name], i) => this.pair(c, name, 130 + i * 420, 400, 1.6));
+    SMALL.forEach(([c, name], i) => this.pair(c, name, 90 + i * 300, 660, 1));
+    this.info = this.add.text(640, 540, '', { fontFamily: FONT, fontSize: '15px', color: '#6E4526', lineSpacing: 4 });
+    this.labels.push(this.info);
     this.dots = this.add.graphics().setDepth(100);
+    this.input.keyboard.on('keydown-J', () => { this.showJoints = !this.showJoints; });
+    this.input.keyboard.on('keydown-M', () => { this.mirror = !this.mirror; this.actors.forEach(r => r.setFlipX(this.mirror)); });
+    this.input.keyboard.on('keydown-O', () => { this.refs.forEach(o => o.setVisible(!o.visible)); });
+    this.input.keyboard.on('keydown-SPACE', () => { this.paused = !this.paused; });
+    this.buildUi();
+    this.setAction('idle');
     window.__rig = this;
   }
 
-  // 部件：按关节点做原点，返回 Image
-  part(c, p) {
-    const k = `${c}_${p}`, m = ART[k];
-    if (!m) return this.add.container(0, 0); // 缺件（联军兵没有背饰）
-    return this.add.image(0, 0, k).setOrigin(m.p[0], m.p[1]);
+  pair(c, name, x, y, s) {
+    const dx = 190 * s / 1.6, fs = s > 1 ? '16px' : '12px';
+    const a = new RigSprite(this, x, y, c, s), b = new RigSprite(this, x + dx, y, c, s).play('rest', { blend: 0 });
+    a.label = name; this.actors.push(a); this.statics.push(b);
+    const m = ART[`${c}_idle`];
+    this.refs.push(this.add.image(x + dx, y, `${c}_idle`).setOrigin(m.o[0], m.o[1]).setScale(s).setAlpha(0.45).setDepth(50));
+    this.labels.push(this.add.text(x, y + 8, name, { fontFamily: FONT, fontSize: fs, color: '#2B1D16' }).setOrigin(0.5, 0));
+    this.labels.push(this.add.text(x + dx, y + 8, '静止 + 叠待机图', { fontFamily: FONT, fontSize: fs, color: '#2B1D16' }).setOrigin(0.5, 0));
   }
 
-  // 挂点按包围盒估：腿顶在髋，身体底在髋，头底在身体顶，手臂顶在肩，武器握把在手
-  build(c, x, y, label) {
-    const root = this.add.container(x, y).setScale(1);
-    const g = this.add.container(0, 0).setScale(S);
-    root.add(g);
-    const leg = box(`${c}_leg_l`), body = box(`${c}_body`), arm = box(`${c}_arm_r`);
-    const ov = 5; // 10px（2 倍图）重叠 = 显示 5px
-    const legLen = leg.h * (1 - 0.15) - ov;
-    const hipY = -legLen;
-    const bodyTop = hipY - body.h * 0.85 + ov;
-    const shoulderY = bodyTop + body.h * 0.22;
-    const shoulderX = body.w * 0.42;
-    const r = {
-      c, root, g,
-      back: this.part(c, 'back').setPosition(-body.w * 0.12, bodyTop + body.h * 0.62),
-      leg_l: this.part(c, 'leg_l').setPosition(-body.w * 0.18, hipY),
-      leg_r: this.part(c, 'leg_r').setPosition(body.w * 0.18, hipY),
-      body: this.part(c, 'body').setPosition(0, hipY + ov),
-      head: this.part(c, 'head').setPosition(0, bodyTop + ov),
-      armL: this.add.container(-shoulderX, shoulderY),
-      armR: this.add.container(shoulderX, shoulderY),
-    };
-    r.armL.add(this.part(c, 'arm_l'));
-    const armLen = arm.h * 0.7;
-    r.weapon = this.part(c, 'weapon').setPosition(0, armLen).setAngle(-20);
-    r.armR.add([r.weapon, this.part(c, 'arm_r')]);
-    // 前后顺序：背饰、远侧腿、近侧腿、远侧臂、身体、头、武器、近侧臂
-    g.add([r.back, r.leg_l, r.leg_r, r.armL, r.body, r.head, r.armR]);
-    r.joints = [[0, hipY], [0, bodyTop], [-shoulderX, shoulderY], [shoulderX, shoulderY]];
-    this.add.text(x, y + 20, label + '（拆件拼装）', { fontFamily: FONT, fontSize: '16px', color: '#2B1D16' }).setOrigin(0.5, 0);
-    this.add.ellipse(x, y, 70 * S, 16 * S, 0x2B1D16, 0.25).setDepth(-1);
-    return r;
-  }
-
-  update(time) {
-    const t = time / 1000, a = this.swing ? Math.sin(t * 4) : 0;
-    const d = this.dots; d.clear();
-    for (const r of this.rigs) {
-      r.armL.setRotation(a * 0.45);
-      r.armR.setRotation(-a * 0.45);
-      r.leg_l.setRotation(-a * 0.25);
-      r.leg_r.setRotation(a * 0.25);
-      r.head.setRotation(a * 0.04);
-      if (!this.showJoints) continue;
-      const sx = r.root.scaleX;
-      for (const [jx, jy] of r.joints) {
-        d.fillStyle(0xE74C3C, 1); d.fillCircle(r.root.x + jx * S * sx, r.root.y + jy * S, 4);
-      }
-      d.lineStyle(1, 0x3EC6E0, 0.8); d.lineBetween(r.root.x - 60, r.root.y, r.root.x + 60, r.root.y);
+  buildUi() {
+    const ui = document.getElementById('ui');
+    this.btns = {};
+    for (const n of ACTIONS) {
+      const b = document.createElement('button');
+      b.textContent = n; b.onclick = () => this.setAction(n);
+      ui.appendChild(b); this.btns[n] = b;
     }
+    const slider = (label, min, max, step, val, fn) => {
+      const l = document.createElement('label'); l.textContent = label + ' ';
+      const i = document.createElement('input'); Object.assign(i, { type: 'range', min, max, step, value: val });
+      const v = document.createElement('span'); v.textContent = val;
+      i.oninput = () => { v.textContent = i.value; fn(+i.value); };
+      l.append(i, ' ', v); ui.appendChild(l);
+    };
+    slider('速度', 0.1, 2, 0.05, 1, v => { this.speed = v; this.setAction(this.action, false); });
+    slider('过渡秒', 0, 0.5, 0.02, 0.12, v => { this.blend = v; });
+  }
+
+  // 各角色没有的动作保持待机；非循环动作播完 0.5 秒后重播
+  setAction(n, restart = true) {
+    this.action = n;
+    Object.entries(this.btns).forEach(([k, b]) => b.classList.toggle('on', k === n));
+    for (const r of this.actors) {
+      const name = (ALIAS[n] && ALIAS[n][set(r.c)]) || n;
+      r.play(clipsFor(r.c)[name] ? name : 'idle', { blend: this.blend, speed: this.speed, restart });
+    }
+    this.replayT = 0;
+  }
+
+  update(time, deltaMs) {
+    const dt = this.paused ? 0 : deltaMs / 1000;
+    for (const r of this.rigSet) r.tick(dt);
+    const a = this.actors[0].anim;
+    if (!a.clip.loop && a.finished) { this.replayT += dt; if (this.replayT > 0.5) this.setAction(this.action); }
+    this.info.setText([
+      `动作 ${this.action}　速度 ×${this.speed}　过渡 ${this.blend}s${this.paused ? '　暂停' : ''}`,
+      ...this.actors.slice(0, 3).map(r => `${r.label}：${r.anim.name}　${r.anim.t.toFixed(2)} / ${r.anim.clip.len}s`),
+      'J 关节点　M 镜像　O 叠图　空格 暂停',
+    ].join('\n'));
+    const d = this.dots; d.clear();
+    if (!this.showJoints) return;
+    for (const r of this.actors) {
+      if (!r.visible) continue;
+      for (const n of Object.values(r.nodes)) {
+        const m = n.getWorldTransformMatrix();
+        d.fillStyle(0xE74C3C, 1); d.fillCircle(m.tx, m.ty, 2.5);
+      }
+    }
+  }
+
+  // 截图量轮廓用：只留某个角色的静止拼装（rig）或待机图（ref）
+  isolate(c, which) {
+    this.showJoints = false;
+    document.getElementById('ui').style.display = 'none';
+    this.labels.forEach(o => o.setVisible(false));
+    const i = this.statics.findIndex(q => q.c === c), r = this.statics[i];
+    [...this.actors, ...this.statics].forEach(q => q.setVisible(which === 'rig' && q === r));
+    this.refs.forEach((o, j) => o.setVisible(which === 'ref' && j === i).setAlpha(1));
+    return { x: r.x, y: r.y, s: r.k };
   }
 }
 
