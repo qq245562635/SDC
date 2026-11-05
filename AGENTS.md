@@ -1,23 +1,37 @@
 # AGENTS.md
 
-给 Codex 等编码代理的说明。
+《逃离三国》三方协作说明。所有代理开工前先读本文件和 `docs/tasks/README.md`。
 
-## 先读
+## 角色
 
-1. `README.md`：项目概况和已定决策。
-2. `docs/02-系统详细策划案-v0.1.md`：写代码时以这里的规格和数值为准。
-3. `docs/03-Demo美术需求清单.md`：出图时以这里的资源表、尺寸和命名为准。
+| 角色 | 谁 | 负责 | 可写目录 |
+| --- | --- | --- | --- |
+| 主策 | Claude 1 号 | 策划案、拆任务、验收、整体把控 | `docs/`、`art/prompts/`、`README.md`、`AGENTS.md` |
+| 主程 | Claude 2 号 | 写代码实现 | `prototype/`、`game/`（Godot 工程）、`tools/` |
+| 主美 | Codex | 出图 | `art/`（`art/prompts/` 除外） |
 
-## 出图任务
+不要改别人目录下的文件；需要改时在 PR 或任务里提给对应角色。
 
-- 每条提示词前拼接 `docs/01-总策划案.md` 里“风格总纲 STYLE”段落。
-- 输出 PNG 透明背景（场景大图除外），按 `类别_名称_部件_序号.png` 命名。
-- 放在 `art/` 下对应目录：`art/char`、`art/env`、`art/prop`、`art/ui`、`art/icon`、`art/vfx`；定画风阶段的图放 `art/concept/batch1/`。
-- 不要模仿任何已有游戏、动画或画师的角色和风格，不要出现文字、水印、Logo。
-- 当前要做的是 `art/prompts/batch1-定画风.md`。
+## 循环
 
-## 代码任务
+1. 主策把需求写成 `docs/tasks/T编号-标题.md`，登记到 `docs/tasks/README.md`，状态“待领取”。
+2. 主程 / 主美 领取自己角色的任务：从最新 main 拉分支，开 Draft PR，标题 `[T001] 标题`。
+3. 做完把 PR 改为 Ready，PR 里写：完成了哪些验收项、与需求不同的地方、截图或图片预览。
+4. 主策验收：逐条对验收清单，在 PR 里评论“验收通过”或列出退回原因；同时更新任务板状态。
+5. 用户合并 PR。合并后主策视结果写下一个任务。
 
-- 引擎 Godot 4，GDScript。
-- 先按 `docs/02-系统详细策划案-v0.1.md` 第 9 节的 MVP 清单实现，用灰盒子占位美术。
-- `prototype/hulao-camp.html` 是布局和手感参考，不是正式代码。
+遇到需求不清：在 PR 里提问并 @ 主策（或告诉用户转达），不要自行改需求。
+
+## 分支与提交
+
+- `main`：只收合并的 PR。主策可直接向 main 提交 `docs/` 下的文档修改。
+- 主程：`dev/T编号-简称`；主美：`art/T编号-简称`。一个任务一个分支一个 PR。
+- 提交信息：`[T001] 做了什么`。不要提交密钥、大于 20MB 的文件。
+- 不改写已推送的历史，不强推 main。
+
+## 规范
+
+- 代码：原型用 Phaser 3（WebGL）；正式版用 Godot 4 + GDScript。数值以 `docs/02-系统详细策划案-v0.1.md` 为准，任务文档里另写的以任务为准。
+- 美术：每条提示词前拼接 `docs/01-总策划案.md` 的“风格总纲 STYLE”；PNG 透明底（场景大图除外）；命名 `类别_名称_部件_序号.png`；按 `art/char`、`art/env`、`art/prop`、`art/ui`、`art/icon`、`art/vfx` 分类；规格见 `docs/03-Demo美术需求清单.md`。不模仿已有游戏、动画或画师，不出文字、水印、Logo。
+- 精灵：概念图更新后，主程运行 `python3 tools/extract_sprites.py` 重新切图到 `prototype/webgl/assets/`。
+- 文字精简，少写套话，节省 token。

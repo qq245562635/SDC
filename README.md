@@ -10,6 +10,7 @@
 | [docs/02-系统详细策划案-v0.1.md](docs/02-系统详细策划案-v0.1.md) | 可开发的系统规格与初始数值：战斗、背包、历史修正力、虎牢关、吕布、蜀·五虎将魂、貂蝉、庄园经济、MVP 清单 |
 | [docs/03-Demo美术需求清单.md](docs/03-Demo美术需求清单.md) | Demo 全部美术资源表（尺寸、变体、优先级）和 Codex 提示词 D01–D26 |
 | [art/prompts/batch1-定画风.md](art/prompts/batch1-定画风.md) | 第一批 5 张定画风图的完整出图需求，可直接执行 |
+| [docs/tasks/](docs/tasks/README.md) | 任务板：主策发任务，主程、主美领取（流程见 AGENTS.md） |
 | [prototype/hulao-camp.html](prototype/hulao-camp.html) | 虎牢关联军营地可试玩占位原型，浏览器直接打开，按 1/2/3 切换三种风格 |
 
 ## 已定决策
@@ -19,6 +20,7 @@
 - 引擎：Godot 4（推荐）。
 - 美术风格：A「水墨粗线卡通」，深褐粗墨线 #2B1D16、平涂加一档硬阴影、宣纸纹理。
 - 红颜系统按全年龄尺度做。
+- 分工：主策 Claude 1 号，主程 Claude 2 号，主美 Codex，见 [AGENTS.md](AGENTS.md)。
 
 ## 待定
 
