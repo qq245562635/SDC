@@ -83,4 +83,3 @@ report={'review_comment':6656771262,'base_count':4,'decal_count':14,'categories'
 assert len(placements)==40 and room.size==(1280,720)
 assert max(t['edge_inner_difference_percent'] for t in stats)<=5
 print(json.dumps(report,indent=2))
-
