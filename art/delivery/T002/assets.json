@@ -374,7 +374,7 @@
       "content_bbox": [
         78,
         12,
-        341,
+        266,
         290
       ],
       "source": "art/delivery/T002/sources/archer_poses.png",
@@ -384,7 +384,8 @@
         869,
         724
       ],
-      "sha256": "1804020cfaee4e35bd6a224de472d1309e72e9917af79ac614e35dd9afa21343"
+      "sha256": "ec535d31b1eade4fbfa23235cab39a557e1f381ad0ff96373c2a2de305a92da3",
+      "alpha_cleanup": "Keep largest 8-connected alpha>24 component; retain only low-alpha antialias within 2px. Original canvas, RGB and origin unchanged."
     },
     {
       "file": "art/char/char_archer_draw_01.png",
@@ -476,27 +477,33 @@
       "role": "sprite",
       "size_px": [
         140,
-        240
+        360
       ],
       "display_scale": 0.5,
       "origin_normalized": [
-        0.5,
-        0.9833333333333333
+        0.12857142857142856,
+        1
       ],
       "content_bbox": [
-        4,
-        130,
+        18,
+        24,
         136,
-        236
+        220
       ],
-      "source": "art/delivery/T002/sources/banner.png",
+      "source": "art/delivery/T002/sources/banner_revision.png",
       "source_rect": [
         0,
         0,
         444,
         444
       ],
-      "sha256": "a7fb7e9a36a6240f199325cc361233d054aa164d104b4697f015c4c3e01bbea5"
+      "sha256": "40b28a5892d0e84b891453cd6265ae6c9bc931f30a76a51870e91d8a0986ecb5",
+      "assembly_group": "banner_blue",
+      "attachment_px": [
+        18,
+        24
+      ],
+      "assembly_note": "Both layers 140x360, same origin at pole foot (18,360). Cloth attaches near pole top y24. Display at 0.5."
     },
     {
       "file": "art/env/env_banner_yellow_cloth_01.png",
@@ -504,27 +511,33 @@
       "role": "sprite",
       "size_px": [
         140,
-        240
+        360
       ],
       "display_scale": 0.5,
       "origin_normalized": [
-        0.5,
-        0.9833333333333333
+        0.12857142857142856,
+        1
       ],
       "content_bbox": [
-        4,
-        130,
+        18,
+        24,
         136,
-        236
+        220
       ],
-      "source": "art/delivery/T002/sources/banner.png",
+      "source": "art/delivery/T002/sources/banner_revision.png",
       "source_rect": [
         444,
         0,
         887,
         444
       ],
-      "sha256": "d9dfed0de14441e8f8de4a018e650e1081ce8bc64df2c325338f7c0842c060e0"
+      "sha256": "4fcdcd228fa20798d2133ea657e23d32f47be57592690894666a124eb40c7d86",
+      "assembly_group": "banner_yellow",
+      "attachment_px": [
+        18,
+        24
+      ],
+      "assembly_note": "Both layers 140x360, same origin at pole foot (18,360). Cloth attaches near pole top y24. Display at 0.5."
     },
     {
       "file": "art/env/env_banner_red_cloth_01.png",
@@ -532,27 +545,33 @@
       "role": "sprite",
       "size_px": [
         140,
-        240
+        360
       ],
       "display_scale": 0.5,
       "origin_normalized": [
-        0.5,
-        0.9833333333333333
+        0.12857142857142856,
+        1
       ],
       "content_bbox": [
-        4,
-        130,
+        18,
+        24,
         136,
-        236
+        220
       ],
-      "source": "art/delivery/T002/sources/banner.png",
+      "source": "art/delivery/T002/sources/banner_revision.png",
       "source_rect": [
         887,
         0,
         1330,
         444
       ],
-      "sha256": "41d042923f1c54d7e13051041c9df522bd4f30d6c6aab5d56ed290aa1d641f12"
+      "sha256": "3a41ea35ff9725b34209b217b4637040e5b722381b5803c9c545f49536d1d5bd",
+      "assembly_group": "banner_red",
+      "attachment_px": [
+        18,
+        24
+      ],
+      "assembly_note": "Both layers 140x360, same origin at pole foot (18,360). Cloth attaches near pole top y24. Display at 0.5."
     },
     {
       "file": "art/env/env_banner_blank_cloth_01.png",
@@ -560,139 +579,169 @@
       "role": "sprite",
       "size_px": [
         140,
-        240
+        360
       ],
       "display_scale": 0.5,
       "origin_normalized": [
-        0.5,
-        0.9833333333333333
+        0.12857142857142856,
+        1
       ],
       "content_bbox": [
-        4,
-        130,
+        18,
+        24,
         136,
-        236
+        220
       ],
-      "source": "art/delivery/T002/sources/banner.png",
+      "source": "art/delivery/T002/sources/banner_revision.png",
       "source_rect": [
         1330,
         0,
         1774,
         444
       ],
-      "sha256": "85bcd1d25ae78fe9e4d8c7bff3ea994d9c35b0b18803101bea87a2e479457263"
+      "sha256": "d6949eaf64ab686d51aede22ba4687d2f4ee8ffd32e68b5c27ab99d4f16151e6",
+      "assembly_group": "banner_blank",
+      "attachment_px": [
+        18,
+        24
+      ],
+      "assembly_note": "Both layers 140x360, same origin at pole foot (18,360). Cloth attaches near pole top y24. Display at 0.5."
     },
     {
       "file": "art/env/env_banner_blue_pole_01.png",
       "requirement": "E05",
       "role": "sprite",
       "size_px": [
-        40,
+        140,
         360
       ],
       "display_scale": 0.5,
       "origin_normalized": [
-        0.5,
-        0.9888888888888889
+        0.12857142857142856,
+        1
       ],
       "content_bbox": [
-        4,
-        221,
+        0,
+        0,
         36,
-        356
+        360
       ],
-      "source": "art/delivery/T002/sources/banner.png",
+      "source": "art/delivery/T002/sources/banner_revision.png",
       "source_rect": [
         0,
         444,
         444,
         887
       ],
-      "sha256": "37cc9528ff0c848a26eaa9d54adb880b4be86b7251cd58d4fed16e11e0274389"
+      "sha256": "906f395d1e30ca508ebbd6367c28acf9889a5a29ef25c5efee58c1dc38cd6a22",
+      "assembly_group": "banner_blue",
+      "attachment_px": [
+        18,
+        24
+      ],
+      "assembly_note": "Both layers 140x360, same origin at pole foot (18,360). Cloth attaches near pole top y24. Display at 0.5."
     },
     {
       "file": "art/env/env_banner_yellow_pole_01.png",
       "requirement": "E05",
       "role": "sprite",
       "size_px": [
-        40,
+        140,
         360
       ],
       "display_scale": 0.5,
       "origin_normalized": [
-        0.5,
-        0.9888888888888889
+        0.12857142857142856,
+        1
       ],
       "content_bbox": [
-        4,
-        221,
+        0,
+        0,
         36,
-        356
+        360
       ],
-      "source": "art/delivery/T002/sources/banner.png",
+      "source": "art/delivery/T002/sources/banner_revision.png",
       "source_rect": [
         444,
         444,
         887,
         887
       ],
-      "sha256": "da4020112cc4708189d6ebab1746a48cf884dbbc60747079d55a523a13a6664a"
+      "sha256": "ad227a822dc12de4676d39883acb332497b368cbfc75216e55047c8c4aedcb05",
+      "assembly_group": "banner_yellow",
+      "attachment_px": [
+        18,
+        24
+      ],
+      "assembly_note": "Both layers 140x360, same origin at pole foot (18,360). Cloth attaches near pole top y24. Display at 0.5."
     },
     {
       "file": "art/env/env_banner_red_pole_01.png",
       "requirement": "E05",
       "role": "sprite",
       "size_px": [
-        40,
+        140,
         360
       ],
       "display_scale": 0.5,
       "origin_normalized": [
-        0.5,
-        0.9888888888888889
+        0.12857142857142856,
+        1
       ],
       "content_bbox": [
-        4,
-        222,
+        0,
+        0,
         36,
-        356
+        360
       ],
-      "source": "art/delivery/T002/sources/banner.png",
+      "source": "art/delivery/T002/sources/banner_revision.png",
       "source_rect": [
         887,
         444,
         1330,
         887
       ],
-      "sha256": "b5870fe55550a3ca39769dfb7f990393e4cc6744c84b94cad95422feb5c65203"
+      "sha256": "f1acdbd8f9d756394bf7709d4aae3f31e044b57fcbc0ad504e35928c24978886",
+      "assembly_group": "banner_red",
+      "attachment_px": [
+        18,
+        24
+      ],
+      "assembly_note": "Both layers 140x360, same origin at pole foot (18,360). Cloth attaches near pole top y24. Display at 0.5."
     },
     {
       "file": "art/env/env_banner_blank_pole_01.png",
       "requirement": "E05",
       "role": "sprite",
       "size_px": [
-        40,
+        140,
         360
       ],
       "display_scale": 0.5,
       "origin_normalized": [
-        0.5,
-        0.9888888888888889
+        0.12857142857142856,
+        1
       ],
       "content_bbox": [
-        4,
-        223,
+        0,
+        0,
         36,
-        356
+        360
       ],
-      "source": "art/delivery/T002/sources/banner.png",
+      "source": "art/delivery/T002/sources/banner_revision.png",
       "source_rect": [
         1330,
         444,
         1774,
         887
       ],
-      "sha256": "3cc8a324a04e4b09ee46fad0f25a0c536578bee0ec6d50f04d8c22c0d06e0c42"
+      "sha256": "e9eb832a10bd140f0ce2d8f87075453124c758bdca75453bf46d7bd40ddebe8c",
+      "assembly_group": "banner_blank",
+      "attachment_px": [
+        18,
+        24
+      ],
+      "assembly_note": "Both layers 140x360, same origin at pole foot (18,360). Cloth attaches near pole top y24. Display at 0.5."
     },
     {
       "file": "art/prop/prop_brazier_body_01.png",
@@ -2372,10 +2421,10 @@
         0.9666666666666667
       ],
       "content_bbox": [
-        52,
+        53,
         27,
-        367,
-        290
+        296,
+        289
       ],
       "source": "art/delivery/T002/sources/hero_poses.png",
       "source_rect": [
@@ -2384,7 +2433,8 @@
         1586,
         793
       ],
-      "sha256": "aac13f94ff4889ef3149fa460fa165a6f6e73669592990009f1a737274e9bd6e"
+      "sha256": "72a0d571a86d13f22f65860263fe23de8fe96d2bc4992492560d6161bc1787e0",
+      "alpha_cleanup": "Keep largest 8-connected alpha>24 component; retain only low-alpha antialias within 2px. Original canvas, RGB and origin unchanged."
     },
     {
       "file": "art/char/char_hero_down_01.png",
@@ -3709,10 +3759,10 @@
         0.9827586206896551
       ],
       "content_bbox": [
-        156,
-        10,
-        684,
-        570
+        233,
+        12,
+        681,
+        567
       ],
       "source": "art/delivery/T002/sources/lubu_poses.png",
       "source_rect": [
@@ -3721,7 +3771,8 @@
         1330,
         444
       ],
-      "sha256": "4221676d5f0ae2f6283d17c65625279ac43de92c7c1b07f06c1623a53c899f99"
+      "sha256": "30c8f20f5aa4946ff7424dd361d736f341a020ea0d977345a51857e1636f0ba2",
+      "alpha_cleanup": "Keep largest 8-connected alpha>24 component; retain only low-alpha antialias within 2px. Original canvas, RGB and origin unchanged."
     },
     {
       "file": "art/char/char_lubu_backswing_01.png",
@@ -3821,10 +3872,10 @@
         0.9827586206896551
       ],
       "content_bbox": [
-        131,
-        55,
-        708,
-        569
+        133,
+        57,
+        579,
+        567
       ],
       "source": "art/delivery/T002/sources/lubu_poses.png",
       "source_rect": [
@@ -3833,7 +3884,8 @@
         1330,
         887
       ],
-      "sha256": "8f54261807b56aea07429fa051944ae2bd103a605bfe5e4bc34d1034824d11ee"
+      "sha256": "65603edb73cb786b8e29d5246bbd564ea647b374aa26af1f476f18950454c588",
+      "alpha_cleanup": "Keep largest 8-connected alpha>24 component; retain only low-alpha antialias within 2px. Original canvas, RGB and origin unchanged."
     },
     {
       "file": "art/char/char_lubu_down_01.png",
@@ -3877,9 +3929,9 @@
         0.9827586206896551
       ],
       "content_bbox": [
-        177,
-        10,
-        662,
+        179,
+        11,
+        611,
         569
       ],
       "source": "art/delivery/T002/sources/lubu_riding.png",
@@ -3889,7 +3941,8 @@
         512,
         512
       ],
-      "sha256": "f45c40c798f5bc795e5dedba42a7fa3ff001f310d330232ec71e666d08fa5236"
+      "sha256": "bb7f71945624fd27a918993ef4f34ace8354f8a8edd9f8e0a9a39c1d58bf8ee6",
+      "alpha_cleanup": "Keep largest 8-connected alpha>24 component; retain only low-alpha antialias within 2px. Original canvas, RGB and origin unchanged."
     },
     {
       "file": "art/char/char_lubu_riding_charge_01.png",
@@ -3906,9 +3959,9 @@
       ],
       "content_bbox": [
         129,
-        10,
-        711,
-        570
+        11,
+        657,
+        569
       ],
       "source": "art/delivery/T002/sources/lubu_riding.png",
       "source_rect": [
@@ -3917,7 +3970,8 @@
         1024,
         512
       ],
-      "sha256": "3d6146f9c94ae9b32ade27feba80ed4cade2ac887b9d0b11e2b9edb8496f60e4"
+      "sha256": "7c02c05203931c825e34d4071265f1b663f56ad781bc2fe13a04302e24b1511f",
+      "alpha_cleanup": "Keep largest 8-connected alpha>24 component; retain only low-alpha antialias within 2px. Original canvas, RGB and origin unchanged."
     },
     {
       "file": "art/char/char_lubu_riding_turn_01.png",
@@ -6362,6 +6416,35 @@
         887
       ],
       "sha256": "f014d77e07b92e765b1e0fcf4a64d67c82394c114b26c73b23f4c8dd26d0acd8"
+    },
+    {
+      "file": "art/vfx/vfx_lootbeam_red_spark_01.png",
+      "size_px": [
+        256,
+        256
+      ],
+      "content_bbox": [
+        67,
+        29,
+        194,
+        220
+      ],
+      "sha256": "5a91a757b26bfac11768b545eb2c276d4a303fbb6faffafcf988c1a51bf4b47b",
+      "requirement": "V05",
+      "role": "effect",
+      "display_scale": 0.5,
+      "origin_normalized": [
+        0.5,
+        0.5
+      ],
+      "source": "art/delivery/T002/sources/red_spark.png",
+      "source_rect": [
+        0,
+        0,
+        1254,
+        1254
+      ],
+      "usage": "Separate red/gold sparkle overlay. Animate with particles in Godot."
     }
   ]
 }

@@ -1,7 +1,7 @@
 {
-  "assets": 216,
+  "assets": 217,
   "requirements": 22,
-  "transparent_pngs": 200,
+  "transparent_pngs": 201,
   "ground_tiles": 16,
   "all_tile_pairs_seam_checked": 256,
   "sRGB_embedded": true,
@@ -11,5 +11,110 @@
     "Godot skeleton joint assembly and 10px joint occlusion",
     "Phaser/Godot integration by programmer",
     "Art director approval of proportion, texture weight, and fire loop cadence"
-  ]
+  ],
+  "review_fixes": [
+    {
+      "file": "art/char/char_archer_walk_01.png",
+      "components_before": [
+        29070,
+        275,
+        16
+      ],
+      "components_after": [
+        29070
+      ],
+      "removed_alpha_pixels": 1396
+    },
+    {
+      "file": "art/char/char_hero_hurt_01.png",
+      "components_before": [
+        32076,
+        97,
+        17,
+        16
+      ],
+      "components_after": [
+        32076
+      ],
+      "removed_alpha_pixels": 2096
+    },
+    {
+      "file": "art/char/char_lubu_charge_01.png",
+      "components_before": [
+        116765,
+        1767
+      ],
+      "components_after": [
+        116765
+      ],
+      "removed_alpha_pixels": 17604
+    },
+    {
+      "file": "art/char/char_lubu_riding_idle_01.png",
+      "components_before": [
+        119534,
+        788,
+        7
+      ],
+      "components_after": [
+        119534
+      ],
+      "removed_alpha_pixels": 18409
+    },
+    {
+      "file": "art/char/char_lubu_broken_01.png",
+      "components_before": [
+        113401,
+        1343,
+        542,
+        261,
+        173,
+        75
+      ],
+      "components_after": [
+        113401
+      ],
+      "removed_alpha_pixels": 19351
+    },
+    {
+      "file": "art/char/char_lubu_riding_charge_01.png",
+      "components_before": [
+        150704,
+        193,
+        180,
+        162,
+        150,
+        140,
+        93,
+        89,
+        85,
+        84,
+        49,
+        46,
+        45,
+        30,
+        13,
+        12,
+        6,
+        2
+      ],
+      "components_after": [
+        150704
+      ],
+      "removed_alpha_pixels": 29828
+    }
+  ],
+  "banner_assembly": {
+    "layer_size": [
+      140,
+      360
+    ],
+    "shared_origin_px": [
+      18,
+      360
+    ],
+    "content_height_px": 360,
+    "colors": 4
+  },
+  "legendary_particle": "art/vfx/vfx_lootbeam_red_spark_01.png"
 }

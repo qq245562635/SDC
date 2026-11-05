@@ -1,0 +1,5 @@
+{
+  "id": "red_spark",
+  "prompt": "STYLE: 2D hand-drawn action comic game art, Chinese ink-wash inspired, bold dark-brown ink outlines (#2B1D16), flat colors with one hard cel-shadow tone, subtle rice-paper texture, slightly chibi proportions (head-to-body 1:3), strong readable silhouettes, ink splatter accents, top-left light source, top-down three-quarter view at 45 degrees, Late Eastern Han dynasty China setting, original designs, suitable for a top-down action roguelike.\nOne transparent VFX particle texture: a sparse cluster of distinct tiny golden-red sparks, small diamond ember flecks and dark-red ink droplets for a legendary RED loot pillar, some larger warm gold cores with red edges. No beam, no chest, no circular frame, no characters, no ground. Keep entire cluster within central 80% of square canvas with fully transparent outside, clearly separated sparks and variable sizes. Dedicated particle sprite to be animated by game engine. No text watermark logo.",
+  "saved_source": "art/delivery/T002/sources/red_spark.png"
+}
