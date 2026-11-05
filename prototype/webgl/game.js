@@ -53,6 +53,14 @@ const DOOR_ICON = { soul: 'door_spirit', chest: 'door_supplies', elite: 'door_da
 // ---------- 触屏（T007）：index.html 判定平台，?touch=1 / 0 可强制 ----------
 const TOUCH = !!window.TOUCH;
 const HOLD_HEAVY = 0.4; // 攻击键按住多久算重击（秒）
+// T008 试玩反馈调整的手感数值
+const HERO_SPD = 240;       // 基础移速 px/s
+const ROLL_DIST = 120;      // 翻滚距离 px
+const ROLL_T = 0.2;         // 翻滚时长 = 无敌时间（秒）
+const CHONG_K = 1.5;        // 锦马超冲：翻滚距离倍数
+const STICK_K = 1.3;        // 手机摇杆放大倍数（底座、摇杆头、拖动半径）
+const CHEST_NEAR = 160;     // 进入此距离：宝箱头顶出按键提示，可搜
+const CHEST_GLOW = { wood: 0xF3E9D2, bronze: 0xC87533, lacquer: 0xF1C40F }; // 脚下呼吸光：白、铜、金
 const CAN_FULLSCREEN = !!(document.fullscreenEnabled || document.webkitFullscreenEnabled);
 
 // 左半屏浮动摇杆 + 右侧按键，支持多点触控。每根手指（pointer.id）各管一个控件。
@@ -155,7 +163,7 @@ class TouchPad {
   update(dt) {
     const s = this.s, h = s.hero;
     if (this.blocked()) { this.stick = null; this.atkHeld = false; this.owner = {}; }
-    const st = this.stick, R0 = 70;
+    const st = this.stick, R0 = 70 * STICK_K;
     this.mx = 0; this.my = 0; this.moving = false;
     const g = this.stickG; g.clear();
     if (st) {
@@ -165,7 +173,7 @@ class TouchPad {
       if (l > R0) { dx *= R0 / l; dy *= R0 / l; }
       g.fillStyle(0x16110d, 0.3); g.fillCircle(st.ox, st.oy, R0);
       g.lineStyle(3, 0xF3E9D2, 0.5); g.strokeCircle(st.ox, st.oy, R0);
-      g.fillStyle(0xF3E9D2, 0.55); g.fillCircle(st.ox + dx, st.oy + dy, 30);
+      g.fillStyle(0xF3E9D2, 0.55); g.fillCircle(st.ox + dx, st.oy + dy, 30 * STICK_K);
     }
     if (this.atkHeld && !this.atkHeavy) {
       this.atkT += dt;
@@ -329,7 +337,7 @@ class Run extends Phaser.Scene {
     this.sparkFx = this.add.particles(0, 0, 'dot', { speed: { min: 60, max: 220 }, scale: { start: 1, end: 0 }, lifespan: 420, blendMode: 'ADD', emitting: false }).setDepth(4001);
 
     const hero = this.hero = {
-      x: 640, y: 620, r: 18, hp: 100, maxHp: 100, spd: 300, face: -Math.PI / 2, faceX: 1,
+      x: 640, y: 620, r: 18, hp: 100, maxHp: 100, spd: HERO_SPD, face: -Math.PI / 2, faceX: 1,
       dodges: 2, maxDodge: 2, dodgeT: 0, rollT: 0, rollDir: 0, inv: 0, hurtInv: 0,
       atk: null, combo: 0, comboWin: 0, queue: null, heavyCd: 0, rolledHit: new Set(),
       rage: 0, torch: 3, chain: 0, chainT: 0, charge: -1, chargeMouse: false, breakT: 0, dmgMul: 1, flash: 0,
@@ -370,7 +378,7 @@ class Run extends Phaser.Scene {
     this.roomObjs.forEach(o => o.destroy());
     this.roomObjs = [];
     this.enemies.forEach(e => { e.spr.destroy(); e.ui && e.ui.destroy(); });
-    this.chests.forEach(c => { c.spr.destroy(); c.ui && c.ui.destroy(); });
+    this.chests.forEach(c => { [c.spr, c.glow, c.glint, c.tip, c.ui].forEach(o => o && o.destroy()); });
     this.enemies = []; this.arrows = []; this.chests = []; this.doors = []; this.obstacles = [];
     this.decalG.clear();
     this.anchor = null;
@@ -516,10 +524,28 @@ class Run extends Phaser.Scene {
     for (let i = 0; i < 20 && this.blocked(x, y, 40); i++) y += i % 2 ? -i * 12 : i * 12;
     const k = CHEST_K * (tier === 'lacquer' ? 1.15 : 1);
     const spr = art(this, x, y, def.tex + '_closed', k).setDepth(y);
-    const c = { tier, def, spr, x, y, k, opened: false, items: null, idx: 0, t: 0 };
+    // 脚下呼吸光圈，1.2 秒一个周期
+    const glow = this.add.graphics().setDepth(y - 2).setPosition(x, y - 4).setBlendMode('ADD');
+    const gc = CHEST_GLOW[tier];
+    glow.fillStyle(gc, 0.18); glow.fillEllipse(0, 0, 150, 46);
+    glow.fillStyle(gc, 0.28); glow.fillEllipse(0, 0, 108, 32);
+    glow.lineStyle(3, gc, 0.9); glow.strokeEllipse(0, 0, 130, 40);
+    glow.setAlpha(0.35);
+    this.tweens.add({ targets: glow, alpha: 1, scale: 1.1, duration: 600, yoyo: true, repeat: -1, ease: 'Sine.easeInOut' });
+    // 每 3 秒闪一下高光：同图白色剪影叠加
+    const glint = art(this, x, y, def.tex + '_closed', k).setDepth(y + 1).setTintFill(0xFFFFFF).setBlendMode('ADD').setAlpha(0);
+    const glintTw = this.tweens.add({ targets: glint, alpha: 0.55, duration: 150, yoyo: true, hold: 60, repeat: -1, repeatDelay: 2700, delay: rnd(300, 2700) });
+    // 头顶按键提示（靠近才显示）
+    const top = spr.getBounds().top;
+    const tip = this.add.container(x, top - 44).setDepth(7000).setVisible(false);
+    tip.add(ui(this, 0, 0, 'hud_slot_frame', 56));
+    const st = { fontFamily: FONT, color: '#F3E9D2', stroke: '#16110D', strokeThickness: 6, fontStyle: 'bold' };
+    tip.add(this.add.text(0, 0, TOUCH ? '搜' : 'E', { ...st, fontSize: '28px' }).setOrigin(0.5));
+    tip.add(this.add.text(0, 44, '搜索', { ...st, fontSize: '20px', strokeThickness: 5 }).setOrigin(0.5));
+    const c = { tier, def, spr, x, y, k, glow, glint, glintTw, tip, near: false, opened: false, items: null, idx: 0, t: 0 };
     this.chests.push(c);
     this.obstacles.push({ x, y: y - 8, r: 26 });
-    if (tier === 'lacquer') this.tweens.add({ targets: spr, scale: spr.scale * 1.06, duration: 600, yoyo: true, repeat: -1 });
+    if (tier === 'lacquer') this.tweens.add({ targets: [spr, glint], scale: spr.scale * 1.06, duration: 600, yoyo: true, repeat: -1 });
     return c;
   }
 
@@ -659,8 +685,10 @@ class Run extends Phaser.Scene {
     let vx = 0, vy = 0;
     const spd = h.spd * (h.charge >= 0 ? 0.4 : 1);
     if (h.rollT > 0) {
+      // 最后一帧只走剩下的时间，距离不随帧率漂
+      const step = Math.min(dt, h.rollT) / dt;
       h.rollT -= dt;
-      const rs = this.has('chong') ? 1200 : 800; // 0.2 秒：160 px，锦马超冲 240 px
+      const rs = ROLL_DIST / ROLL_T * (this.has('chong') ? CHONG_K : 1) * step; // 120 px，锦马超冲 180 px
       vx = Math.cos(h.rollDir) * rs; vy = Math.sin(h.rollDir) * rs;
       if (Math.random() < 0.6) this.inkFx.emitParticleAt(h.x + rnd(-8, 8), h.y + rnd(-4, 4), 1);
       this.rollHits();
@@ -746,7 +774,7 @@ class Run extends Phaser.Scene {
     if (this.paused || h.dodges <= 0 || h.rollT > 0) return;
     h.dodges--; h.atk = null; h.queue = null; h.charge = -1;
     h.rollDir = moving ? Math.atan2(my, mx) : h.face;
-    h.rollT = 0.2; h.inv = 0.2;
+    h.rollT = ROLL_T; h.inv = ROLL_T;
     h.rolledHit = new Set();
   }
 
@@ -1053,7 +1081,7 @@ class Run extends Phaser.Scene {
   // ---------- 搜箱 ----------
   nearChest() {
     const h = this.hero;
-    let best = null, bd = 90;
+    let best = null, bd = CHEST_NEAR;
     for (const c of this.chests) { const d = Math.hypot(c.x - h.x, c.y - h.y); if (d < bd) { bd = d; best = c; } }
     return best;
   }
@@ -1063,8 +1091,10 @@ class Run extends Phaser.Scene {
     if (!c || c.opened) return;
     c.opened = true;
     c.spr.setTexture(c.def.tex + '_open');
-    this.tweens.killTweensOf(c.spr);
-    c.spr.setScale(artScale(c.def.tex + '_open') * c.k);
+    this.tweens.killTweensOf([c.spr, c.glow, c.glint]);
+    c.spr.setScale(artScale(c.def.tex + '_open') * c.k).setY(c.y).setTint(0xB3B3B3); // 搜过：压暗 30%
+    [c.glow, c.glint, c.tip].forEach(o => o.destroy());
+    c.glow = c.glint = c.tip = null;
     c.items = [];
     for (let i = 0; i < c.def.n; i++) {
       const r = this.rollRarity(c.def.w);
@@ -1097,7 +1127,15 @@ class Run extends Phaser.Scene {
   updateChests(dt) {
     const h = this.hero;
     h.looting = false;
+    const nc = this.nearChest();
     for (const c of this.chests) {
+      if (!c.opened) {
+        const near = c === nc && !this.over;
+        if (near && !c.near) this.tweens.add({ targets: c.spr, y: c.y - 10, duration: 110, yoyo: true, ease: 'Quad.easeOut' });
+        c.near = near;
+        c.tip.setVisible(near);
+        if (near) c.tip.y = c.spr.getBounds().top - 44 + Math.sin(this.time.now / 220) * 3;
+      }
       if (!c.opened || c.idx >= c.items.length) continue;
       const near = Math.hypot(c.x - h.x, c.y - h.y) < 120;
       const it = c.items[c.idx];
@@ -1421,10 +1459,7 @@ class Run extends Phaser.Scene {
       }
     }
     // 箱子提示
-    const c = this.nearChest();
-    if (c && !c.opened) {
-      this.hint.setText(TOUCH ? `点“搜”搜索${c.def.name}` : `E 搜索${c.def.name}`).setVisible(true);
-    } else if (this.anchor) {
+    if (this.anchor) {
       this.hint.setText('站进青色裂隙里撑住！').setVisible(true);
     } else this.hint.setVisible(false);
   }
