@@ -61,6 +61,19 @@ const CHONG_K = 1.5;        // 锦马超冲：翻滚距离倍数
 const STICK_K = 1.3;        // 手机摇杆放大倍数（底座、摇杆头、拖动半径）
 const CHEST_NEAR = 160;     // 进入此距离：宝箱头顶出按键提示，可搜
 const CHEST_GLOW = { wood: 0xF3E9D2, bronze: 0xC87533, lacquer: 0xF1C40F }; // 脚下呼吸光：白、铜、金
+// T009 重量背包 + 宝驹（docs/02 第 2 节）
+const BAGS = [null, { n: '帆布挎包', cap: 20 }, { n: '外卖箱', cap: 35 }, { n: '保温大箱', cap: 50 }]; // 容量：斤
+// 宝箱额外掉背包：[等级, 概率]，按顺序判。精英房奖励箱本身是铜箍箱，另加 20% 出 3 级
+const BAG_DROP = { bronze: [[2, 0.08]], lacquer: [[3, 0.10], [2, 0.15]], elite: [[3, 0.20], [2, 0.08]] };
+const LOAD_FREE = 0.5;      // 装到容量的这个比例以下没有惩罚
+const LOAD_SLOW = 0.2;      // 满载移速 -20%（50%–100% 线性）
+const PET_SLOTS = 2;        // 宝驹位置数，不算重量
+const SAFE_SLOTS = 2;       // 护心镜安全位，算重量，传说放不进
+const PET_NEAR = 75, PET_FAR = 90, PET_TP = 400; // 宝驹：离主角超过 FAR 就跟上，走到 NEAR 停；超过 TP 直接传送
+const PICK_NEAR = 70;       // 地上物品的拾取距离
+const fmtW = w => String(Math.round(w * 10) / 10);
+const sumW = a => a.reduce((t, it) => t + it.wt, 0);
+const sumV = a => a.reduce((t, it) => t + it.v, 0);
 const CAN_FULLSCREEN = !!(document.fullscreenEnabled || document.webkitFullscreenEnabled);
 
 // 左半屏浮动摇杆 + 右侧按键，支持多点触控。每根手指（pointer.id）各管一个控件。
@@ -206,14 +219,14 @@ const RAR = [
   { n: '凡', c: 0xD9D9D9, t: 0.5 }, { n: '良', c: 0x6AB04C, t: 1 }, { n: '精', c: 0x3A8DDE, t: 2 },
   { n: '珍', c: 0x9B59B6, t: 3 }, { n: '绝', c: 0xF1C40F, t: 4 }, { n: '传说', c: 0xE74C3C, t: 4 },
 ];
-// 名称, 稀有度, 宽, 高, 价值
+// 名称, 稀有度, 重量（斤）, 价值
 const ITEMS = [
-  ['半两钱', 0, 1, 1, 10], ['麦饼', 0, 1, 1, 8], ['粗麻布', 0, 1, 2, 14], ['草鞋', 0, 1, 1, 6],
-  ['五铢钱串', 1, 1, 1, 30], ['铁箭簇', 1, 1, 1, 25], ['竹简', 1, 1, 2, 45], ['皮护腕', 1, 1, 2, 40],
-  ['青铜酒爵', 2, 1, 1, 90], ['漆耳杯', 2, 1, 1, 80], ['铜镜', 2, 2, 2, 140],
-  ['玉璧', 3, 2, 2, 320], ['错金带钩', 3, 1, 1, 260], ['兵书残卷', 3, 1, 2, 300],
-  ['鎏金博山炉', 4, 2, 2, 720], ['金缕玉片', 4, 1, 2, 680],
-  ['方天画戟', 5, 1, 4, 2400],
+  ['半两钱', 0, 0.5, 10], ['麦饼', 0, 0.5, 8], ['粗麻布', 0, 2, 14], ['草鞋', 0, 1, 6],
+  ['五铢钱串', 1, 1, 30], ['铁箭簇', 1, 1.5, 25], ['竹简', 1, 2, 45], ['皮护腕', 1, 1, 40],
+  ['青铜酒爵', 2, 1, 90], ['漆耳杯', 2, 0.5, 80], ['铜镜', 2, 3, 140],
+  ['玉璧', 3, 2, 320], ['错金带钩', 3, 0.5, 260], ['兵书残卷', 3, 1.5, 300],
+  ['鎏金博山炉', 4, 6, 720], ['金缕玉片', 4, 4, 680],
+  ['方天画戟', 5, 20, 2400],
 ];
 const CHESTS = {
   wood:    { tex: 'chest_wood',    n: 2, w: [55, 33, 10, 2, 0, 0],   name: '木箱' },
@@ -257,6 +270,24 @@ function makeTextures(scene) {
   const g = scene.make.graphics({ add: false });
   g.fillStyle(C.ink, 1); g.fillCircle(6, 6, 6); g.generateTexture('ink', 12, 12); g.clear();
   g.fillStyle(0xffffff, 1); g.fillCircle(4, 4, 4); g.generateTexture('dot', 8, 8); g.clear();
+  // 宝驹占位：朝右的小毛驴 + 两个褡裢，等美术出图替换
+  const ink = C.ink, fur = 0x8B6A4E, dark = 0x5E4433;
+  g.lineStyle(3, ink, 1);
+  g.fillStyle(dark, 1);
+  for (const lx of [26, 36, 58, 68]) { g.fillRect(lx, 50, 7, 22); g.strokeRect(lx, 50, 7, 22); }
+  g.lineBetween(14, 34, 6, 50); // 尾巴
+  g.fillStyle(fur, 1); g.fillEllipse(46, 42, 62, 32); g.strokeEllipse(46, 42, 62, 32);
+  g.fillTriangle(66, 36, 76, 14, 84, 30); // 脖子
+  g.fillStyle(fur, 1); g.fillEllipse(84, 22, 26, 18); g.strokeEllipse(84, 22, 26, 18);
+  g.fillStyle(0xC9B49A, 1); g.fillEllipse(93, 25, 12, 11);
+  g.fillStyle(dark, 1); g.fillTriangle(76, 16, 72, 0, 81, 12); g.fillTriangle(82, 14, 84, 0, 88, 13);
+  g.fillStyle(ink, 1); g.fillCircle(86, 19, 2);
+  // 褡裢：背上一条带子，两侧各挂一个口袋
+  g.fillStyle(0x6E4526, 1); g.fillRect(36, 24, 22, 6);
+  g.fillStyle(0x2F5D8A, 1); g.fillRect(28, 30, 20, 22); g.strokeRect(28, 30, 20, 22);
+  g.fillStyle(C.red, 1); g.fillRect(46, 30, 20, 22); g.strokeRect(46, 30, 20, 22);
+  g.lineStyle(2, C.paper, 0.8); g.lineBetween(28, 40, 48, 40); g.lineBetween(46, 40, 66, 40);
+  g.generateTexture('pet_donkey', 100, 74); g.clear();
   g.destroy();
 
   // 地面：E01 16 块地砖随机铺（任意两块边缘都能接上）
@@ -346,9 +377,11 @@ class Run extends Phaser.Scene {
     // 上方栅栏：E03 横栏，开营门时把门口那段藏起来换成营门
     this.rails = [];
     for (let x = 20; x < W + 40; x += 70) this.rails.push(art(this, x, ARENA.t - 8, x % 280 === 160 ? 'palisade_damaged' : 'palisade_rail').setDepth(ARENA.t - 8));
-    this.run = { room: 0, kills: 0, souls: [], bag: [], grid: [], correction: 0, warned: {}, t0: this.time.now, value: 0 };
-    for (let i = 0; i < 4; i++) this.run.grid.push(new Array(6).fill(null));
-    this.enemies = []; this.arrows = []; this.chests = []; this.doors = []; this.roomObjs = [];
+    this.run = { room: 0, kills: 0, souls: [], bag: [], pet: [], safe: [], bagLv: 1, correction: 0, warned: {}, t0: this.time.now };
+    // 宝驹：不挡路、不挨打，跟在主角身后
+    this.pet = { x: hero.x - 70, y: hero.y + 4, faceX: 1, follow: false, moving: false };
+    this.pet.spr = this.add.image(this.pet.x, this.pet.y, 'pet_donkey').setOrigin(0.5, 0.97);
+    this.enemies = []; this.arrows = []; this.chests = []; this.drops = []; this.doors = []; this.roomObjs = [];
     this.hitstop = 0; this.paused = false; this.panel = null; this.mouseAim = false;
     this.over = false;
     if (TOUCH) {
@@ -379,7 +412,8 @@ class Run extends Phaser.Scene {
     this.roomObjs = [];
     this.enemies.forEach(e => { e.spr.destroy(); e.ui && e.ui.destroy(); });
     this.chests.forEach(c => { [c.spr, c.glow, c.glint, c.tip, c.ui].forEach(o => o && o.destroy()); });
-    this.enemies = []; this.arrows = []; this.chests = []; this.doors = []; this.obstacles = [];
+    this.drops.forEach(d => { d.c.destroy(); d.tip.destroy(); });
+    this.enemies = []; this.arrows = []; this.chests = []; this.drops = []; this.doors = []; this.obstacles = [];
     this.decalG.clear();
     this.anchor = null;
   }
@@ -393,6 +427,7 @@ class Run extends Phaser.Scene {
     this.cleared = false; this.waves = [];
     const hero = this.hero;
     hero.x = 640; hero.y = 640; hero.atk = null; hero.rollT = 0;
+    this.pet.x = hero.x - 70; this.pet.y = hero.y + 4; this.pet.follow = false; // 过门一起走
     if (kind !== 'start') this.addCorrection(5);
     if (kind !== 'start' && this.has('laodang')) { hero.dmgMul += 0.08; this.time.delayedCall(900, () => this.toast(`老当益壮：伤害 +${Math.round((hero.dmgMul - 1) * 100)}%`, '#9FD3A8')); }
 
@@ -536,12 +571,7 @@ class Run extends Phaser.Scene {
     const glint = art(this, x, y, def.tex + '_closed', k).setDepth(y + 1).setTintFill(0xFFFFFF).setBlendMode('ADD').setAlpha(0);
     const glintTw = this.tweens.add({ targets: glint, alpha: 0.55, duration: 150, yoyo: true, hold: 60, repeat: -1, repeatDelay: 2700, delay: rnd(300, 2700) });
     // 头顶按键提示（靠近才显示）
-    const top = spr.getBounds().top;
-    const tip = this.add.container(x, top - 44).setDepth(7000).setVisible(false);
-    tip.add(ui(this, 0, 0, 'hud_slot_frame', 56));
-    const st = { fontFamily: FONT, color: '#F3E9D2', stroke: '#16110D', strokeThickness: 6, fontStyle: 'bold' };
-    tip.add(this.add.text(0, 0, TOUCH ? '搜' : 'E', { ...st, fontSize: '28px' }).setOrigin(0.5));
-    tip.add(this.add.text(0, 44, '搜索', { ...st, fontSize: '20px', strokeThickness: 5 }).setOrigin(0.5));
+    const tip = this.makeTip(x, spr.getBounds().top - 44, '搜索');
     const c = { tier, def, spr, x, y, k, glow, glint, glintTw, tip, near: false, opened: false, items: null, idx: 0, t: 0 };
     this.chests.push(c);
     this.obstacles.push({ x, y: y - 8, r: 26 });
@@ -549,11 +579,21 @@ class Run extends Phaser.Scene {
     return c;
   }
 
+  // 头顶按键提示：U01 slot 框里写 E（触屏写“搜”），下面写动作
+  makeTip(x, y, label) {
+    const tip = this.add.container(x, y).setDepth(7000).setVisible(false);
+    tip.add(ui(this, 0, 0, 'hud_slot_frame', 56));
+    const st = { fontFamily: FONT, color: '#F3E9D2', stroke: '#16110D', strokeThickness: 6, fontStyle: 'bold' };
+    tip.add(this.add.text(0, 0, TOUCH ? '搜' : 'E', { ...st, fontSize: '28px' }).setOrigin(0.5));
+    tip.add(this.add.text(0, 44, label, { ...st, fontSize: '20px', strokeThickness: 5 }).setOrigin(0.5));
+    return tip;
+  }
+
   onRoomCleared() {
     this.cleared = true;
     const k = this.roomKind;
     if (k === 'soul' || k === 'elite') this.time.delayedCall(450, () => this.soulPick());
-    if (k === 'elite') this.addChest('bronze', 640, 360);
+    if (k === 'elite') this.addChest('bronze', 640, 360).elite = true; // 精英奖励箱：另有 20% 出 3 级背包
     if (k === 'chest') { this.addChest('lacquer', 640, 360); this.toast('漆金宝箱出现了'); }
     if (k === 'heal') { const h = Math.min(40, this.hero.maxHp - this.hero.hp); this.hero.hp += h; this.toast(`郎中包扎：体力 +${Math.round(h)}`); }
     this.makeDoors();
@@ -595,6 +635,7 @@ class Run extends Phaser.Scene {
     if (this.run.correction >= 100) this.hurtHero(5 * dt, null, true);
 
     this.updateHero(dt);
+    this.updatePet(dt);
     this.enemies.forEach(e => this.updateEnemy(e, dt));
     this.separate();
     this.updateArrows(dt);
@@ -683,7 +724,7 @@ class Run extends Phaser.Scene {
     }
 
     let vx = 0, vy = 0;
-    const spd = h.spd * (h.charge >= 0 ? 0.4 : 1);
+    const spd = h.spd * this.loadMul() * (h.charge >= 0 ? 0.4 : 1);
     if (h.rollT > 0) {
       // 最后一帧只走剩下的时间，距离不随帧率漂
       const step = Math.min(dt, h.rollT) / dt;
@@ -1079,16 +1120,20 @@ class Run extends Phaser.Scene {
   }
 
   // ---------- 搜箱 ----------
+  // 最近的可交互物：没搜过的宝箱，或地上的物品
   nearChest() {
     const h = this.hero;
-    let best = null, bd = CHEST_NEAR;
-    for (const c of this.chests) { const d = Math.hypot(c.x - h.x, c.y - h.y); if (d < bd) { bd = d; best = c; } }
+    let best = null, bd = Infinity;
+    const test = (o, r) => { const d = Math.hypot(o.x - h.x, o.y - h.y); if (d < r && d < bd) { bd = d; best = o; } };
+    for (const c of this.chests) if (!c.opened) test(c, CHEST_NEAR);
+    for (const d of this.drops) test(d, PICK_NEAR);
     return best;
   }
 
   tryOpenChest() {
     const c = this.nearChest();
     if (!c || c.opened) return;
+    if (c.drop) { this.pickDrop(c); return; }
     c.opened = true;
     c.spr.setTexture(c.def.tex + '_open');
     this.tweens.killTweensOf([c.spr, c.glow, c.glint]);
@@ -1100,7 +1145,13 @@ class Run extends Phaser.Scene {
       const r = this.rollRarity(c.def.w);
       const pool = ITEMS.filter(it => it[1] === r);
       const it = pick(pool);
-      c.items.push({ name: it[0], r: it[1], w: it[2], h: it[3], v: it[4], found: false });
+      c.items.push({ name: it[0], r: it[1], wt: it[2], v: it[3], found: false });
+    }
+    // 背包掉落：搜到自动换上
+    let roll = Math.random();
+    for (const [lv, pr] of BAG_DROP[c.elite ? 'elite' : c.tier] || []) {
+      if (roll < pr) { c.items.push({ name: BAGS[lv].n, bag: lv, r: lv, wt: 0, v: 0, found: false }); break; }
+      roll -= pr;
     }
     c.idx = 0; c.t = 0;
     this.addCorrection(3);
@@ -1136,6 +1187,9 @@ class Run extends Phaser.Scene {
         c.tip.setVisible(near);
         if (near) c.tip.y = c.spr.getBounds().top - 44 + Math.sin(this.time.now / 220) * 3;
       }
+    }
+    for (const d of this.drops) d.tip.setVisible(d === nc && !this.over);
+    for (const c of this.chests) {
       if (!c.opened || c.idx >= c.items.length) continue;
       const near = Math.hypot(c.x - h.x, c.y - h.y) < 120;
       const it = c.items[c.idx];
@@ -1152,8 +1206,14 @@ class Run extends Phaser.Scene {
         s.box.setFillStyle(RAR[it.r].c).setStrokeStyle(3, C.ink);
         const icon = ITEM_ICON[it.name];
         if (icon) { c.ui.add(ui(this, s.x, 0, icon, 38)); s.t.setText(''); } else s.t.setText(it.name.slice(0, 2)).setColor(it.r >= 3 ? '#F3E9D2' : '#2B1D16').setFontSize(14).setStroke(it.r >= 3 ? '#2B1D16' : '#F3E9D2', 3);
-        const ok = this.putInBag(it);
-        this.floatText(c.x, c.y - 120, `${RAR[it.r].n}·${it.name}${ok ? '' : '（背包满了）'}`, hex(RAR[it.r].c), it.r >= 3 ? 24 : 18);
+        let note = '';
+        if (it.bag) note = this.equipBag(it.bag);
+        else {
+          const where = this.stow(it);
+          if (where === 'pet') note = '（放上宝驹）';
+          if (!where) { note = '（背不动，放在地上）'; this.tooHeavy(); this.dropItem(it, c.x + rnd(-50, 50), c.y + rnd(30, 50)); }
+        }
+        this.floatText(c.x, c.y - 120, `${it.bag ? `Lv${it.bag} ` : RAR[it.r].n + '·'}${it.name}${note}`, hex(RAR[it.r].c), it.r >= 3 ? 24 : 18);
         // V05 出货光柱，按品质换色，越稀有越高越久
         const beam = art(this, c.x, c.y + 4, `lootbeam_${RAR_KEY[it.r]}`, 0.8 + it.r * 0.18).setDepth(c.y + 1);
         const bs = beam.scale;
@@ -1171,19 +1231,78 @@ class Run extends Phaser.Scene {
     }
   }
 
-  putInBag(it) {
-    const g = this.run.grid;
-    const fits = (x, y, w, h) => { if (x + w > 6 || y + h > 4) return false; for (let j = y; j < y + h; j++) for (let i = x; i < x + w; i++) if (g[j][i]) return false; return true; };
-    for (const [w, hh] of [[it.w, it.h], [it.h, it.w]]) {
-      for (let y = 0; y < 4; y++) for (let x = 0; x < 6; x++) if (fits(x, y, w, hh)) {
-        const placed = { ...it, gx: x, gy: y, gw: w, gh: hh };
-        for (let j = y; j < y + hh; j++) for (let i = x; i < x + w; i++) g[j][i] = placed;
-        this.run.bag.push(placed);
-        this.run.value += it.v;
-        return true;
-      }
+  // ---------- 重量背包 ----------
+  bagCap() { return BAGS[this.run.bagLv].cap; }
+  bagWeight() { return sumW(this.run.bag) + sumW(this.run.safe); } // 护心镜里的照算重量
+  runValue() { const r = this.run; return sumV(r.bag) + sumV(r.pet) + sumV(r.safe); }
+  loadMul() {
+    const l = this.bagWeight() / this.bagCap();
+    return l <= LOAD_FREE ? 1 : 1 - LOAD_SLOW * Math.min(1, (l - LOAD_FREE) / (1 - LOAD_FREE));
+  }
+  fitsBag(it) { return this.bagWeight() + it.wt <= this.bagCap() + 1e-6; }
+
+  // 捡到东西：背包装得下进背包，否则进宝驹；都满了返回 null
+  stow(it) {
+    const run = this.run;
+    const o = { name: it.name, r: it.r, wt: it.wt, v: it.v };
+    if (this.fitsBag(o)) { run.bag.push(o); return 'bag'; }
+    if (run.pet.length < PET_SLOTS) { run.pet.push(o); return 'pet'; }
+    return null;
+  }
+
+  tooHeavy() { this.floatText(this.hero.x, this.hero.y - 130, '背不动', '#E74C3C', 26); }
+
+  equipBag(lv) {
+    if (lv <= this.run.bagLv) { this.toast(`${BAGS[lv].n}不比身上的好，没换`, '#CDB78A'); return '（没换）'; }
+    this.run.bagLv = lv;
+    this.toast(`换上 Lv${lv} ${BAGS[lv].n}：容量 ${BAGS[lv].cap} 斤`, '#9FD3A8');
+    return '（换上了）';
+  }
+
+  // 丢在地上的物品：本房间内走过去按 E / 搜 捡回
+  dropItem(it, x, y) {
+    x = R.Clamp(x, ARENA.l + 20, ARENA.r - 20); y = R.Clamp(y, ARENA.t + 20, ARENA.b - 10);
+    const c = this.add.container(x, y).setDepth(y);
+    const col = RAR[it.r].c;
+    c.add(this.add.ellipse(0, 0, 54, 18, col, 0.35).setStrokeStyle(2, col, 0.9));
+    const icon = ITEM_ICON[it.name];
+    if (icon) c.add(ui(this, 0, -14, icon, 34));
+    else {
+      c.add(this.add.rectangle(0, -14, 28, 28, col).setStrokeStyle(2, C.ink));
+      c.add(this.add.text(0, -14, it.name.slice(0, 1), { fontFamily: FONT, fontSize: '16px', color: '#2B1D16' }).setOrigin(0.5));
     }
-    return false;
+    this.tweens.add({ targets: c, y: y - 4, duration: 700, yoyo: true, repeat: -1, ease: 'Sine.easeInOut' });
+    const d = { drop: true, it, x, y, c, tip: this.makeTip(x, y - 80, '捡起') };
+    this.drops.push(d);
+    return d;
+  }
+
+  pickDrop(d) {
+    const where = this.stow(d.it);
+    if (!where) { this.tooHeavy(); return; }
+    this.drops = this.drops.filter(o => o !== d);
+    d.c.destroy(); d.tip.destroy();
+    this.floatText(d.x, d.y - 60, `${d.it.name}${where === 'pet' ? '（放上宝驹）' : ''}`, hex(RAR[d.it.r].c), 18);
+  }
+
+  // 宝驹跟随：超过 PET_FAR 才走，走到 PET_NEAR 停；太远直接传送
+  updatePet(dt) {
+    const p = this.pet, h = this.hero;
+    let dx = h.x - p.x, dy = h.y - p.y, d = Math.hypot(dx, dy);
+    if (d > PET_TP) {
+      p.x = h.x - h.faceX * 70; p.y = h.y + 4; p.follow = false;
+      this.ring(p.x, p.y - 10, C.paper, 40, 300, 3);
+      dx = h.x - p.x; dy = h.y - p.y; d = Math.hypot(dx, dy);
+    }
+    if (d > PET_FAR) p.follow = true;
+    if (d < PET_NEAR) p.follow = false;
+    p.moving = p.follow;
+    if (p.follow) {
+      const step = Math.min(d - PET_NEAR + 0.5, h.spd * 1.1 * dt);
+      p.x += dx / d * step; p.y += dy / d * step;
+      if (Math.abs(dx) > 4) p.faceX = Math.sign(dx);
+    }
+    p.x = R.Clamp(p.x, ARENA.l + 20, ARENA.r - 20); p.y = R.Clamp(p.y, ARENA.t, ARENA.b);
   }
 
   // ---------- 撤离 ----------
@@ -1278,41 +1397,173 @@ class Run extends Phaser.Scene {
     this.paused = false;
   }
 
-  // ---------- 背包 ----------
+  // ---------- 背包（T009：按重量） ----------
+  // 左：背包列表；右上：宝驹 2 格；右下：护心镜 2 格。
+  // 点物品：背包 ↔ 宝驹（护心镜里的点一下回背包）；拖到护心镜放进安全位；“丢”扔在脚下。
   toggleBag() {
     if (this.over) return;
     if (this.panel) { if (this.panel.kind === 'bag') this.closePanel(); return; }
+    this.bagPage = 0;
+    this.openBag();
+  }
+
+  refreshBag() {
+    if (!this.panel || this.panel.kind !== 'bag') return;
+    this.panel.off(); this.panel.c.destroy(); this.panel = null;
+    this.openBag();
+  }
+
+  openBag() {
     this.paused = true;
-    const p = this.add.container(0, 0).setDepth(9000);
-    const dim = this.add.rectangle(W / 2, H / 2, W, H, 0x16110d, 0.7).setInteractive();
-    if (TOUCH) dim.on('pointerdown', () => this.toggleBag());
+    const run = this.run, p = this.add.container(0, 0).setDepth(9000);
+    const T = (x, y, s, size = 18, color = '#F3E9D2', o = {}) => this.add.text(x, y, s, { fontFamily: FONT, fontSize: size + 'px', color, stroke: '#2B1D16', strokeThickness: 4, ...o });
+    const dim = this.add.rectangle(W / 2, H / 2, W, H, 0x16110d, 0.8).setInteractive();
     p.add(dim);
-    // U02：面板自带 6×4 竹格，物品按格线对齐（原图格线 x 206–705、y 282–608）
-    const pw0 = 83.2, ph0 = 81.5, gl = 206, gt = 282;
-    const panel = this.add.image(W / 2 - 80, 386, 'inventory_panel').setInteractive();
-    const sc = 62 / pw0;
-    panel.setScale(sc);
-    p.add(panel);
-    const pl = panel.x - panel.displayWidth / 2, ptop = panel.y - panel.displayHeight / 2;
-    const gx = pl + gl * sc, gy = ptop + gt * sc, pw = pw0 * sc, ph = ph0 * sc;
-    p.add(this.add.text(panel.x, 62, `外卖箱 6×4　　带出价值 ${this.run.value}`, { fontFamily: FONT, fontSize: '26px', color: '#F3E9D2', stroke: '#2B1D16', strokeThickness: 5 }).setOrigin(0.5));
-    for (const it of this.run.bag) {
-      const x = gx + it.gx * pw, y = gy + it.gy * ph, w = it.gw * pw, hh = it.gh * ph, cx = x + w / 2, cy = y + hh / 2;
-      p.add(this.add.rectangle(cx, cy, w - 6, hh - 6, RAR[it.r].c, 0.3));
-      // 稀有度框：九宫格保住四角，2 倍画再缩一半让角不显得太粗
-      const fk = `inventory_rarity_${RAR_KEY[it.r]}`;
-      p.add(this.add.nineslice(cx, cy, fk, contentFrame(this, fk), (w - 2) * 2, (hh - 2) * 2, 34, 34, 34, 34).setScale(0.5));
+    // 面板底：点到这里不关
+    p.add(this.add.rectangle(W / 2, H / 2 + 6, 1200, 676, 0x2B1D16, 0.92).setStrokeStyle(3, 0x8E5E33).setInteractive());
+    if (TOUCH) dim.on('pointerdown', () => this.closePanel());
+
+    // 标题 + 重量条
+    const cap = this.bagCap(), wt = this.bagWeight(), load = wt / cap, slow = Math.round((1 - this.loadMul()) * 100);
+    p.add(T(80, 30, `背包 Lv${run.bagLv} · ${BAGS[run.bagLv].n}`, 28));
+    p.add(T(760, 38, `带出价值 ${this.runValue()}`, 20, '#F1C40F').setOrigin(1, 0));
+    const bx = 80, by = 84, bw = 680;
+    p.add(this.add.rectangle(bx, by, bw, 16, 0x16110d).setOrigin(0, 0.5).setStrokeStyle(2, C.ink));
+    p.add(this.add.rectangle(bx + 1, by, (bw - 2) * Math.min(1, load), 12, load > LOAD_FREE ? 0xF0A04B : 0x9FD3A8).setOrigin(0, 0.5));
+    p.add(this.add.rectangle(bx + bw * LOAD_FREE, by, 2, 22, C.paper, 0.8));
+    p.add(T(bx, by + 14, `${fmtW(wt)} / ${cap} 斤${run.safe.length ? '（含护心镜）' : ''}`, 16, '#CDB78A'));
+    p.add(T(bx + bw, by + 14, slow > 0 ? `超过一半：移速 -${slow}%` : '一半以内不减速', 16, slow > 0 ? '#F0A04B' : '#9FD3A8').setOrigin(1, 0));
+
+    // 关闭
+    const close = this.add.container(1210, 40);
+    close.add(this.add.circle(0, 0, 24, 0x16110d, 0.9).setStrokeStyle(2, 0x8E5E33));
+    close.add(T(0, 0, '✕', 22).setOrigin(0.5));
+    close.setSize(48, 48).setInteractive({ useHandCursor: true }).on('pointerup', () => this.closePanel());
+    p.add(close);
+
+    const zones = []; // 拖放目标
+    const items = [];  // 可点 / 可拖的格子：{ it, from, hit }
+    const drawItem = (cx, cy, it, size) => {
+      const col = RAR[it.r].c;
+      p.add(this.add.rectangle(cx, cy, size, size, col, 0.3).setStrokeStyle(2, col));
       const icon = ITEM_ICON[it.name];
-      if (icon) p.add(ui(this, cx, cy - 2, icon, Math.min(w, hh) * 0.72));
-      else p.add(this.add.text(cx, cy - 4, it.name, { fontFamily: FONT, fontSize: '14px', color: '#2B1D16', align: 'center', stroke: '#F3E9D2', strokeThickness: 3, wordWrap: { width: w - 14, useAdvancedWrap: true } }).setOrigin(0.5));
-      p.add(this.add.text(x + w - 7, y + hh - 6, String(it.v), { fontFamily: FONT, fontSize: '12px', color: '#F3E9D2', stroke: '#2B1D16', strokeThickness: 3 }).setOrigin(1, 1));
+      if (icon) p.add(ui(this, cx, cy, icon, size * 0.85));
+      else p.add(T(cx, cy, it.name.slice(0, 1), size * 0.5, '#F3E9D2').setOrigin(0.5));
+    };
+    const dropBtn = (x, y, it, from) => {
+      const b = this.add.container(x, y);
+      b.add(this.add.rectangle(0, 0, 34, 28, 0x5a2a22, 0.95).setStrokeStyle(2, 0xB03A2E));
+      b.add(T(0, 0, '丢', 16).setOrigin(0.5));
+      b.setSize(34, 28).setInteractive({ useHandCursor: true }).on('pointerup', () => this.discard(it, from));
+      p.add(b);
+    };
+
+    // 背包列表：两列，每列 9 行，多了翻页
+    const rows = 9, perPage = rows * 2, rw = 334, rh = 50, lx = 80, ly = 124;
+    const pages = Math.max(1, Math.ceil(run.bag.length / perPage));
+    this.bagPage = Math.min(this.bagPage || 0, pages - 1);
+    zones.push({ to: 'bag', x: lx, y: ly, w: rw * 2 + 12, h: rows * rh });
+    if (!run.bag.length) p.add(T(lx + rw + 6, ly + 180, '背包是空的', 22, '#8A7A66').setOrigin(0.5));
+    run.bag.slice(this.bagPage * perPage, (this.bagPage + 1) * perPage).forEach((it, i) => {
+      const x = lx + Math.floor(i / rows) * (rw + 12), y = ly + (i % rows) * rh, cy = y + rh / 2 - 2;
+      const hit = this.add.rectangle(x, y, rw, rh - 6, 0x3a2c22, 0.95).setOrigin(0, 0).setStrokeStyle(2, RAR[it.r].c, 0.7).setInteractive({ useHandCursor: true });
+      p.add(hit);
+      drawItem(x + 24, cy, it, 34);
+      p.add(T(x + 48, cy, it.name, 18, it.r === 0 ? '#F3E9D2' : hex(RAR[it.r].c)).setOrigin(0, 0.5));
+      p.add(T(x + 156, cy, RAR[it.r].n, 14, hex(RAR[it.r].c)).setOrigin(0, 0.5));
+      p.add(T(x + 238, cy, `${fmtW(it.wt)} 斤`, 15, '#CDB78A').setOrigin(1, 0.5));
+      p.add(T(x + 288, cy, String(it.v), 15, '#F1C40F').setOrigin(1, 0.5));
+      dropBtn(x + rw - 22, cy, it, 'bag');
+      items.push({ it, from: 'bag', hit });
+    });
+    if (pages > 1) {
+      const pg = (dx, label, x) => {
+        const b = T(x, ly + rows * rh + 14, label, 18, '#F3E9D2', { backgroundColor: '#3a2c22', padding: { x: 10, y: 4 } }).setOrigin(0.5, 0);
+        b.setInteractive({ useHandCursor: true }).on('pointerup', () => { this.bagPage = (this.bagPage + dx + pages) % pages; this.refreshBag(); });
+        p.add(b);
+      };
+      pg(-1, '上一页', lx + 200);
+      p.add(T(lx + rw + 6, ly + rows * rh + 18, `${this.bagPage + 1} / ${pages}`, 18, '#CDB78A').setOrigin(0.5, 0));
+      pg(1, '下一页', lx + rw * 2 - 188);
     }
-    // 护心镜保险格（2×2）：原型还没有保险格逻辑，只摆出来
-    const sx = pl + panel.displayWidth + 95;
-    p.add(ui(this, sx, 330, 'inventory_safe', 150));
-    p.add(this.add.text(sx, 420, '护心镜 2×2\n（保险格，原型未启用）', { fontFamily: FONT, fontSize: '16px', color: '#CDB78A', align: 'center' }).setOrigin(0.5, 0));
-    p.add(this.add.text(W / 2, H - 22, TOUCH ? '死了全部丢失，撤离才算数。点空白处关闭' : '死了全部丢失，撤离才算数。Tab 关闭', { fontFamily: FONT, fontSize: '18px', color: '#CDB78A' }).setOrigin(0.5));
-    this.panel = { kind: 'bag', c: p };
+
+    // 右侧：宝驹、护心镜
+    const slotRow = (title, sub, arr, n, key, y, tint) => {
+      p.add(T(980, y - 112, title, 22).setOrigin(0.5));
+      p.add(T(980, y - 86, sub, 15, '#CDB78A').setOrigin(0.5));
+      for (let i = 0; i < n; i++) {
+        const x = 905 + i * 150;
+        const frame = ui(this, x, y, 'hud_slot_frame', 120).setTint(tint);
+        const hit = this.add.rectangle(x, y, 112, 112, 0x16110d, 0.6).setInteractive({ useHandCursor: true });
+        p.add([hit, frame]);
+        zones.push({ to: key, x: x - 60, y: y - 60, w: 120, h: 120 });
+        const it = arr[i];
+        if (!it) { p.add(T(x, y, '空', 20, '#5E4E40').setOrigin(0.5)); continue; }
+        drawItem(x, y, it, 64);
+        p.add(T(x, y + 74, it.name, 16, it.r === 0 ? '#F3E9D2' : hex(RAR[it.r].c)).setOrigin(0.5));
+        p.add(T(x, y + 96, `${fmtW(it.wt)} 斤 · ${it.v}`, 14, '#CDB78A').setOrigin(0.5));
+        dropBtn(x + 50, y - 50, it, key);
+        items.push({ it, from: key, hit });
+      }
+    };
+    slotRow('宝驹', '不算重量，什么都能驮', run.pet, PET_SLOTS, 'pet', 250, 0xFFFFFF);
+    slotRow('护心镜', '死了不丢 · 重量照算 · 传说放不进', run.safe, SAFE_SLOTS, 'safe', 520, 0x9FE3F2);
+
+    p.add(T(W / 2, H - 18, `点物品：背包 ↔ 宝驹　拖到护心镜：存进安全位　丢：扔在脚下，本房间能捡回　${TOUCH ? '点 ✕ 关闭' : 'Tab / ✕ 关闭'}`, 15, '#CDB78A').setOrigin(0.5, 1));
+
+    // 点击 / 拖动：按下记住物品，移动超过 12px 变成拖动，抬起时判断落点
+    let drag = null;
+    items.forEach(o => o.hit.on('pointerdown', ptr => { drag = { ...o, x0: ptr.x, y0: ptr.y, id: ptr.id, ghost: null }; }));
+    const onMove = ptr => {
+      if (!drag || ptr.id !== drag.id) return;
+      if (!drag.ghost && Math.hypot(ptr.x - drag.x0, ptr.y - drag.y0) > 12) {
+        const g = this.add.container(ptr.x, ptr.y).setDepth(9100).setAlpha(0.85);
+        g.add(this.add.rectangle(0, 0, 60, 60, RAR[drag.it.r].c, 0.5).setStrokeStyle(3, C.paper));
+        const icon = ITEM_ICON[drag.it.name];
+        g.add(icon ? ui(this, 0, 0, icon, 50) : T(0, 0, drag.it.name.slice(0, 2), 18).setOrigin(0.5));
+        drag.ghost = g;
+      }
+      if (drag.ghost) drag.ghost.setPosition(ptr.x, ptr.y);
+    };
+    const onUp = ptr => {
+      if (!drag || ptr.id !== drag.id) return;
+      const d = drag; drag = null;
+      if (d.ghost) {
+        d.ghost.destroy();
+        const z = zones.find(z => ptr.x >= z.x && ptr.x <= z.x + z.w && ptr.y >= z.y && ptr.y <= z.y + z.h);
+        if (z) this.moveItem(d.it, d.from, z.to);
+      } else if (d.hit.getBounds().contains(ptr.x, ptr.y)) {
+        this.moveItem(d.it, d.from, d.from === 'bag' ? 'pet' : 'bag');
+      }
+    };
+    this.input.on('pointermove', onMove);
+    this.input.on('pointerup', onUp);
+    this.panel = { kind: 'bag', c: p, off: () => { this.input.off('pointermove', onMove); this.input.off('pointerup', onUp); } };
+  }
+
+  // 在背包、宝驹、护心镜之间挪一件东西；不合规则就提示原因
+  moveItem(it, from, to) {
+    const run = this.run;
+    if (from === to) return;
+    const say = (s) => { this.toast(s, '#E74C3C'); return false; };
+    // 背包和护心镜共用重量，只有从宝驹拿出来才加重量
+    if (to !== 'pet' && from === 'pet' && !this.fitsBag(it)) return say('背不动');
+    if (to === 'pet' && run.pet.length >= PET_SLOTS) return say('宝驹驮满了');
+    if (to === 'safe' && it.r >= 5) return say('传说物品放不进护心镜');
+    if (to === 'safe' && run.safe.length >= SAFE_SLOTS) return say('护心镜满了');
+    run[from].splice(run[from].indexOf(it), 1);
+    run[to].push(it);
+    this.refreshBag();
+    return true;
+  }
+
+  discard(it, from) {
+    const arr = this.run[from], i = arr.indexOf(it);
+    if (i < 0) return;
+    arr.splice(i, 1);
+    const h = this.hero;
+    this.dropItem(it, h.x + rnd(-30, 30), h.y + rnd(6, 20));
+    this.refreshBag();
   }
 
   // ---------- 结算 ----------
@@ -1325,27 +1576,38 @@ class Run extends Phaser.Scene {
     const secs = Math.round((this.time.now - run.t0) / 1000);
     const p = this.add.container(0, 0).setDepth(9500);
     p.add(this.add.rectangle(W / 2, H / 2, W, H, win ? 0x0d2a30 : 0x2a0d0d, 0.82));
-    if (win) { this.ring(this.hero.x, this.hero.y - 30, C.cyan, 400, 700, 10); this.tweens.add({ targets: this.hero.spr, alpha: 0, scale: 0.2, duration: 600 }); }
-    else { this.setPose(this.hero.spr, 'hero_down', this.hero.faceX); this.hero.spr.setRotation(0).setAlpha(1).clearTint(); }
+    if (win) { this.ring(this.hero.x, this.hero.y - 30, C.cyan, 400, 700, 10); this.tweens.add({ targets: [this.hero.spr, this.pet.spr], alpha: 0, scale: 0.2, duration: 600 }); }
+    else {
+      this.setPose(this.hero.spr, 'hero_down', this.hero.faceX); this.hero.spr.setRotation(0).setAlpha(1).clearTint();
+      // 宝驹逃回庄园，背上的东西丢了
+      this.pet.spr.setFlipX(this.pet.x > W / 2 ? false : true);
+      this.tweens.add({ targets: this.pet.spr, x: this.pet.x > W / 2 ? W + 80 : -80, alpha: 0.6, duration: 1200, ease: 'Quad.easeIn' });
+    }
     p.add(this.add.text(W / 2, 120, win ? '撤离成功' : '被历史抹除', { fontFamily: FONT, fontSize: '64px', color: win ? '#3EC6E0' : '#E74C3C', stroke: '#2B1D16', strokeThickness: 10 }).setOrigin(0.5));
-    const kept = win ? run.value : 0;
+    const kept = win ? this.runValue() : sumV(run.safe);
     const soulNames = run.souls.map(id => SOULS.find(s => s.id === id).n).join('、') || '无';
     const lines = [
       `走过 ${run.room} 间营帐　击败 ${run.kills} 人　用时 ${Math.floor(secs / 60)}:${String(secs % 60).padStart(2, '0')}`,
       `将魂：${soulNames}`,
       `历史修正力：${Math.round(run.correction)}`,
-      win ? `带回庄园：${run.bag.length} 件，价值 ${kept}` : `行囊里的 ${run.bag.length} 件东西（价值 ${run.value}）全部丢失`,
+      win ? `带回庄园：价值 ${kept}${run.bagLv > 1 ? `　带回 Lv${run.bagLv} ${BAGS[run.bagLv].n}` : ''}` : `背包和宝驹的东西全部丢失，护心镜保住价值 ${kept}`,
     ];
-    p.add(this.add.text(W / 2, 250, lines.join('\n'), { fontFamily: FONT, fontSize: '24px', color: '#F3E9D2', align: 'center', lineSpacing: 14 }).setOrigin(0.5, 0));
-    const best = run.bag.slice().sort((a, b) => b.v - a.v).slice(0, 6);
-    best.forEach((it, i) => {
-      const x = W / 2 + (i - (best.length - 1) / 2) * 140;
-      p.add(this.add.rectangle(x, 500, 124, 56, RAR[it.r].c, win ? 1 : 0.35).setStrokeStyle(3, C.ink));
-      const icon = ITEM_ICON[it.name];
-      if (icon) p.add(ui(this, x - 38, 500, icon, 48).setAlpha(win ? 1 : 0.5));
-      p.add(this.add.text(icon ? x + 18 : x, 500, it.name, { fontFamily: FONT, fontSize: icon ? '15px' : '17px', color: '#2B1D16' }).setOrigin(0.5));
+    p.add(this.add.text(W / 2, 210, lines.join('\n'), { fontFamily: FONT, fontSize: '24px', color: '#F3E9D2', align: 'center', lineSpacing: 12 }).setOrigin(0.5, 0));
+    // 背包 / 宝驹 / 护心镜分开列
+    const cols = [['背包', run.bag, win], ['宝驹', run.pet, win], ['护心镜', run.safe, true]];
+    cols.forEach(([nm, arr, keep], i) => {
+      const x = W / 2 + (i - 1) * 380, y0 = 390;
+      const head = `${nm}：${arr.length} 件 · 价值 ${sumV(arr)}${arr.length ? (keep ? '' : '　丢失') : ''}`;
+      p.add(this.add.text(x, y0, head, { fontFamily: FONT, fontSize: '20px', color: keep ? '#F3E9D2' : '#E74C3C', stroke: '#2B1D16', strokeThickness: 4 }).setOrigin(0.5));
+      const best = arr.slice().sort((a, b) => b.v - a.v);
+      best.slice(0, 5).forEach((it, j) => {
+        const y = y0 + 36 + j * 30;
+        p.add(this.add.rectangle(x - 120, y, 18, 18, RAR[it.r].c, keep ? 1 : 0.35).setStrokeStyle(2, C.ink));
+        p.add(this.add.text(x - 102, y, `${it.name}　${fmtW(it.wt)} 斤　${it.v}`, { fontFamily: FONT, fontSize: '17px', color: keep ? hex(RAR[it.r].c) : '#8A7A66' }).setOrigin(0, 0.5));
+      });
+      if (best.length > 5) p.add(this.add.text(x, y0 + 36 + 5 * 30, `…另有 ${best.length - 5} 件`, { fontFamily: FONT, fontSize: '15px', color: '#CDB78A' }).setOrigin(0.5));
     });
-    const again = this.add.text(W / 2, 620, TOUCH ? '点击再来一局' : '点击或按 Enter 再来一局', { fontFamily: FONT, fontSize: '28px', color: '#F3E9D2', stroke: '#2B1D16', strokeThickness: 6 }).setOrigin(0.5);
+    const again = this.add.text(W / 2, 650, TOUCH ? '点击再来一局' : '点击或按 Enter 再来一局', { fontFamily: FONT, fontSize: '28px', color: '#F3E9D2', stroke: '#2B1D16', strokeThickness: 6 }).setOrigin(0.5);
     p.add(again);
     this.tweens.add({ targets: again, alpha: 0.4, duration: 700, yoyo: true, repeat: -1 });
     this.time.delayedCall(700, () => {
@@ -1353,7 +1615,7 @@ class Run extends Phaser.Scene {
       this.input.keyboard.once('keydown-ENTER', restart);
       this.input.once('pointerdown', restart);
     });
-    window.__result = { win, value: kept, rooms: run.room, kills: run.kills };
+    window.__result = { win, value: kept, rooms: run.room, kills: run.kills, bag: run.bag.length, pet: run.pet.length, safe: run.safe.length, bagLv: run.bagLv };
   }
 
   // ---------- 碰撞 ----------
@@ -1579,7 +1841,12 @@ class Run extends Phaser.Scene {
     [this.slotRoar, this.roarIcon, this.roarText].forEach(o => o.setVisible(!TOUCH && this.has('hou')));
     this.roarIcon.setAlpha(h.rage >= 100 ? 1 : 0.35);
     this.roomText.setText(`第 ${run.room} 间 · ${this.roomName || ''}`);
-    this.bagText.setText(`行囊 ${run.bag.length} 件 · 价值 ${run.value}${TOUCH ? '' : '　[Tab]'}`);
+    const load = this.bagWeight() / this.bagCap();
+    this.bagText.setText(`背包 Lv${run.bagLv} · ${fmtW(this.bagWeight())} / ${this.bagCap()} 斤 · 宝驹 ${run.pet.length}/${PET_SLOTS} · 价值 ${this.runValue()}${TOUCH ? '' : '　[Tab]'}`)
+      .setColor(load > LOAD_FREE ? '#F0A04B' : '#CDB78A');
+    // 宝驹
+    const p = this.pet;
+    if (!this.over) p.spr.setPosition(p.x, p.y - (p.moving && !this.paused ? Math.abs(Math.sin(this.time.now / 110)) * 3 : 0)).setFlipX(p.faceX < 0).setDepth(p.y);
     this.soulText.setText(run.souls.length ? '将魂：' + run.souls.map(id => SOULS.find(s => s.id === id).n).join('  ') : '');
     // 怒气
     g.fillStyle(C.ink, 1); g.fillRect(166, 84, 128, 10);
