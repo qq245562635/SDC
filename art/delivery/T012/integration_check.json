@@ -1,0 +1,111 @@
+{
+  "task": "T012",
+  "production_sync_executed": true,
+  "scratch_output": "Temporary directory outside repository",
+  "repo_prototype_and_tools_modified": false,
+  "replaced_png_count": 10,
+  "unrelated_T004_asset_records_unchanged": true,
+  "fixed_fields_preserved": [
+    "size_px",
+    "display_scale",
+    "joint_pivot",
+    "origin_normalized",
+    "rest_position",
+    "z"
+  ],
+  "max_abs_axis_degrees": 0.17279,
+  "images": [
+    {
+      "file": "art/char/char_hero_leg_l_01.png",
+      "axis_degrees": -0.00542,
+      "imported_axis_radians": -0.0001,
+      "imported_dimensions": [
+        30,
+        40
+      ]
+    },
+    {
+      "file": "art/char/char_hero_leg_r_01.png",
+      "axis_degrees": 0.01454,
+      "imported_axis_radians": 0.0003,
+      "imported_dimensions": [
+        23,
+        46
+      ]
+    },
+    {
+      "file": "art/char/char_soldier_blue_leg_l_01.png",
+      "axis_degrees": 0.0009,
+      "imported_axis_radians": 0.0,
+      "imported_dimensions": [
+        34,
+        38
+      ]
+    },
+    {
+      "file": "art/char/char_soldier_blue_leg_r_01.png",
+      "axis_degrees": 0.01302,
+      "imported_axis_radians": 0.0002,
+      "imported_dimensions": [
+        62,
+        40
+      ]
+    },
+    {
+      "file": "art/char/char_soldier_yellow_leg_l_01.png",
+      "axis_degrees": 0.0009,
+      "imported_axis_radians": 0.0,
+      "imported_dimensions": [
+        34,
+        38
+      ]
+    },
+    {
+      "file": "art/char/char_soldier_yellow_leg_r_01.png",
+      "axis_degrees": 0.01302,
+      "imported_axis_radians": 0.0002,
+      "imported_dimensions": [
+        62,
+        40
+      ]
+    },
+    {
+      "file": "art/char/char_soldier_red_leg_l_01.png",
+      "axis_degrees": 0.0009,
+      "imported_axis_radians": 0.0,
+      "imported_dimensions": [
+        34,
+        38
+      ]
+    },
+    {
+      "file": "art/char/char_soldier_red_leg_r_01.png",
+      "axis_degrees": 0.01302,
+      "imported_axis_radians": 0.0002,
+      "imported_dimensions": [
+        62,
+        40
+      ]
+    },
+    {
+      "file": "art/char/char_archer_leg_l_01.png",
+      "axis_degrees": 0.17279,
+      "imported_axis_radians": 0.003,
+      "imported_dimensions": [
+        22,
+        38
+      ]
+    },
+    {
+      "file": "art/char/char_archer_leg_r_01.png",
+      "axis_degrees": -0.00411,
+      "imported_axis_radians": -0.0001,
+      "imported_dimensions": [
+        38,
+        45
+      ]
+    }
+  ],
+  "runtime_confirmation": "Pending programmer rig.html walk/run check",
+  "size_policy_confirmation": "Pending chief designer: original vertical envelope vs old oblique radial length."
+}

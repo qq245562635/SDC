@@ -178,9 +178,9 @@
       ],
       "display_scale": 0.5,
       "content_bbox": [
+        5,
         4,
-        4,
-        56,
+        40,
         77
       ],
       "joint_pivot": [
@@ -196,9 +196,9 @@
         -72.7727
       ],
       "z": 1,
-      "source": "art/delivery/T004/sources/hero_hidden_parts.png",
-      "method": "Complete AI-repainted side cutout; measured anatomical pivots and fitted rest transforms. No baked-in neighboring limbs or weapon pixels.",
-      "sha256": "1f7b8cbab73a085118d68e85ee9b5ed8ef38e606bdf2f4c0f6dc7e4a017f7a58"
+      "source": "art/delivery/T012/sources/hero_leg_l_crop.png",
+      "method": "T012 matched trousers and boots; neutral vertical leg, horizontal sole; resampled into unchanged canvas and translated around unchanged hip pivot. No baked stride rotation.",
+      "sha256": "c220acac8df4c363e02df48226050d9329530522bdc1cc7b971bb07a3c7cad93"
     },
     {
       "file": "art/char/char_hero_leg_r_01.png",
@@ -212,9 +212,9 @@
       ],
       "display_scale": 0.5,
       "content_bbox": [
+        7,
         4,
-        4,
-        42,
+        43,
         87
       ],
       "joint_pivot": [
@@ -230,9 +230,9 @@
         -75.6303
       ],
       "z": 2,
-      "source": "art/delivery/T004/sources/hero_hidden_parts.png",
-      "method": "Complete AI-repainted side cutout; measured anatomical pivots and fitted rest transforms. No baked-in neighboring limbs or weapon pixels.",
-      "sha256": "87621aacef539cc7eb87437822b15e3486fccf1ab86290f26e2f109189b6bc30"
+      "source": "art/delivery/T012/sources/hero_leg_r_crop.png",
+      "method": "T012 matched trousers and boots; neutral vertical leg, horizontal sole; resampled into unchanged canvas and translated around unchanged hip pivot. No baked stride rotation.",
+      "sha256": "db94aa511ef4cf072cf02b8ede33e846cea0a375c15c046b789606a6530d0ee4"
     },
     {
       "file": "art/char/char_hero_arm_l_01.png",
@@ -450,9 +450,9 @@
       ],
       "display_scale": 0.5,
       "content_bbox": [
+        2,
         4,
-        4,
-        64,
+        41,
         71
       ],
       "joint_pivot": [
@@ -468,9 +468,9 @@
         -64.1726
       ],
       "z": 1,
-      "source": "art/delivery/T004/sources/soldier_hidden_parts.png",
-      "method": "Complete AI-repainted side cutout; measured anatomical pivots and fitted rest transforms. No baked-in neighboring limbs or weapon pixels.",
-      "sha256": "d9e1d121814bb97e91541d0fce44bd36d8c074c30f5107b4dc9e70ebe40ea5b8"
+      "source": "art/delivery/T012/sources/soldier_blue_leg_l_crop.png",
+      "method": "T012 matched trousers and boots; neutral vertical leg, horizontal sole; resampled into unchanged canvas and translated around unchanged hip pivot. No baked stride rotation.",
+      "sha256": "1734afe6d24a46b1034ea91f12c75cbe89464f4a5f5c164b3ed60e50e82c8d2d"
     },
     {
       "file": "art/char/char_soldier_blue_leg_r_01.png",
@@ -484,9 +484,9 @@
       ],
       "display_scale": 0.5,
       "content_bbox": [
+        67,
         4,
-        4,
-        120,
+        107,
         75
       ],
       "joint_pivot": [
@@ -502,9 +502,9 @@
         -64.4962
       ],
       "z": 2,
-      "source": "art/delivery/T004/sources/soldier_hidden_parts.png",
-      "method": "Complete AI-repainted side cutout; measured anatomical pivots and fitted rest transforms. No baked-in neighboring limbs or weapon pixels.",
-      "sha256": "99747984d337b00804cfa3c4e356983d38f57a52274f2dad8b31e5d6a6969bea"
+      "source": "art/delivery/T012/sources/soldier_blue_leg_r_crop.png",
+      "method": "T012 matched trousers and boots; neutral vertical leg, horizontal sole; resampled into unchanged canvas and translated around unchanged hip pivot. No baked stride rotation.",
+      "sha256": "bda41dc314fa3cfb94ba97eb33f8b6268f4d3ea36bce71e14cfae1a4469d773e"
     },
     {
       "file": "art/char/char_soldier_blue_arm_l_01.png",
@@ -722,9 +722,9 @@
       ],
       "display_scale": 0.5,
       "content_bbox": [
+        2,
         4,
-        4,
-        64,
+        41,
         71
       ],
       "joint_pivot": [
@@ -740,9 +740,9 @@
         -63.1726
       ],
       "z": 1,
-      "source": "art/delivery/T004/sources/soldier_hidden_parts.png",
-      "method": "Complete AI-repainted side cutout; measured anatomical pivots and fitted rest transforms. No baked-in neighboring limbs or weapon pixels.",
-      "sha256": "d9e1d121814bb97e91541d0fce44bd36d8c074c30f5107b4dc9e70ebe40ea5b8"
+      "source": "art/delivery/T012/sources/soldier_blue_leg_l_crop.png",
+      "method": "T012 matched trousers and boots; neutral vertical leg, horizontal sole; resampled into unchanged canvas and translated around unchanged hip pivot. No baked stride rotation.",
+      "sha256": "1734afe6d24a46b1034ea91f12c75cbe89464f4a5f5c164b3ed60e50e82c8d2d"
     },
     {
       "file": "art/char/char_soldier_yellow_leg_r_01.png",
@@ -756,9 +756,9 @@
       ],
       "display_scale": 0.5,
       "content_bbox": [
+        67,
         4,
-        4,
-        120,
+        107,
         75
       ],
       "joint_pivot": [
@@ -774,9 +774,9 @@
         -63.4962
       ],
       "z": 2,
-      "source": "art/delivery/T004/sources/soldier_hidden_parts.png",
-      "method": "Complete AI-repainted side cutout; measured anatomical pivots and fitted rest transforms. No baked-in neighboring limbs or weapon pixels.",
-      "sha256": "99747984d337b00804cfa3c4e356983d38f57a52274f2dad8b31e5d6a6969bea"
+      "source": "art/delivery/T012/sources/soldier_blue_leg_r_crop.png",
+      "method": "T012 matched trousers and boots; neutral vertical leg, horizontal sole; resampled into unchanged canvas and translated around unchanged hip pivot. No baked stride rotation.",
+      "sha256": "bda41dc314fa3cfb94ba97eb33f8b6268f4d3ea36bce71e14cfae1a4469d773e"
     },
     {
       "file": "art/char/char_soldier_yellow_arm_l_01.png",
@@ -994,9 +994,9 @@
       ],
       "display_scale": 0.5,
       "content_bbox": [
+        2,
         4,
-        4,
-        64,
+        41,
         71
       ],
       "joint_pivot": [
@@ -1012,9 +1012,9 @@
         -63.1726
       ],
       "z": 1,
-      "source": "art/delivery/T004/sources/soldier_hidden_parts.png",
-      "method": "Complete AI-repainted side cutout; measured anatomical pivots and fitted rest transforms. No baked-in neighboring limbs or weapon pixels.",
-      "sha256": "d9e1d121814bb97e91541d0fce44bd36d8c074c30f5107b4dc9e70ebe40ea5b8"
+      "source": "art/delivery/T012/sources/soldier_blue_leg_l_crop.png",
+      "method": "T012 matched trousers and boots; neutral vertical leg, horizontal sole; resampled into unchanged canvas and translated around unchanged hip pivot. No baked stride rotation.",
+      "sha256": "1734afe6d24a46b1034ea91f12c75cbe89464f4a5f5c164b3ed60e50e82c8d2d"
     },
     {
       "file": "art/char/char_soldier_red_leg_r_01.png",
@@ -1028,9 +1028,9 @@
       ],
       "display_scale": 0.5,
       "content_bbox": [
+        67,
         4,
-        4,
-        120,
+        107,
         75
       ],
       "joint_pivot": [
@@ -1046,9 +1046,9 @@
         -63.4962
       ],
       "z": 2,
-      "source": "art/delivery/T004/sources/soldier_hidden_parts.png",
-      "method": "Complete AI-repainted side cutout; measured anatomical pivots and fitted rest transforms. No baked-in neighboring limbs or weapon pixels.",
-      "sha256": "99747984d337b00804cfa3c4e356983d38f57a52274f2dad8b31e5d6a6969bea"
+      "source": "art/delivery/T012/sources/soldier_blue_leg_r_crop.png",
+      "method": "T012 matched trousers and boots; neutral vertical leg, horizontal sole; resampled into unchanged canvas and translated around unchanged hip pivot. No baked stride rotation.",
+      "sha256": "bda41dc314fa3cfb94ba97eb33f8b6268f4d3ea36bce71e14cfae1a4469d773e"
     },
     {
       "file": "art/char/char_soldier_red_arm_l_01.png",
@@ -1300,9 +1300,9 @@
       ],
       "display_scale": 0.5,
       "content_bbox": [
+        3,
         4,
-        4,
-        40,
+        34,
         73
       ],
       "joint_pivot": [
@@ -1318,9 +1318,9 @@
         -72.1471
       ],
       "z": 1,
-      "source": "art/delivery/T004/sources/archer_hidden_parts.png",
-      "method": "Complete AI-repainted side cutout; measured anatomical pivots and fitted rest transforms. No baked-in neighboring limbs or weapon pixels.",
-      "sha256": "e1c8dc44e19837ad5d7ea6f02d8499182e1d15bf38efac025ebe51784882d293"
+      "source": "art/delivery/T012/sources/archer_leg_l_crop.png",
+      "method": "T012 matched trousers and boots; neutral vertical leg, horizontal sole; resampled into unchanged canvas and translated around unchanged hip pivot. No baked stride rotation.",
+      "sha256": "682c2acdc393c4ca866cee43bd2d70c08a8660dbd77cffc6c431adb4fe63d097"
     },
     {
       "file": "art/char/char_archer_leg_r_01.png",
@@ -1334,9 +1334,9 @@
       ],
       "display_scale": 0.5,
       "content_bbox": [
+        40,
         4,
-        4,
-        73,
+        72,
         86
       ],
       "joint_pivot": [
@@ -1352,9 +1352,9 @@
         -72.1471
       ],
       "z": 2,
-      "source": "art/delivery/T004/sources/archer_hidden_parts.png",
-      "method": "Complete AI-repainted side cutout; measured anatomical pivots and fitted rest transforms. No baked-in neighboring limbs or weapon pixels.",
-      "sha256": "a5b3f1994c36634a85801841ebdd107e5b710a6fbc0f5af0de9f19813e67f660"
+      "source": "art/delivery/T012/sources/archer_leg_r_crop.png",
+      "method": "T012 matched trousers and boots; neutral vertical leg, horizontal sole; resampled into unchanged canvas and translated around unchanged hip pivot. No baked stride rotation.",
+      "sha256": "561108b1dd8d2908255e64bd24e7261b2b00797d9f7a8a97f3191669db53250f"
     },
     {
       "file": "art/char/char_archer_arm_l_01.png",
