@@ -1,0 +1,35 @@
+{
+  "rigs": [
+    {
+      "character": "hero",
+      "outline_max_error_display_px": 9.848857801796104,
+      "assembled_height_source_px": 276,
+      "reference_height_source_px": 276
+    },
+    {
+      "character": "soldier_blue",
+      "outline_max_error_display_px": 9.5524865872714,
+      "assembled_height_source_px": 273,
+      "reference_height_source_px": 273
+    },
+    {
+      "character": "soldier_yellow",
+      "outline_max_error_display_px": 9.513148795220223,
+      "assembled_height_source_px": 273,
+      "reference_height_source_px": 273
+    },
+    {
+      "character": "soldier_red",
+      "outline_max_error_display_px": 9.013878188659973,
+      "assembled_height_source_px": 273,
+      "reference_height_source_px": 273
+    },
+    {
+      "character": "archer",
+      "outline_max_error_display_px": 10.0,
+      "assembled_height_source_px": 276,
+      "reference_height_source_px": 276
+    }
+  ],
+  "runtime_confirmation": "Pending programmer"
+}

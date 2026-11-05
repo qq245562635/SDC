@@ -1,0 +1,39 @@
+{
+  "samples_degrees": [
+    -20,
+    -15,
+    -10,
+    0,
+    10,
+    15,
+    20
+  ],
+  "results": [
+    {
+      "character": "hero",
+      "hierarchical_neutral_max_outline_error_display_px": 9.848857801796104,
+      "hand_grip_max_error_source_px_across_7_angles": 2.842170943040401e-14
+    },
+    {
+      "character": "soldier_blue",
+      "hierarchical_neutral_max_outline_error_display_px": 9.5524865872714,
+      "hand_grip_max_error_source_px_across_7_angles": 2.842170943040401e-14
+    },
+    {
+      "character": "soldier_yellow",
+      "hierarchical_neutral_max_outline_error_display_px": 9.513148795220223,
+      "hand_grip_max_error_source_px_across_7_angles": 2.842170943040401e-14
+    },
+    {
+      "character": "soldier_red",
+      "hierarchical_neutral_max_outline_error_display_px": 9.013878188659973,
+      "hand_grip_max_error_source_px_across_7_angles": 2.842170943040401e-14
+    },
+    {
+      "character": "archer",
+      "hierarchical_neutral_max_outline_error_display_px": 10.0,
+      "hand_grip_max_error_source_px_across_7_angles": 2.842170943040401e-14
+    }
+  ],
+  "runtime_confirmation": "Still pending T003/T006 programmer; this renderer is only an independent art-data verification."
+}

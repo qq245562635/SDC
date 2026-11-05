@@ -1,0 +1,73 @@
+{
+  "dirt_target_luminance": 142.6394,
+  "band_px": 24,
+  "shared_band_texture": "Mirrored periodic AI-painted dirt grain, not flat color",
+  "matching_edge_pairs": 256,
+  "matching_same_side_24px_bands": 256,
+  "tiles": [
+    {
+      "tile": 1,
+      "center_soil_minus_target_luminance": 0.05
+    },
+    {
+      "tile": 2,
+      "center_soil_minus_target_luminance": -0.026
+    },
+    {
+      "tile": 3,
+      "center_soil_minus_target_luminance": -0.017
+    },
+    {
+      "tile": 4,
+      "center_soil_minus_target_luminance": -0.022
+    },
+    {
+      "tile": 5,
+      "center_soil_minus_target_luminance": -0.022
+    },
+    {
+      "tile": 6,
+      "center_soil_minus_target_luminance": -0.02
+    },
+    {
+      "tile": 7,
+      "center_soil_minus_target_luminance": 0.042
+    },
+    {
+      "tile": 8,
+      "center_soil_minus_target_luminance": -0.022
+    },
+    {
+      "tile": 9,
+      "center_soil_minus_target_luminance": -0.022
+    },
+    {
+      "tile": 10,
+      "center_soil_minus_target_luminance": -0.022
+    },
+    {
+      "tile": 11,
+      "center_soil_minus_target_luminance": 0.046
+    },
+    {
+      "tile": 12,
+      "center_soil_minus_target_luminance": 0.033
+    },
+    {
+      "tile": 13,
+      "center_soil_minus_target_luminance": 0.045
+    },
+    {
+      "tile": 14,
+      "center_soil_minus_target_luminance": 0.137
+    },
+    {
+      "tile": 15,
+      "center_soil_minus_target_luminance": 0.043
+    },
+    {
+      "tile": 16,
+      "center_soil_minus_target_luminance": -0.0
+    }
+  ]
+}
