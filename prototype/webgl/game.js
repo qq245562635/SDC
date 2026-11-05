@@ -17,6 +17,39 @@ const rnd = (a, b) => a + Math.random() * (b - a);
 const pick = a => a[Math.floor(Math.random() * a.length)];
 const dist = (a, b) => Math.hypot(a.x - b.x, a.y - b.y);
 
+// ---------- 正式美术（T002，tools/sync_art.py 生成 assets/art/manifest.js） ----------
+// 美术按 1080p 显示尺寸出图，原型画布 720p，统一乘 WS，不单独拉伸。
+const ART = window.ART || {};
+const WS = W / 1920;
+const artScale = key => WS * (ART[key] ? ART[key].d : 1);
+// 世界物件：原点用清单里的脚底锚点
+function art(scene, x, y, key, k = 1, sprite = false) {
+  const m = ART[key];
+  return (sprite ? scene.add.sprite(x, y, key) : scene.add.image(x, y, key)).setOrigin(m.o[0], m.o[1]).setScale(artScale(key) * k);
+}
+// UI：按目标宽度等比缩放，居中
+function ui(scene, x, y, key, width) {
+  const im = scene.add.image(x, y, key);
+  return im.setScale(width / im.width);
+}
+// 取图片内容区当作一帧，用于九宫格等
+function contentFrame(scene, key) {
+  const tex = scene.textures.get(key);
+  if (!tex.has('c')) { const b = ART[key].b; tex.add('c', 0, b[0], b[1], b[2] - b[0], b[3] - b[1]); }
+  return 'c';
+}
+// 姿势图朝向：除翻滚外都朝右
+const POSE_FACE = { hero_roll: -1 };
+const RAR_KEY = ['white', 'green', 'blue', 'purple', 'gold', 'red'];
+// 原型物品 → I01 图标；对不上的保留色块
+const ITEM_ICON = {
+  '麦饼': 'loot_rice', '铁箭簇': 'loot_bolts', '竹简': 'loot_bamboo', '铜镜': 'loot_mirror',
+  '玉璧': 'loot_jade', '兵书残卷': 'loot_strategy', '金缕玉片': 'loot_gold',
+};
+// 将魂印章：按武将的兵器
+const SOUL_SEAL = { '关羽': 'blade', '赵云': 'spear', '张飞': 'spear', '黄忠': 'bow', '马超': 'spear' };
+const DOOR_ICON = { soul: 'door_spirit', chest: 'door_supplies', elite: 'door_danger', heal: 'door_merchant', anchor: 'anchor_ring' };
+
 // ---------- 数据 ----------
 const RAR = [
   { n: '凡', c: 0xD9D9D9, t: 0.5 }, { n: '良', c: 0x6AB04C, t: 1 }, { n: '精', c: 0x3A8DDE, t: 2 },
@@ -49,12 +82,14 @@ const SOULS = [
   { id: 'chong',    g: '马超', n: '锦马超冲', ic: '马', slot: '翻滚', d: '翻滚距离 +50%\n终点撞飞敌人' },
   { id: 'xiliang',  g: '马超', n: '西凉铁骑', ic: '凉', slot: '被动', pre: 'chong', d: '翻滚后 1 秒内\n下一击必破阵' },
 ];
+// k：相对普通兵（140）的显示倍率，精英 170。铁骑、时空守卫是 P1，暂用联军兵换色放大。
 const ENEMY = {
-  spear:  { name: '联军兵', hp: 40, dmg: 8, spd: 115, range: 78, windup: 0.45, cd: 1.1, scale: 0.6, r: 20 },
-  archer: { name: '弓手', hp: 30, dmg: 6, spd: 105, range: 420, windup: 0.75, cd: 1.9, scale: 0.55, r: 18, tex: 'soldier_yellow' },
-  cav:    { name: '西凉铁骑', hp: 90, dmg: 15, spd: 125, range: 330, windup: 0.8, cd: 2.4, scale: 0.78, r: 26, guard: 60, tex: 'soldier_red', elite: true },
-  guard:  { name: '时空守卫', hp: 220, dmg: 20, spd: 95, range: 110, windup: 1.0, cd: 2.0, scale: 0.86, r: 28, guard: 100, tex: 'soldier_blue', elite: true, tint: 0x7FE3F2 },
+  spear:  { name: '联军兵', hp: 40, dmg: 8, spd: 115, range: 78, windup: 0.45, cd: 1.1, k: 1, r: 20 },
+  archer: { name: '弓手', hp: 30, dmg: 6, spd: 105, range: 420, windup: 0.75, cd: 1.9, k: 1, r: 18, skin: 'archer' },
+  cav:    { name: '西凉铁骑', hp: 90, dmg: 15, spd: 125, range: 330, windup: 0.8, cd: 2.4, k: 1.21, r: 26, guard: 60, skin: 'soldier_red', elite: true },
+  guard:  { name: '时空守卫', hp: 220, dmg: 20, spd: 95, range: 110, windup: 1.0, cd: 2.0, k: 1.25, r: 28, guard: 100, skin: 'soldier_blue', elite: true, tint: 0x7FE3F2 },
 };
+const CHAR_H = 140 * WS; // 普通角色显示高度
 const DOORS = {
   soul:   { n: '将魂', ic: '魂', c: C.shu },
   chest:  { n: '宝箱', ic: '宝', c: C.yellow },
@@ -71,53 +106,26 @@ function makeTextures(scene) {
   g.fillStyle(0xffffff, 1); g.fillCircle(4, 4, 4); g.generateTexture('dot', 8, 8); g.clear();
   g.destroy();
 
-  // 地面 + 木栅栏
+  // 地面：E01 16 块地砖随机铺（任意两块边缘都能接上）
   const tex = scene.textures.createCanvas('ground', W, H);
   const x = tex.getContext();
-  x.fillStyle = '#CDB78A'; x.fillRect(0, 0, W, H);
-  for (let i = 0; i < 420; i++) {
-    const px = Math.random() * W, py = Math.random() * H, r = rnd(20, 90);
-    const grd = x.createRadialGradient(px, py, 0, px, py, r);
-    const c = Math.random() < 0.5 ? '190,165,118' : '216,196,152';
-    grd.addColorStop(0, `rgba(${c},0.35)`); grd.addColorStop(1, `rgba(${c},0)`);
-    x.fillStyle = grd; x.fillRect(px - r, py - r, r * 2, r * 2);
+  const src = k => scene.textures.get(k).getSourceImage();
+  // 每块中间颜色偏深，铺开有格子感：多用最平的 01/04，深色斑块和水坑少放
+  const weights = [10, 2, 2, 8, 3, 2, 1, 1, 1, 1, 2, 2, 1, 1, 1, 1];
+  const sum = weights.reduce((a, b) => a + b, 0);
+  const pickTile = () => { let r = Math.random() * sum; for (let i = 0; i < 16; i++) { r -= weights[i]; if (r < 0) return i; } return 0; };
+  const T = 128 * WS;
+  for (let ty = 0; ty * T < H; ty++) for (let tx = 0; tx * T < W; tx++) {
+    const px = Math.floor(tx * T), py = Math.floor(ty * T);
+    x.drawImage(src(`camp_tile${String(pickTile() + 1).padStart(2, '0')}`), px, py, Math.ceil(T) + 1, Math.ceil(T) + 1);
   }
-  // 车辙
-  x.strokeStyle = 'rgba(120,92,60,0.18)'; x.lineWidth = 10;
-  for (let k = 0; k < 2; k++) {
-    x.beginPath(); x.moveTo(560 + k * 150, H);
-    x.bezierCurveTo(600 + k * 150, 500, 520 + k * 150, 320, 600 + k * 120, 150); x.stroke();
-  }
-  // 草丛
-  for (let i = 0; i < 260; i++) {
-    const px = Math.random() * W, py = 150 + Math.random() * (H - 150);
-    x.strokeStyle = Math.random() < 0.25 ? 'rgba(43,29,22,0.55)' : 'rgba(96,110,58,0.75)';
-    x.lineWidth = 1.6;
-    for (let b = 0; b < 3; b++) {
-      x.beginPath(); x.moveTo(px + b * 3, py); x.lineTo(px + b * 3 + rnd(-4, 4), py - rnd(5, 11)); x.stroke();
-    }
-  }
-  // 墨点
-  for (let i = 0; i < 90; i++) {
-    x.fillStyle = 'rgba(43,29,22,' + rnd(0.08, 0.25) + ')';
-    x.beginPath(); x.arc(Math.random() * W, Math.random() * H, rnd(1, 3.5), 0, Math.PI * 2); x.fill();
-  }
-  // 栅栏
-  const stake = (sx, sy, w, h) => {
-    x.fillStyle = '#8E5E33'; x.strokeStyle = '#2B1D16'; x.lineWidth = 3;
-    x.beginPath(); x.moveTo(sx, sy + h); x.lineTo(sx, sy + 10); x.lineTo(sx + w / 2, sy); x.lineTo(sx + w, sy + 10);
-    x.lineTo(sx + w, sy + h); x.closePath(); x.fill(); x.stroke();
-    x.fillStyle = 'rgba(43,29,22,0.28)'; x.fillRect(sx + w * 0.62, sy + 10, w * 0.38 - 1.5, h - 11);
+  // 左右、下方栅栏：E03 单根木桩，从上往下画，下面的压住上面的
+  const drawArt = (k, cx, by, s = 1) => {
+    const m = ART[k], sc = artScale(k) * s, w = m.w * sc, h = m.h * sc;
+    x.drawImage(src(k), cx - w * m.o[0], by - h * m.o[1], w, h);
   };
-  for (let sx = 0; sx < W; sx += 26) stake(sx, 74 + rnd(-4, 4), 24, 82);
-  x.fillStyle = '#6E4526'; x.fillRect(0, 118, W, 10); x.strokeStyle = '#2B1D16'; x.lineWidth = 3; x.strokeRect(-4, 118, W + 8, 10);
-  const post = (px, py) => {
-    x.fillStyle = '#8E5E33'; x.strokeStyle = '#2B1D16'; x.lineWidth = 3;
-    x.beginPath(); x.arc(px, py, 11, 0, Math.PI * 2); x.fill(); x.stroke();
-    x.fillStyle = 'rgba(43,29,22,0.3)'; x.beginPath(); x.arc(px + 3, py + 3, 6, 0, Math.PI * 2); x.fill();
-  };
-  for (let py = 170; py < H; py += 24) { post(36, py); post(W - 36, py); }
-  for (let px = 36; px < W; px += 24) post(px, H - 14);
+  for (let py = 150; py < H + 40; py += 20) { drawArt('palisade_stake', 30, py); drawArt('palisade_stake', W - 30, py); }
+  for (let px = 30; px < W; px += 17) drawArt('palisade_stake', px, H + 34);
   // 顶部遮暗（HUD 背板）
   const top = x.createLinearGradient(0, 0, 0, 80);
   top.addColorStop(0, 'rgba(22,17,13,0.92)'); top.addColorStop(1, 'rgba(22,17,13,0)');
@@ -129,15 +137,17 @@ function makeTextures(scene) {
 class Title extends Phaser.Scene {
   constructor() { super('title'); }
   preload() {
-    const a = ['hero_side', 'hero_front', 'soldier_blue', 'soldier_yellow', 'soldier_red', 'tent_blue', 'tent_yellow', 'tent_red',
-      'chest_wood', 'chest_wood_open', 'chest_bronze', 'chest_bronze_open', 'chest_lacquer', 'chest_lacquer_open'];
-    a.forEach(k => this.load.image(k, `assets/${k}.png`));
+    // 吕布和拆件只在 rig.html 里用
+    Object.keys(ART).filter(k => !k.startsWith('lubu_') && !ART[k].p).forEach(k => this.load.image(k, `assets/art/${k}.png`));
     this.load.image('key_art', 'assets/key_art.jpg');
     const bar = this.add.rectangle(W / 2 - 200, H / 2, 0, 8, C.cyan).setOrigin(0, 0.5);
     this.load.on('progress', p => bar.width = 400 * p);
   }
   create() {
     if (!this.textures.exists('ground')) makeTextures(this);
+    if (!this.anims.exists('fire')) {
+      this.anims.create({ key: 'fire', frames: Array.from({ length: 8 }, (_, i) => ({ key: `fire_frame0${i + 1}` })), frameRate: 8, repeat: -1 });
+    }
     const k = this.add.image(W / 2, H / 2, 'key_art');
     k.setScale(Math.max(W / k.width, H / k.height));
     const g = this.add.graphics();
@@ -174,9 +184,12 @@ class Run extends Phaser.Scene {
       x: 640, y: 620, r: 18, hp: 100, maxHp: 100, spd: 300, face: -Math.PI / 2, faceX: 1,
       dodges: 2, maxDodge: 2, dodgeT: 0, rollT: 0, rollDir: 0, inv: 0, hurtInv: 0,
       atk: null, combo: 0, comboWin: 0, queue: null, heavyCd: 0, rolledHit: new Set(),
-      rage: 0, torch: 3, charge: -1, chargeMouse: false, breakT: 0, dmgMul: 1, flash: 0,
+      rage: 0, torch: 3, chain: 0, chainT: 0, charge: -1, chargeMouse: false, breakT: 0, dmgMul: 1, flash: 0,
     };
-    hero.spr = this.add.image(hero.x, hero.y, 'hero_side').setOrigin(0.5, 0.94).setScale(0.6);
+    hero.spr = art(this, hero.x, hero.y, 'hero_idle');
+    // 上方栅栏：E03 横栏，开营门时把门口那段藏起来换成营门
+    this.rails = [];
+    for (let x = 20; x < W + 40; x += 70) this.rails.push(art(this, x, ARENA.t - 8, x % 280 === 160 ? 'palisade_damaged' : 'palisade_rail').setDepth(ARENA.t - 8));
     this.run = { room: 0, kills: 0, souls: [], bag: [], grid: [], correction: 0, warned: {}, t0: this.time.now, value: 0 };
     for (let i = 0; i < 4; i++) this.run.grid.push(new Array(6).fill(null));
     this.enemies = []; this.arrows = []; this.chests = []; this.doors = []; this.roomObjs = [];
@@ -218,21 +231,34 @@ class Run extends Phaser.Scene {
     if (kind !== 'start') this.addCorrection(5);
     if (kind !== 'start' && this.has('laodang')) { hero.dmgMul += 0.08; this.time.delayedCall(900, () => this.toast(`老当益壮：伤害 +${Math.round((hero.dmgMul - 1) * 100)}%`, '#9FD3A8')); }
 
-    // 营帐
+    this.rails.forEach(r => r.setVisible(true));
+    // 营帐：E04，三色随机，四成是破损版
     const nt = kind === 'anchor' ? 2 : R.Between(2, 3);
     const spots = [[230, 300], [1050, 300], [250, 560], [1040, 560], [420, 420], [880, 430]];
-    Phaser.Utils.Array.Shuffle(spots).slice(0, nt).forEach(([tx, ty]) => {
+    const faction = pick(['blue', 'yellow', 'red']);
+    Phaser.Utils.Array.Shuffle(spots).slice(0, nt).forEach(([tx, ty], i) => {
       tx += rnd(-30, 30); ty += rnd(-20, 20);
-      const t = this.add.image(tx, ty, pick(['tent_blue', 'tent_yellow', 'tent_red'])).setOrigin(0.5, 0.88).setScale(0.72).setDepth(ty);
+      const col = i === 0 ? faction : pick(['blue', 'yellow', 'red']);
+      const t = art(this, tx, ty, `tent_${col}${Math.random() < 0.4 ? '_damaged' : ''}`).setDepth(ty);
       if (Math.random() < 0.5) t.setFlipX(true);
       this.roomObjs.push(t);
-      this.obstacles.push({ x: tx, y: ty - 34, r: 66 });
+      this.obstacles.push({ x: tx, y: ty - 18, r: 46 });
+      // 第一顶营帐旁插帅旗（E05，旗面单独一层飘动）
+      if (i === 0) this.addBanner(tx + (t.flipX ? -62 : 62), ty + 6, faction);
     });
-    // 墨渍装饰
-    for (let i = 0; i < 6; i++) {
-      this.decalG.fillStyle(C.ink, rnd(0.05, 0.12));
-      const dx = rnd(150, 1130), dy = rnd(200, 650);
-      for (let j = 0; j < 6; j++) this.decalG.fillCircle(dx + rnd(-30, 30), dy + rnd(-14, 14), rnd(4, 16));
+    // 辎重车 E06、火盆 E07 + 火焰 V03
+    if (Math.random() < 0.7) {
+      const p = this.freeSpot(50);
+      const cart = art(this, p.x, p.y, pick(['cart_loaded', 'cart_loaded', 'cart_empty', 'cart_overturned'])).setDepth(p.y).setFlipX(Math.random() < 0.5);
+      this.roomObjs.push(cart);
+      this.obstacles.push({ x: p.x, y: p.y - 10, r: 32 });
+    }
+    for (let i = R.Between(1, 2); i > 0; i--) {
+      const p = this.freeSpot(30);
+      const b = art(this, p.x, p.y, 'brazier_body').setDepth(p.y);
+      const f = art(this, p.x, p.y - 22, 'fire_frame01', 1, true).setDepth(p.y + 1).play({ key: 'fire', startFrame: R.Between(0, 7) });
+      this.roomObjs.push(b, f);
+      this.obstacles.push({ x: p.x, y: p.y - 4, r: 13 });
     }
 
     const d = run.room;
@@ -244,6 +270,11 @@ class Run extends Phaser.Scene {
       this.waves = [['spear', 'spear', 'spear']];
     } else if (kind === 'anchor') {
       this.anchor = { x: 640, y: 400, prog: 0, need: 8, spawnT: 1.5 };
+      // E09 时空锚点：地面法阵 + 光柱
+      const ring = art(this, 640, 400, 'anchor_ring', 3.2).setOrigin(0.5).setDepth(-4);
+      const beam = art(this, 640, 424, 'anchor_beam', 2).setDepth(401).setAlpha(0.75);
+      this.tweens.add({ targets: beam, alpha: 0.4, duration: 900, yoyo: true, repeat: -1, ease: 'Sine.easeInOut' });
+      this.roomObjs.push(ring, beam);
     } else {
       const a = [...sp(2 + Math.min(d, 5))];
       if (d >= 2) a.push('archer');
@@ -261,6 +292,32 @@ class Run extends Phaser.Scene {
     this.cameras.main.fadeIn(260, 22, 17, 13);
   }
 
+  // 不压障碍、离出生点和撤离点远一些的空地
+  freeSpot(r) {
+    let x, y;
+    for (let i = 0; i < 60; i++) {
+      x = rnd(ARENA.l + 60, ARENA.r - 60); y = rnd(ARENA.t + 70, ARENA.b - 40);
+      if (this.blocked(x, y, r) || Math.hypot(x - 640, y - 640) < 170) continue;
+      if (this.roomKind === 'anchor' && Math.hypot(x - 640, (y - 400) * 1.6) < 200) continue;
+      break;
+    }
+    return { x, y };
+  }
+
+  addBanner(x, y, col) {
+    if (this.blocked(x, y, 8)) return;
+    const pole = art(this, x, y, `banner_${col}_pole`).setDepth(y);
+    // 交付没给旗面挂点：按包围盒把旗面左上角挂到杆顶下方，以挂杆一侧为轴轻轻飘
+    const mp = ART[`banner_${col}_pole`], mc = ART[`banner_${col}_cloth`];
+    const s = artScale(`banner_${col}_cloth`);
+    const poleTop = y - (mp.o[1] * mp.h - mp.b[1]) * s;
+    const cloth = this.add.image(x - 2 * s, poleTop + 6 * s, `banner_${col}_cloth`)
+      .setOrigin(mc.b[0] / mc.w, mc.b[1] / mc.h).setScale(s).setDepth(y + 1);
+    this.tweens.add({ targets: cloth, scaleX: s * 0.9, scaleY: s * 1.03, duration: rnd(600, 900), yoyo: true, repeat: -1, ease: 'Sine.easeInOut' });
+    this.roomObjs.push(pole, cloth);
+    this.obstacles.push({ x, y, r: 8 });
+  }
+
   spawnWave() {
     const w = this.waves.shift();
     if (!w) return;
@@ -275,11 +332,11 @@ class Run extends Phaser.Scene {
       y = at ? at.y + rnd(-40, 40) : rnd(ARENA.t + 20, ARENA.b - 120);
       tries++;
     } while (tries < 30 && (Math.hypot(x - this.hero.x, y - this.hero.y) < 280 || this.blocked(x, y, def.r)));
-    const tex = def.tex || pick(['soldier_blue', 'soldier_red']);
-    const spr = this.add.image(x, y, tex).setOrigin(0.5, 0.94).setScale(def.scale).setAlpha(0);
+    const skin = def.skin || pick(['soldier_blue', 'soldier_yellow', 'soldier_red']);
+    const spr = art(this, x, y, `${skin}_idle`, def.k).setAlpha(0);
     if (def.tint) spr.setTint(def.tint);
     const e = {
-      type, def, spr, x, y, r: def.r, hp: def.hp, maxHp: def.hp, guard: def.guard || 0, maxGuard: def.guard || 0,
+      type, def, skin, spr, x, y, r: def.r, hp: def.hp, maxHp: def.hp, guard: def.guard || 0, maxGuard: def.guard || 0, hurtT: 0,
       dmg: def.dmg, sinceHit: 99, state: 'move', t: 0, cd: rnd(0.4, 1.2), spawnT: 0.6, stun: 0, broken: 0, dir: 0,
       flash: 0, hitBy: -1, strafe: Math.random() < 0.5 ? 1 : -1, kx: 0, ky: 0,
     };
@@ -303,11 +360,12 @@ class Run extends Phaser.Scene {
     }
     // 固定坐标（清房奖励）若压到营帐，就沿竖直方向挪开
     for (let i = 0; i < 20 && this.blocked(x, y, 40); i++) y += i % 2 ? -i * 12 : i * 12;
-    const spr = this.add.image(x, y, def.tex).setOrigin(0.5, 0.85).setScale(tier === 'lacquer' ? 0.9 : 0.8).setDepth(y);
-    const c = { tier, def, spr, x, y, opened: false, items: null, idx: 0, t: 0 };
+    const k = tier === 'lacquer' ? 1.15 : 1;
+    const spr = art(this, x, y, def.tex + '_closed', k).setDepth(y);
+    const c = { tier, def, spr, x, y, k, opened: false, items: null, idx: 0, t: 0 };
     this.chests.push(c);
-    this.obstacles.push({ x, y: y - 6, r: 22 });
-    if (tier === 'lacquer') this.tweens.add({ targets: spr, scale: 0.96, duration: 600, yoyo: true, repeat: -1 });
+    this.obstacles.push({ x, y: y - 6, r: 18 });
+    if (tier === 'lacquer') this.tweens.add({ targets: spr, scale: spr.scale * 1.06, duration: 600, yoyo: true, repeat: -1 });
     return c;
   }
 
@@ -329,18 +387,17 @@ class Run extends Phaser.Scene {
     if (r >= 3 || this.run.correction >= 75) b = 'anchor';
     [[480, a], [800, b]].forEach(([x, kind]) => {
       const info = DOORS[kind];
-      const g = this.add.graphics().setDepth(150);
-      g.fillStyle(0x16110d, 1); g.fillRect(x - 46, 100, 92, 40);
-      g.fillStyle(0x8E5E33, 1); g.lineStyle(3, C.ink, 1);
-      g.fillRect(x - 58, 70, 14, 84); g.strokeRect(x - 58, 70, 14, 84);
-      g.fillRect(x + 44, 70, 14, 84); g.strokeRect(x + 44, 70, 14, 84);
-      g.fillRect(x - 64, 62, 128, 12); g.strokeRect(x - 64, 62, 128, 12);
-      const glow = this.add.ellipse(x, 140, 120, 40, info.c, 0.35).setDepth(149);
+      // 拆掉门口那段横栏，换 E03 营门
+      this.rails.forEach(r => { if (Math.abs(r.x - x) < 70) r.setVisible(false); });
+      const gy = ARENA.t - 8;
+      const gate = art(this, x, gy, 'palisade_gate', 1.15).setDepth(gy);
+      const glow = this.add.ellipse(x, gy - 8, 110, 34, info.c, 0.35).setDepth(gy - 1);
       this.tweens.add({ targets: glow, alpha: 0.12, duration: 700, yoyo: true, repeat: -1 });
-      const disc = this.add.circle(x, 112, 22, info.c).setStrokeStyle(3, C.ink).setDepth(151);
-      const ic = this.add.text(x, 112, info.ic, { fontFamily: FONT, fontSize: '24px', color: '#F3E9D2', stroke: '#2B1D16', strokeThickness: 4, fontStyle: 'bold' }).setOrigin(0.5).setDepth(152);
-      const lb = this.add.text(x, 160, info.n, { fontFamily: FONT, fontSize: '17px', color: '#F3E9D2', stroke: '#2B1D16', strokeThickness: 4 }).setOrigin(0.5).setDepth(152);
-      this.roomObjs.push(g, glow, disc, ic, lb);
+      // U04 门奖励图标（撤离用 E09 锚点小图）
+      const ic = ui(this, x, gy - 44, DOOR_ICON[kind], kind === 'anchor' ? 70 : 54).setDepth(gy + 2);
+      this.tweens.add({ targets: ic, y: ic.y - 4, duration: 800, yoyo: true, repeat: -1, ease: 'Sine.easeInOut' });
+      const lb = this.add.text(x, gy + 14, info.n, { fontFamily: FONT, fontSize: '17px', color: '#F3E9D2', stroke: '#2B1D16', strokeThickness: 4 }).setOrigin(0.5).setDepth(gy + 2);
+      this.roomObjs.push(gate, glow, ic, lb);
       this.doors.push({ x, y: 150, kind });
     });
     this.toast('营门已开，选一条路');
@@ -408,7 +465,7 @@ class Run extends Phaser.Scene {
     const { mx, my, moving } = this.input2();
     h.inv = Math.max(0, h.inv - dt); h.hurtInv = Math.max(0, h.hurtInv - dt);
     h.heavyCd = Math.max(0, h.heavyCd - dt); h.breakT = Math.max(0, h.breakT - dt);
-    h.comboWin = Math.max(0, h.comboWin - dt);
+    h.comboWin = Math.max(0, h.comboWin - dt); h.chainT -= dt;
     const cap = this.dodgeCap();
     if (h.dodges > cap) h.dodges = cap;
     if (h.dodges < cap) { h.dodgeT += dt; if (h.dodgeT >= 1.2) { h.dodgeT = 0; h.dodges++; } }
@@ -458,18 +515,27 @@ class Run extends Phaser.Scene {
     const s = h.spr;
     const dirX = h.atk ? Math.cos(h.atk.dir) : (moving ? mx : 0);
     if (dirX > 0.15) h.faceX = 1; else if (dirX < -0.15) h.faceX = -1;
-    const frontal = !h.atk && moving && my > 0.7 && Math.abs(mx) < 0.5;
-    s.setTexture(frontal ? 'hero_front' : 'hero_side');
-    s.setFlipX(!frontal && h.faceX < 0);
-    const bob = moving && !h.atk && h.rollT <= 0 ? Math.abs(Math.sin(this.time.now / 85)) * 5 : 0;
+    // C01 关键姿势切换（不做逐帧动画）
+    let pose = moving ? 'run' : 'idle';
+    if (h.looting && !moving) pose = 'loot';
+    if (h.hurtInv > 0.3) pose = 'hurt';
+    if (h.charge >= 0) pose = 'attack3';
+    if (h.atk) pose = h.atk.kind === 'heavy' ? 'heavy' : 'attack' + h.atk.step;
+    if (h.rollT > 0) pose = 'roll';
+    if (h.hp <= 0) pose = 'down';
+    this.setPose(s, 'hero_' + pose, h.faceX);
+    const bob = moving && !h.atk && h.rollT <= 0 ? Math.abs(Math.sin(this.time.now / 85)) * 4 : 0;
     s.setPosition(h.x, h.y - bob);
-    let rot = moving ? Math.sin(this.time.now / 85) * 0.05 : 0;
-    if (h.rollT > 0) rot = (1 - h.rollT / 0.2) * Math.PI * 2 * h.faceX;
-    if (h.atk) rot = (h.atk.t < h.atk.hitAt ? -0.18 : 0.22) * h.faceX;
-    s.setRotation(rot);
+    s.setRotation(moving && !h.atk && h.rollT <= 0 ? Math.sin(this.time.now / 85) * 0.04 : 0);
     s.setAlpha(h.hurtInv > 0 ? (Math.floor(this.time.now / 60) % 2 ? 0.45 : 1) : 1);
     s.setDepth(h.y);
     if (h.flash > 0) { h.flash -= dt; s.setTintFill(0xffffff); } else s.clearTint();
+  }
+
+  // 换姿势图；face 为 1 表示朝右，姿势图本身朝左的要反过来镜像
+  setPose(s, key, face) {
+    if (s.texture.key !== key) s.setTexture(key);
+    s.setFlipX(face * (POSE_FACE[key] || 1) < 0);
   }
 
   tryLight(fromMouse) {
@@ -606,6 +672,7 @@ class Run extends Phaser.Scene {
       this.arrows.push({ x: cx + Math.cos(a.dir) * 40, y: cy + Math.sin(a.dir) * 40, vx: Math.cos(a.dir) * 820, vy: Math.sin(a.dir) * 820, dmg: 20, hero: true, wave: true, hit: new Set(), life: 0.5 });
     }
     if (hits) {
+      h.chain = (h.chainT > 0 ? h.chain : 0) + 1; h.chainT = 1.6;
       h.rage = Math.min(100, h.rage + 4);
       this.hitstop = a.kind === 'heavy' ? (a.charged ? 0.12 : 0.09) : 0.05;
       this.cameras.main.shake(a.kind === 'heavy' ? 120 : 70, a.kind === 'heavy' ? 0.007 : 0.004);
@@ -617,7 +684,7 @@ class Run extends Phaser.Scene {
     e.guard -= v;
     if (e.guard > 0) return false;
     e.guard = 0; e.broken = 3; e.stun = 1.2; e.state = 'move';
-    this.floatText(e.x, e.y - 110, '破防！', '#F1C40F', 30);
+    this.stamp(e.x, e.y - CHAR_H * e.def.k - 20);
     this.cameras.main.shake(180, 0.01); this.hitstop = 0.12;
     this.sparkFx.setParticleTint(0xF1C40F); this.sparkFx.explode(24, e.x, e.y - 40);
     return true;
@@ -640,7 +707,9 @@ class Run extends Phaser.Scene {
     e.flash = 0.07;
     if (o.dir !== undefined) { const kb = (o.kb || 120) * (e.def.elite && e.broken <= 0 ? 0.3 : 1); e.kx = Math.cos(o.dir) * kb; e.ky = Math.sin(o.dir) * kb; }
     if (e.state === 'windup' && !e.def.elite) { e.state = 'recover'; e.t = 0.35; }
-    this.inkFx.explode(o.heavy ? 14 : 8, e.x, e.y - 40);
+    e.hurtT = 0.22;
+    this.fxImage(e.x + rnd(-8, 8), e.y - CHAR_H * e.def.k * 0.45, 'hit_splash', o.heavy ? 0.9 : 0.65, o.heavy ? 260 : 200);
+    this.inkFx.explode(o.heavy ? 8 : 4, e.x, e.y - 40);
     this.floatText(e.x + rnd(-12, 12), e.y - 90, String(dmg), col, o.heavy ? 26 : 20);
     if (e.hp <= 0) this.killEnemy(e);
   }
@@ -648,11 +717,14 @@ class Run extends Phaser.Scene {
   killEnemy(e) {
     e.dead = true;
     this.run.kills++;
-    this.inkFx.explode(26, e.x, e.y - 30);
-    this.decalG.fillStyle(C.ink, 0.22);
-    for (let j = 0; j < 7; j++) this.decalG.fillCircle(e.x + rnd(-26, 26), e.y + rnd(-8, 8), rnd(3, 11));
+    this.inkFx.explode(16, e.x, e.y - 30);
+    // V02 墨滴留在地上当血迹
+    const drop = art(this, e.x, e.y + 6, 'hit_droplets', 0.8).setOrigin(0.5).setDepth(-6).setAlpha(0.55).setScale(artScale('hit_droplets') * 0.8, artScale('hit_droplets') * 0.45).setFlipX(Math.random() < 0.5);
+    this.roomObjs.push(drop);
     e.ui && e.ui.destroy();
-    this.tweens.add({ targets: e.spr, alpha: 0, angle: (e.x < this.hero.x ? -1 : 1) * 80, y: e.spr.y + 10, duration: 380, onComplete: () => e.spr.destroy() });
+    this.setPose(e.spr, `${e.skin}_down`, e.spr.flipX ? -1 : 1);
+    e.spr.setRotation(0).clearTint();
+    this.tweens.add({ targets: e.spr, alpha: 0, delay: 500, duration: 400, onComplete: () => e.spr.destroy() });
     if (e.type === 'guard') this.addCorrection(-6, '击退时空守卫，修正力 -6');
   }
 
@@ -660,7 +732,7 @@ class Run extends Phaser.Scene {
   updateEnemy(e, dt) {
     if (e.dead) return;
     const h = this.hero;
-    e.spawnT -= dt; e.cd -= dt; e.flash -= dt; e.sinceHit += dt;
+    e.spawnT -= dt; e.cd -= dt; e.flash -= dt; e.sinceHit += dt; e.hurtT -= dt;
     if (e.broken > 0) { e.broken -= dt; if (e.broken <= 0) { e.broken = 0; e.guard = e.maxGuard; } } // 破阵结束架势回满
     // 架势 2 秒不受攻击后每秒恢复 15%
     else if (e.maxGuard && e.guard < e.maxGuard && e.sinceHit >= 2) e.guard = Math.min(e.maxGuard, e.guard + e.maxGuard * 0.15 * dt);
@@ -690,7 +762,8 @@ class Run extends Phaser.Scene {
           if (e.cd <= 0 && d < def.range + 10) { e.state = 'windup'; e.t = def.windup; e.dir = toH; }
         }
         this.moveActor(e, mvx * def.spd * dt, mvy * def.spd * dt);
-        if (mvx || mvy) e.bob = (e.bob || 0) + dt * 12;
+        e.moving = !!(mvx || mvy);
+        if (e.moving) e.bob = (e.bob || 0) + dt * 12;
         break;
       }
       case 'windup':
@@ -741,19 +814,23 @@ class Run extends Phaser.Scene {
 
   enemyLook(e, dx) {
     const s = e.spr;
-    if (dx < -2) s.setFlipX(true); else if (dx > 2) s.setFlipX(false);
-    let bob = e.state === 'move' && e.stun <= 0 ? Math.abs(Math.sin(e.bob || 0)) * 4 : 0;
-    let rot = 0;
-    if (e.state === 'windup') rot = (s.flipX ? 1 : -1) * 0.12 * (1 + Math.sin(this.time.now / 30) * 0.3);
-    if (e.state === 'lunge' || e.state === 'charge') rot = (s.flipX ? -1 : 1) * 0.15;
-    if (e.stun > 0) rot = Math.sin(this.time.now / 70) * 0.12;
+    if (dx < -0.1) e.face = -1; else if (dx > 0.1) e.face = 1;
+    // C02 / C03 关键姿势：待机、走、前摇、刺击、受击
+    const archer = e.skin === 'archer';
+    let pose = e.state === 'move' && e.moving && e.spawnT <= 0 ? 'walk' : 'idle';
+    if (e.state === 'windup') pose = archer ? 'draw' : 'windup';
+    if (e.state === 'lunge' || e.state === 'charge') pose = archer ? 'draw' : 'stab';
+    if (e.hurtT > 0 || e.stun > 0) pose = 'hurt';
+    this.setPose(s, `${e.skin}_${pose}`, e.face || 1);
+    const bob = pose === 'walk' ? Math.abs(Math.sin(e.bob || 0)) * 3 : 0;
+    const rot = e.state === 'windup' ? (e.face || 1) * -0.04 * Math.sin(this.time.now / 30) : 0;
     s.setPosition(e.x, e.y - bob).setRotation(rot).setDepth(e.y);
     if (e.flash > 0) s.setTintFill(0xffffff);
     else if (e.def.tint) s.setTint(e.def.tint);
     else if (e.broken > 0) s.setTint(0xffe9a8);
     else s.clearTint();
     if (e.type === 'guard' && e.flash <= 0) s.setAlpha(0.82 + Math.sin(this.time.now / 90) * 0.15);
-    if (e.ui) e.ui.setPosition(e.x, e.y - e.def.scale * 140 - 26).setDepth(e.y + 1);
+    if (e.ui) e.ui.setPosition(e.x, e.y - CHAR_H * e.def.k - 26).setDepth(e.y + 1);
   }
 
   hurtHero(dmg, src, silent) {
@@ -817,7 +894,7 @@ class Run extends Phaser.Scene {
     c.opened = true;
     c.spr.setTexture(c.def.tex + '_open');
     this.tweens.killTweensOf(c.spr);
-    c.spr.setScale(c.tier === 'lacquer' ? 0.9 : 0.8);
+    c.spr.setScale(artScale(c.def.tex + '_open') * c.k);
     c.items = [];
     for (let i = 0; i < c.def.n; i++) {
       const r = this.rollRarity(c.def.w);
@@ -849,12 +926,13 @@ class Run extends Phaser.Scene {
 
   updateChests(dt) {
     const h = this.hero;
+    h.looting = false;
     for (const c of this.chests) {
       if (!c.opened || c.idx >= c.items.length) continue;
       const near = Math.hypot(c.x - h.x, c.y - h.y) < 120;
       const it = c.items[c.idx];
       const need = RAR[it.r].t;
-      if (near && !h.atk && h.rollT <= 0) c.t += dt;
+      if (near && !h.atk && h.rollT <= 0) { c.t += dt; h.looting = true; }
       const s = c.slots[c.idx];
       s.pg.clear();
       s.pg.lineStyle(4, near ? C.cyan : 0x777777, 1);
@@ -864,13 +942,19 @@ class Run extends Phaser.Scene {
         s.pg.clear();
         it.found = true; c.idx++; c.t = 0;
         s.box.setFillStyle(RAR[it.r].c).setStrokeStyle(3, C.ink);
-        s.t.setText(it.name.slice(0, 2)).setColor(it.r >= 3 ? '#F3E9D2' : '#2B1D16').setFontSize(14).setStroke(it.r >= 3 ? '#2B1D16' : '#F3E9D2', 3);
+        const icon = ITEM_ICON[it.name];
+        if (icon) { c.ui.add(ui(this, s.x, 0, icon, 38)); s.t.setText(''); } else s.t.setText(it.name.slice(0, 2)).setColor(it.r >= 3 ? '#F3E9D2' : '#2B1D16').setFontSize(14).setStroke(it.r >= 3 ? '#2B1D16' : '#F3E9D2', 3);
         const ok = this.putInBag(it);
         this.floatText(c.x, c.y - 120, `${RAR[it.r].n}·${it.name}${ok ? '' : '（背包满了）'}`, hex(RAR[it.r].c), it.r >= 3 ? 24 : 18);
+        // V05 出货光柱，按品质换色，越稀有越高越久
+        const beam = art(this, c.x, c.y + 4, `lootbeam_${RAR_KEY[it.r]}`, 0.8 + it.r * 0.18).setDepth(c.y + 1);
+        const bs = beam.scale;
+        beam.setScale(bs * 0.4, bs * 0.2);
+        this.tweens.add({ targets: beam, scaleX: bs, scaleY: bs, duration: 160, ease: 'Back.easeOut',
+          onComplete: () => this.tweens.add({ targets: beam, alpha: 0, delay: 300 + it.r * 180, duration: 500, onComplete: () => beam.destroy() }) });
         if (it.r >= 3) {
-          const pillar = this.add.rectangle(c.x, c.y - 200, 34, 400, RAR[it.r].c, 0.55).setBlendMode('ADD').setDepth(c.y - 1);
-          this.tweens.add({ targets: pillar, alpha: 0, scaleX: 2.4, duration: 900, onComplete: () => pillar.destroy() });
-          this.sparkFx.setParticleTint(RAR[it.r].c); this.sparkFx.explode(30, c.x, c.y - 30);
+          // 红色传说的额外粒子：主美补贴图前先用程序粒子
+          this.sparkFx.setParticleTint(RAR[it.r].c); this.sparkFx.explode(it.r >= 5 ? 60 : 30, c.x, c.y - 30);
           if (it.r >= 4) this.cameras.main.flash(160, 241, 196, 15, false);
         }
         if (c.idx >= c.items.length) this.time.delayedCall(1600, () => { if (c.ui && c.ui.active) this.tweens.add({ targets: c.ui, alpha: 0, duration: 300 }); });
@@ -943,19 +1027,19 @@ class Run extends Phaser.Scene {
       this.toast(`获得将魂：${s.n}${tip}`);
     };
     opts.forEach((s, i) => {
-      const x = W / 2 + (i - 1) * 340, y = 380;
-      const card = this.add.rectangle(x, y, 300, 330, C.paper).setStrokeStyle(5, C.ink).setInteractive({ useHandCursor: true });
-      const band = this.add.rectangle(x, y - 135, 300, 60, C.shu).setStrokeStyle(5, C.ink);
-      const disc = this.add.circle(x, y - 60, 46, C.shu).setStrokeStyle(5, C.ink);
-      const ic = this.add.text(x, y - 60, s.ic, { fontFamily: FONT, fontSize: '50px', color: '#F3E9D2', fontStyle: 'bold' }).setOrigin(0.5);
-      const nm = this.add.text(x, y - 135, s.n, { fontFamily: FONT, fontSize: '28px', color: '#F3E9D2', stroke: '#2B1D16', strokeThickness: 5 }).setOrigin(0.5);
-      const g = this.add.text(x, y + 10, `— ${s.g} · ${s.slot} —`,{ fontFamily: FONT, fontSize: '20px', color: '#6E4526' }).setOrigin(0.5);
-      const d = this.add.text(x, y + 70, s.d, { fontFamily: FONT, fontSize: '19px', color: '#2B1D16', align: 'center', lineSpacing: 6 }).setOrigin(0.5);
-      const key = this.add.text(x, y + 145, `[${i + 1}]`, { fontFamily: FONT, fontSize: '18px', color: '#8E5E33' }).setOrigin(0.5);
-      card.on('pointerover', () => card.setFillStyle(0xFFF6E0));
-      card.on('pointerout', () => card.setFillStyle(C.paper));
+      // U03 将魂卡：原型的将魂都是普通品级，用 common 框；印章按武将兵器
+      const x = W / 2 + (i - 1) * 310, y = 400, cw = 270;
+      const card = ui(this, x, y, 'spiritcard_common', cw).setInteractive({ useHandCursor: true });
+      const ch = card.displayHeight, top = y - ch / 2, cs = card.scale;
+      const seal = ui(this, x, top + 44, `spiritcard_seal_${SOUL_SEAL[s.g]}`, 76);
+      const nm = this.add.text(x, top + 96, s.n, { fontFamily: FONT, fontSize: '28px', color: '#2B1D16', fontStyle: 'bold' }).setOrigin(0.5);
+      const g = this.add.text(x, top + 130, `— ${s.g} · ${s.slot} —`, { fontFamily: FONT, fontSize: '18px', color: '#6E4526' }).setOrigin(0.5);
+      const d = this.add.text(x, top + 188, s.d, { fontFamily: FONT, fontSize: '16px', color: '#2B1D16', align: 'center', lineSpacing: 5 }).setOrigin(0.5);
+      const key = this.add.text(x, top + ch - 44, `[${i + 1}]`, { fontFamily: FONT, fontSize: '18px', color: '#8E5E33' }).setOrigin(0.5);
+      card.on('pointerover', () => card.setScale(cs * 1.03).setTint(0xFFF6E0));
+      card.on('pointerout', () => card.setScale(cs).clearTint());
       card.on('pointerdown', () => choose(s));
-      p.add([card, band, disc, ic, nm, g, d, key]);
+      p.add([card, seal, nm, g, d, key]);
     });
     this.panel = { kind: 'soul', c: p, keys: opts.map(s => () => choose(s)) };
     const kh = ev => { const n = { Digit1: 0, Digit2: 1, Digit3: 2, Numpad1: 0, Numpad2: 1, Numpad3: 2 }[ev.code]; if (n !== undefined && this.panel && this.panel.kind === 'soul' && this.panel.keys[n]) this.panel.keys[n](); };
@@ -978,16 +1062,31 @@ class Run extends Phaser.Scene {
     this.paused = true;
     const p = this.add.container(0, 0).setDepth(9000);
     p.add(this.add.rectangle(W / 2, H / 2, W, H, 0x16110d, 0.7).setInteractive());
-    const cs = 78, gx = W / 2 - cs * 3, gy = 200;
-    p.add(this.add.rectangle(W / 2, gy + cs * 2 - 6, cs * 6 + 40, cs * 4 + 110, C.paper).setStrokeStyle(5, C.ink));
-    p.add(this.add.text(W / 2, gy - 34, `行囊 6×4　　带出价值 ${this.run.value}`, { fontFamily: FONT, fontSize: '26px', color: '#2B1D16' }).setOrigin(0.5));
-    for (let y = 0; y < 4; y++) for (let x = 0; x < 6; x++) p.add(this.add.rectangle(gx + x * cs + cs / 2, gy + y * cs + cs / 2, cs - 4, cs - 4, 0xE3D5B5).setStrokeStyle(2, 0xB8A27A));
+    // U02：面板自带 6×4 竹格，物品按格线对齐（原图格线 x 206–705、y 282–608）
+    const pw0 = 83.2, ph0 = 81.5, gl = 206, gt = 282;
+    const panel = this.add.image(W / 2 - 80, 386, 'inventory_panel');
+    const sc = 62 / pw0;
+    panel.setScale(sc);
+    p.add(panel);
+    const pl = panel.x - panel.displayWidth / 2, ptop = panel.y - panel.displayHeight / 2;
+    const gx = pl + gl * sc, gy = ptop + gt * sc, pw = pw0 * sc, ph = ph0 * sc;
+    p.add(this.add.text(panel.x, 62, `外卖箱 6×4　　带出价值 ${this.run.value}`, { fontFamily: FONT, fontSize: '26px', color: '#F3E9D2', stroke: '#2B1D16', strokeThickness: 5 }).setOrigin(0.5));
     for (const it of this.run.bag) {
-      const x = gx + it.gx * cs, y = gy + it.gy * cs, w = it.gw * cs, hh = it.gh * cs;
-      p.add(this.add.rectangle(x + w / 2, y + hh / 2, w - 6, hh - 6, RAR[it.r].c).setStrokeStyle(3, C.ink));
-      p.add(this.add.text(x + w / 2, y + hh / 2, `${it.name}\n${it.v}`, { fontFamily: FONT, fontSize: '15px', color: it.r >= 3 ? '#F3E9D2' : '#2B1D16', align: 'center', stroke: it.r >= 3 ? '#2B1D16' : undefined, strokeThickness: it.r >= 3 ? 3 : 0, wordWrap: { width: w - 10, useAdvancedWrap: true } }).setOrigin(0.5));
+      const x = gx + it.gx * pw, y = gy + it.gy * ph, w = it.gw * pw, hh = it.gh * ph, cx = x + w / 2, cy = y + hh / 2;
+      p.add(this.add.rectangle(cx, cy, w - 6, hh - 6, RAR[it.r].c, 0.3));
+      // 稀有度框：九宫格保住四角，2 倍画再缩一半让角不显得太粗
+      const fk = `inventory_rarity_${RAR_KEY[it.r]}`;
+      p.add(this.add.nineslice(cx, cy, fk, contentFrame(this, fk), (w - 2) * 2, (hh - 2) * 2, 34, 34, 34, 34).setScale(0.5));
+      const icon = ITEM_ICON[it.name];
+      if (icon) p.add(ui(this, cx, cy - 2, icon, Math.min(w, hh) * 0.72));
+      else p.add(this.add.text(cx, cy - 4, it.name, { fontFamily: FONT, fontSize: '14px', color: '#2B1D16', align: 'center', stroke: '#F3E9D2', strokeThickness: 3, wordWrap: { width: w - 14, useAdvancedWrap: true } }).setOrigin(0.5));
+      p.add(this.add.text(x + w - 7, y + hh - 6, String(it.v), { fontFamily: FONT, fontSize: '12px', color: '#F3E9D2', stroke: '#2B1D16', strokeThickness: 3 }).setOrigin(1, 1));
     }
-    p.add(this.add.text(W / 2, gy + cs * 4 + 26, '死了全部丢失，撤离才算数。Tab 关闭', { fontFamily: FONT, fontSize: '18px', color: '#6E4526' }).setOrigin(0.5));
+    // 护心镜保险格（2×2）：原型还没有保险格逻辑，只摆出来
+    const sx = pl + panel.displayWidth + 95;
+    p.add(ui(this, sx, 330, 'inventory_safe', 150));
+    p.add(this.add.text(sx, 420, '护心镜 2×2\n（保险格，原型未启用）', { fontFamily: FONT, fontSize: '16px', color: '#CDB78A', align: 'center' }).setOrigin(0.5, 0));
+    p.add(this.add.text(W / 2, H - 22, '死了全部丢失，撤离才算数。Tab 关闭', { fontFamily: FONT, fontSize: '18px', color: '#CDB78A' }).setOrigin(0.5));
     this.panel = { kind: 'bag', c: p };
   }
 
@@ -1002,6 +1101,7 @@ class Run extends Phaser.Scene {
     const p = this.add.container(0, 0).setDepth(9500);
     p.add(this.add.rectangle(W / 2, H / 2, W, H, win ? 0x0d2a30 : 0x2a0d0d, 0.82));
     if (win) { this.ring(this.hero.x, this.hero.y - 30, C.cyan, 400, 700, 10); this.tweens.add({ targets: this.hero.spr, alpha: 0, scale: 0.2, duration: 600 }); }
+    else { this.setPose(this.hero.spr, 'hero_down', this.hero.faceX); this.hero.spr.setRotation(0).setAlpha(1).clearTint(); }
     p.add(this.add.text(W / 2, 120, win ? '撤离成功' : '被历史抹除', { fontFamily: FONT, fontSize: '64px', color: win ? '#3EC6E0' : '#E74C3C', stroke: '#2B1D16', strokeThickness: 10 }).setOrigin(0.5));
     const kept = win ? run.value : 0;
     const soulNames = run.souls.map(id => SOULS.find(s => s.id === id).n).join('、') || '无';
@@ -1016,7 +1116,9 @@ class Run extends Phaser.Scene {
     best.forEach((it, i) => {
       const x = W / 2 + (i - (best.length - 1) / 2) * 140;
       p.add(this.add.rectangle(x, 500, 124, 56, RAR[it.r].c, win ? 1 : 0.35).setStrokeStyle(3, C.ink));
-      p.add(this.add.text(x, 500, it.name, { fontFamily: FONT, fontSize: '17px', color: '#2B1D16' }).setOrigin(0.5));
+      const icon = ITEM_ICON[it.name];
+      if (icon) p.add(ui(this, x - 38, 500, icon, 48).setAlpha(win ? 1 : 0.5));
+      p.add(this.add.text(icon ? x + 18 : x, 500, it.name, { fontFamily: FONT, fontSize: icon ? '15px' : '17px', color: '#2B1D16' }).setOrigin(0.5));
     });
     const again = this.add.text(W / 2, 620, '点击或按 Enter 再来一局', { fontFamily: FONT, fontSize: '28px', color: '#F3E9D2', stroke: '#2B1D16', strokeThickness: 6 }).setOrigin(0.5);
     p.add(again);
@@ -1067,9 +1169,7 @@ class Run extends Phaser.Scene {
     // 锚点
     if (this.anchor) {
       const a = this.anchor, t = this.time.now / 1000;
-      fx.fillStyle(C.cyan, 0.18 + Math.sin(t * 4) * 0.06); fx.fillEllipse(a.x, a.y, 200, 110);
-      fx.lineStyle(4, C.cyan, 0.9); fx.strokeEllipse(a.x, a.y, 190 + Math.sin(t * 3) * 8, 104 + Math.sin(t * 3) * 4);
-      fx.lineStyle(3, C.ink, 0.8); fx.strokeEllipse(a.x, a.y, 210, 118);
+      fx.lineStyle(3, C.cyan, 0.5 + Math.sin(t * 3) * 0.3); fx.strokeEllipse(a.x, a.y, 196 + Math.sin(t * 3) * 8, 100 + Math.sin(t * 3) * 4);
       for (let i = 0; i < 5; i++) {
         const ang = t * 1.7 + i * 1.256;
         fx.fillStyle(0xffffff, 0.7); fx.fillCircle(a.x + Math.cos(ang) * 92, a.y + Math.sin(ang) * 50, 3);
@@ -1119,7 +1219,7 @@ class Run extends Phaser.Scene {
     // 血条、架势条
     for (const e of this.enemies) {
       if (e.spawnT > 0) continue;
-      const bw = e.def.elite ? 70 : 44, by = e.y - e.def.scale * 140 - 12;
+      const bw = e.def.elite ? 70 : 44, by = e.y - CHAR_H * e.def.k - 12;
       if (e.hp < e.maxHp || e.def.elite) {
         tg.fillStyle(C.ink, 0.85); tg.fillRect(e.x - bw / 2 - 2, by - 2, bw + 4, 9);
         tg.fillStyle(C.hp, 1); tg.fillRect(e.x - bw / 2, by, bw * Math.max(0, e.hp / e.maxHp), 5);
@@ -1142,19 +1242,32 @@ class Run extends Phaser.Scene {
     } else this.hint.setVisible(false);
   }
 
+  // V01 刀光：三段各一张，第三段金色；重击用第二段放大偏暖
   slashFx(x, y, a) {
-    const g = this.add.graphics().setDepth(this.hero.y + 2);
-    const r = a.reach, arc = Math.min(a.arc, Math.PI);
     const heavy = a.kind === 'heavy';
-    const color = heavy ? 0xFFF1C8 : C.paper;
-    g.fillStyle(color, 0.85);
-    if (arc >= Math.PI) { g.fillCircle(x, y, r); g.fillStyle(C.ink, 1); g.fillCircle(x, y, r - 22); }
-    else {
-      g.beginPath(); g.arc(x, y, r, a.dir - arc, a.dir + arc, false); g.arc(x, y, r - (heavy ? 34 : 24), a.dir + arc, a.dir - arc, true); g.closePath(); g.fillPath();
-      g.lineStyle(3, C.ink, 1); g.beginPath(); g.arc(x, y, r, a.dir - arc, a.dir + arc, false); g.strokePath();
-    }
-    if (arc >= Math.PI) g.setAlpha(0.8);
-    this.tweens.add({ targets: g, alpha: 0, duration: heavy ? 220 : 150, onComplete: () => g.destroy() });
+    const key = heavy ? 'slash_combo2' : 'slash_combo' + a.step;
+    // 弧线凸面（出刀方向）在原图里的朝向
+    const fwd = key === 'slash_combo1' ? -2.36 : Math.PI;
+    const k = a.reach / 62 * (heavy ? 1.15 : 1);
+    const im = art(this, x + Math.cos(a.dir) * a.reach * 0.45, y + Math.sin(a.dir) * a.reach * 0.45, key, k)
+      .setOrigin(0.5).setRotation(a.dir - fwd).setDepth(this.hero.y + 2);
+    if (heavy) im.setTint(a.charged ? 0xFFD27A : 0xFFF1C8);
+    this.tweens.add({ targets: im, alpha: 0, scale: im.scale * 1.08, duration: heavy ? 220 : 160, onComplete: () => im.destroy() });
+  }
+
+  // 一次性特效贴图：放大淡出
+  fxImage(x, y, key, k, ms) {
+    const im = art(this, x, y, key, k).setOrigin(0.5).setRotation(rnd(-0.4, 0.4)).setDepth(4100);
+    this.tweens.add({ targets: im, alpha: 0, scale: im.scale * 1.25, duration: ms, onComplete: () => im.destroy() });
+  }
+
+  // V02 破字印章：砸下来再淡出
+  stamp(x, y) {
+    const im = art(this, x, y, 'hit_breakseal', 0.55).setOrigin(0.5).setDepth(6100).setRotation(rnd(-0.15, 0.15));
+    const s = im.scale;
+    im.setScale(s * 2).setAlpha(0);
+    this.tweens.add({ targets: im, scale: s, alpha: 1, duration: 120, ease: 'Back.easeIn',
+      onComplete: () => this.tweens.add({ targets: im, alpha: 0, delay: 650, duration: 300, onComplete: () => im.destroy() }) });
   }
 
   ring(x, y, color, r, ms, lw = 5) {
@@ -1186,51 +1299,74 @@ class Run extends Phaser.Scene {
   // ---------- HUD ----------
   buildHud() {
     this.hud = this.add.graphics().setDepth(7000);
-    const st = (x, y, s, size = 18, color = '#F3E9D2') => this.add.text(x, y, s, { fontFamily: FONT, fontSize: size + 'px', color, stroke: '#2B1D16', strokeThickness: 4 }).setDepth(7001);
-    this.hpText = st(30, 14, '');
-    this.corrText = st(W / 2, 12, '', 18, '#D9B8EA').setOrigin(0.5, 0);
+    const st = (x, y, s, size = 18, color = '#F3E9D2') => this.add.text(x, y, s, { fontFamily: FONT, fontSize: size + 'px', color, stroke: '#2B1D16', strokeThickness: 4 }).setDepth(7002);
+    const img = (x, y, key, width) => ui(this, x, y, key, width).setDepth(7001);
+    // U01 条：外框 + 九宫格填充（外框内腔按 256×48 图量得）
+    const bar = (cx, cy, width, frameKey, fillKey, inner) => {
+      const f = img(cx, cy, frameKey, width), k = f.scale;
+      const x0 = cx - f.displayWidth / 2 + inner[0] * k, w = (inner[1] - inner[0]) * k;
+      const y = cy - f.displayHeight / 2 + (inner[2] + inner[3]) / 2 * k, h = (inner[3] - inner[2]) * k;
+      const fill = this.add.nineslice(x0, y, fillKey, contentFrame(this, fillKey), w, h, 8, 8, 0, 0).setOrigin(0, 0.5).setDepth(7000);
+      return { fill, w, h };
+    };
+    this.hpBar = bar(150, 36, 256, 'hud_health_frame', 'hud_health_fill', [49, 203, 17, 32]);
+    this.corrBar = bar(W / 2, 36, 400, 'hud_history_frame', 'hud_history_fill', [51, 202, 17, 32]);
+    this.rollPips = [0, 1, 2].map(i => ({ e: img(82 + i * 24, 72, 'hud_roll_empty', 21), f: img(82 + i * 24, 72, 'hud_roll_full', 21) }));
+    this.comboImg = img(W - 70, 210, 'hud_combo_frame', 70);
+    this.comboText = st(W - 70, 208, '', 30, '#F1C40F').setOrigin(0.5);
+    this.comboLb = st(W - 70, 252, '连击', 16).setOrigin(0.5);
+    // 道具栏：强光手电、当阳一吼
+    this.slotTorch = img(48, H - 46, 'hud_slot_frame', 56);
+    img(48, H - 48, 'modern_flashlight', 40);
+    this.torchText = st(66, H - 32, '', 15).setOrigin(1, 0.5);
+    st(30, H - 82, 'F', 15, '#CDB78A');
+    this.slotRoar = img(110, H - 46, 'hud_slot_frame', 56);
+    this.roarIcon = img(110, H - 48, 'door_spirit', 40);
+    this.roarText = st(110, H - 82, 'Q', 15, '#CDB78A').setOrigin(0.5, 0);
+    this.hpText = st(150, 36, '', 13).setOrigin(0.5);
+    this.corrText = st(W / 2, 36, '', 13, '#F3E9D2').setOrigin(0.5);
     this.roomText = st(W - 30, 12, '', 18).setOrigin(1, 0);
     this.bagText = st(W - 30, 38, '', 16, '#CDB78A').setOrigin(1, 0);
-    this.soulText = st(30, H - 34, '', 18, '#9FD3A8');
-    this.qText = st(202, 61, '', 15, '#F3E9D2');
+    this.soulText = st(150, H - 34, '', 18, '#9FD3A8');
+    this.qText = st(170, 64, '', 15, '#F3E9D2');
     this.hint = this.add.text(W / 2, H - 46, '', { fontFamily: FONT, fontSize: '22px', color: '#F3E9D2', stroke: '#2B1D16', strokeThickness: 5, backgroundColor: 'rgba(22,17,13,0.55)', padding: { x: 12, y: 4 } }).setOrigin(0.5).setDepth(7001);
+  }
+
+  setBar(b, v) {
+    v = R.Clamp(v, 0, 1);
+    b.fill.setVisible(v > 0.02);
+    if (v > 0.02) b.fill.setSize(Math.max(18, b.w * v), b.h);
   }
 
   drawHud() {
     const g = this.hud, h = this.hero, run = this.run;
     g.clear();
-    // 体力
-    g.fillStyle(C.ink, 1); g.fillRect(26, 40, 248, 20);
-    g.fillStyle(0x5a2a22, 1); g.fillRect(30, 44, 240, 12);
-    g.fillStyle(C.hp, 1); g.fillRect(30, 44, 240 * R.Clamp(h.hp / h.maxHp, 0, 1), 12);
+    this.setBar(this.hpBar, h.hp / h.maxHp);
     this.hpText.setText(`体力 ${Math.ceil(h.hp)}/${h.maxHp}`);
-    // 翻滚
-    for (let i = 0; i < this.dodgeCap(); i++) {
-      g.fillStyle(C.ink, 1); g.fillCircle(290 + i * 22, 50, 9);
-      g.fillStyle(i < h.dodges ? C.cyan : 0x3a4a50, 1); g.fillCircle(290 + i * 22, 50, 6);
-    }
-    // 修正力
-    const cx = W / 2 - 200, cw = 400;
-    g.fillStyle(C.ink, 1); g.fillRect(cx - 4, 38, cw + 8, 18);
-    g.fillStyle(0x3a2440, 1); g.fillRect(cx, 42, cw, 10);
-    g.fillStyle(C.purple, 1); g.fillRect(cx, 42, cw * run.correction / 100, 10);
-    if (run.correction >= 75) { g.fillStyle(0xE0B0FF, 0.3 + 0.3 * Math.sin(this.time.now / 120)); g.fillRect(cx, 42, cw * run.correction / 100, 10); }
-    g.fillStyle(0xF3E9D2, 1);
-    for (const t of [25, 50, 75]) g.fillRect(cx + cw * t / 100 - 1, 36, 2, 22);
+    const cap = this.dodgeCap();
+    this.rollPips.forEach((p, i) => { p.e.setVisible(i < cap); p.f.setVisible(i < cap && i < h.dodges); });
+    this.setBar(this.corrBar, run.correction / 100);
+    this.corrBar.fill.setAlpha(run.correction >= 75 ? 0.7 + 0.3 * Math.sin(this.time.now / 120) : 1);
     this.corrText.setText(`历史修正力 ${Math.floor(run.correction)}`);
+    const showCombo = h.chainT > 0 && h.chain >= 2;
+    [this.comboImg, this.comboText, this.comboLb].forEach(o => o.setVisible(showCombo));
+    this.comboText.setText(String(h.chain));
+    this.torchText.setText('×' + h.torch);
+    this.slotTorch.setAlpha(h.torch > 0 ? 1 : 0.4);
+    [this.slotRoar, this.roarIcon, this.roarText].forEach(o => o.setVisible(this.has('hou')));
+    this.roarIcon.setAlpha(h.rage >= 100 ? 1 : 0.35);
     this.roomText.setText(`第 ${run.room} 间 · ${this.roomName || ''}`);
     this.bagText.setText(`行囊 ${run.bag.length} 件 · 价值 ${run.value}　[Tab]`);
     this.soulText.setText(run.souls.length ? '将魂：' + run.souls.map(id => SOULS.find(s => s.id === id).n).join('  ') : '');
     // 怒气
-    g.fillStyle(C.ink, 1); g.fillRect(26, 64, 168, 12);
-    g.fillStyle(0x4a2a1a, 1); g.fillRect(30, 67, 160, 6);
-    g.fillStyle(h.rage >= 100 ? 0xF39C12 : 0xC0602A, 1); g.fillRect(30, 67, 160 * h.rage / 100, 6);
+    g.fillStyle(C.ink, 1); g.fillRect(166, 84, 128, 10);
+    g.fillStyle(0x4a2a1a, 1); g.fillRect(168, 86, 124, 6);
+    g.fillStyle(h.rage >= 100 ? 0xF39C12 : 0xC0602A, 1); g.fillRect(168, 86, 124 * h.rage / 100, 6);
     if (h.charge >= 0) { // 蓄力圈
       g.lineStyle(5, h.charge >= 1 ? 0xF1C40F : C.paper, 1); g.beginPath();
       g.arc(h.x, h.y - 130, 16, -Math.PI / 2, -Math.PI / 2 + Math.PI * 2 * Math.min(1, h.charge)); g.strokePath();
     }
-    const q = this.has('hou') ? (h.rage >= 100 ? '　Q 当阳一吼 就绪' : '　Q 当阳一吼') : '';
-    this.qText.setText(`怒 ${Math.floor(h.rage)}　F 强光手电 ×${h.torch}${q}`);
+    this.qText.setText(`怒 ${Math.floor(h.rage)}${this.has('hou') && h.rage >= 100 ? '　Q 就绪' : ''}`);
     // 修正力 75 以上的紫色边缘
     if (run.correction >= 75) {
       const a = 0.12 + 0.08 * Math.sin(this.time.now / 200) + (run.correction >= 100 ? 0.15 : 0);
