@@ -1,0 +1,39 @@
+# 把 prototype/ 发布到 GitHub Pages：https://qq245562635.github.io/SDC/
+# 需先在 Settings → Pages → Source 选 “GitHub Actions”。
+name: Pages
+on:
+  push:
+    branches: [main]
+    paths: ['prototype/**', '.github/workflows/pages.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+concurrency:
+  group: pages
+  cancel-in-progress: true
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deploy.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: 生成站点
+        run: |
+          mkdir -p _site
+          cp -r prototype/. _site/
+          rm -rf _site/webgl/shots
+          cat > _site/index.html <<'HTML'
+          <!doctype html><meta charset="utf-8"><title>逃离三国 原型</title>
+          <meta http-equiv="refresh" content="0; url=webgl/">
+          <p><a href="webgl/">WebGL 玩法原型</a> · <a href="hulao-camp.html">虎牢关场景预览</a></p>
+          HTML
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+      - id: deploy
+        uses: actions/deploy-pages@v4
