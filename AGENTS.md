@@ -12,7 +12,10 @@
 
 不要改别人目录下的文件；需要改时在 PR 或任务里提给对应角色。
 
-主程可以通过 MCP 工具 `mcp__codex__codex`（`tools/codex-mcp/`）直接派出图任务给 Codex。产出仍按主美的目录和命名规则存放，走 `art/` 分支和 PR，不混进代码 PR。
+对接主美：
+- 主通道是任务板加 PR。主美在 Codex 应用里按 `docs/tasks/` 领任务干活。
+- 主程可以用 MCP 工具 `mcp__codex__codex`（`tools/codex-mcp/`）派一次性的小图。每次调用都是全新的 `codex exec`，不进 Codex 应用里的对话，也不记得之前的调用。
+- MCP 出的图也放进 `art/`，按主美的命名规则命名，走 `art/` 分支和 PR，并在任务板上登记，让应用里的 Codex 也知道。
 
 ## 循环
 
