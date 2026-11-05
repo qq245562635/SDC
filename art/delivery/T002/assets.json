@@ -1580,15 +1580,15 @@
         256,
         256
       ],
-      "source": "art/delivery/T004/sources/ground_repaint.png",
+      "source": "art/delivery/T004/sources/ground_revision2_atlas.png",
       "source_rect": [
         0,
         0,
         314,
         314
       ],
-      "sha256": "f37b39a6fb78213940d2da96e8ebcb588cfbe99a2a2085147c5f3cb578664ae8",
-      "edge_processing": "Shared tileable rice-paper dirt grain across all 24px boundary bands; 16px blend into individually illumination-normalized painted interiors."
+      "sha256": "6ca21d339c76242b3a1bd0a061cba71f65f849d257f07c835d69d24a0646d2a8",
+      "edge_processing": "Full AI-painted fine-soil substrate at native tile scale, no mirrored patches; shared 24px bands, 20px smooth transition; painted feature clusters scaled 0.52 and offset to avoid dark tile-sized center slabs."
     },
     {
       "file": "art/env/env_camp_tile02_01.png",
@@ -1609,15 +1609,15 @@
         256,
         256
       ],
-      "source": "art/delivery/T004/sources/ground_repaint.png",
+      "source": "art/delivery/T004/sources/ground_revision2_atlas.png",
       "source_rect": [
         314,
         0,
         627,
         314
       ],
-      "sha256": "51ca25bf6fa81d7dd31f61c18b6a8ec60812ec99c0ec55b3144976cdd79861e6",
-      "edge_processing": "Shared tileable rice-paper dirt grain across all 24px boundary bands; 16px blend into individually illumination-normalized painted interiors."
+      "sha256": "c7dac824086e8e9cfc8f2b77e2ea113dbeae6ba5ac4de4fdc7cbfa81344c7981",
+      "edge_processing": "Full AI-painted fine-soil substrate at native tile scale, no mirrored patches; shared 24px bands, 20px smooth transition; painted feature clusters scaled 0.52 and offset to avoid dark tile-sized center slabs."
     },
     {
       "file": "art/env/env_camp_tile03_01.png",
@@ -1638,15 +1638,15 @@
         256,
         256
       ],
-      "source": "art/delivery/T004/sources/ground_repaint.png",
+      "source": "art/delivery/T004/sources/ground_revision2_atlas.png",
       "source_rect": [
         627,
         0,
         940,
         314
       ],
-      "sha256": "c98004d8865117636e95c4a8c7a00a32cab6ff12281121c0330a8a2621def6a4",
-      "edge_processing": "Shared tileable rice-paper dirt grain across all 24px boundary bands; 16px blend into individually illumination-normalized painted interiors."
+      "sha256": "408a5fcad182808a5d85611f8590ec987373f784112410f1ab74844b73ea1427",
+      "edge_processing": "Full AI-painted fine-soil substrate at native tile scale, no mirrored patches; shared 24px bands, 20px smooth transition; painted feature clusters scaled 0.52 and offset to avoid dark tile-sized center slabs."
     },
     {
       "file": "art/env/env_camp_tile04_01.png",
@@ -1667,15 +1667,15 @@
         256,
         256
       ],
-      "source": "art/delivery/T004/sources/ground_repaint.png",
+      "source": "art/delivery/T004/sources/ground_revision2_atlas.png",
       "source_rect": [
         940,
         0,
         1254,
         314
       ],
-      "sha256": "621b4c0d878d603b12d03849aba17ffe7ec988b5f4e949287b4fb7495a763456",
-      "edge_processing": "Shared tileable rice-paper dirt grain across all 24px boundary bands; 16px blend into individually illumination-normalized painted interiors."
+      "sha256": "54c79197e68808128a7e9d950c135145168fa6c5b599d09b30b234614cbf11ab",
+      "edge_processing": "Full AI-painted fine-soil substrate at native tile scale, no mirrored patches; shared 24px bands, 20px smooth transition; painted feature clusters scaled 0.52 and offset to avoid dark tile-sized center slabs."
     },
     {
       "file": "art/env/env_camp_tile05_01.png",
@@ -1696,15 +1696,15 @@
         256,
         256
       ],
-      "source": "art/delivery/T004/sources/ground_repaint.png",
+      "source": "art/delivery/T004/sources/ground_revision2_atlas.png",
       "source_rect": [
         0,
         314,
         314,
         627
       ],
-      "sha256": "6be5bfba59cd12442611c539e601dd6f9d65af3b972159b2b350d4c514a5793c",
-      "edge_processing": "Shared tileable rice-paper dirt grain across all 24px boundary bands; 16px blend into individually illumination-normalized painted interiors."
+      "sha256": "54a3dc1d756a1891b0e0dff8e19222b2d654644cd5ae233cb51a3e2c961b3a0d",
+      "edge_processing": "Full AI-painted fine-soil substrate at native tile scale, no mirrored patches; shared 24px bands, 20px smooth transition; painted feature clusters scaled 0.52 and offset to avoid dark tile-sized center slabs."
     },
     {
       "file": "art/env/env_camp_tile06_01.png",
@@ -1725,15 +1725,15 @@
         256,
         256
       ],
-      "source": "art/delivery/T004/sources/ground_repaint.png",
+      "source": "art/delivery/T004/sources/ground_revision2_atlas.png",
       "source_rect": [
         314,
         314,
         627,
         627
       ],
-      "sha256": "c9f8352da5cc60187d0ce739c03032e8f7084600626b73299142f431c3aec380",
-      "edge_processing": "Shared tileable rice-paper dirt grain across all 24px boundary bands; 16px blend into individually illumination-normalized painted interiors."
+      "sha256": "d7ecc672b98ada9e65d770c4510020e19ab0836ed7ce4072173c054127e2abb1",
+      "edge_processing": "Full AI-painted fine-soil substrate at native tile scale, no mirrored patches; shared 24px bands, 20px smooth transition; painted feature clusters scaled 0.52 and offset to avoid dark tile-sized center slabs."
     },
     {
       "file": "art/env/env_camp_tile07_01.png",
@@ -1754,15 +1754,15 @@
         256,
         256
       ],
-      "source": "art/delivery/T004/sources/ground_repaint.png",
+      "source": "art/delivery/T004/sources/ground_revision2_atlas.png",
       "source_rect": [
         627,
         314,
         940,
         627
       ],
-      "sha256": "7d1772afc96493abf5eb9479f0adc16c49e40c42b12664767c6eee6127c2c188",
-      "edge_processing": "Shared tileable rice-paper dirt grain across all 24px boundary bands; 16px blend into individually illumination-normalized painted interiors."
+      "sha256": "da1a2d62ce58164d64f59074e33be753b43737c8a58657b12846277d3ae8564f",
+      "edge_processing": "Full AI-painted fine-soil substrate at native tile scale, no mirrored patches; shared 24px bands, 20px smooth transition; painted feature clusters scaled 0.52 and offset to avoid dark tile-sized center slabs."
     },
     {
       "file": "art/env/env_camp_tile08_01.png",
@@ -1783,15 +1783,15 @@
         256,
         256
       ],
-      "source": "art/delivery/T004/sources/ground_repaint.png",
+      "source": "art/delivery/T004/sources/ground_revision2_atlas.png",
       "source_rect": [
         940,
         314,
         1254,
         627
       ],
-      "sha256": "ef1b88b2e331112c15df22ce4fb3ab97b121ff907e809e2771b64709b70f3080",
-      "edge_processing": "Shared tileable rice-paper dirt grain across all 24px boundary bands; 16px blend into individually illumination-normalized painted interiors."
+      "sha256": "4603b84c717064d450a28a6008e3f5c97c21aa7ee1eba53db78ccee018eb270b",
+      "edge_processing": "Full AI-painted fine-soil substrate at native tile scale, no mirrored patches; shared 24px bands, 20px smooth transition; painted feature clusters scaled 0.52 and offset to avoid dark tile-sized center slabs."
     },
     {
       "file": "art/env/env_camp_tile09_01.png",
@@ -1812,15 +1812,15 @@
         256,
         256
       ],
-      "source": "art/delivery/T004/sources/ground_repaint.png",
+      "source": "art/delivery/T004/sources/ground_revision2_atlas.png",
       "source_rect": [
         0,
         627,
         314,
         940
       ],
-      "sha256": "3cb8a6f6bfa4bcd14e5b06baf013b96f955409d31d096c6328bd7c63c560d920",
-      "edge_processing": "Shared tileable rice-paper dirt grain across all 24px boundary bands; 16px blend into individually illumination-normalized painted interiors."
+      "sha256": "2d3a4b86ddfb0c695bed2c0bbb86bf040e7a3647be33f52fcb51c698681d5ccb",
+      "edge_processing": "Full AI-painted fine-soil substrate at native tile scale, no mirrored patches; shared 24px bands, 20px smooth transition; painted feature clusters scaled 0.52 and offset to avoid dark tile-sized center slabs."
     },
     {
       "file": "art/env/env_camp_tile10_01.png",
@@ -1841,15 +1841,15 @@
         256,
         256
       ],
-      "source": "art/delivery/T004/sources/ground_repaint.png",
+      "source": "art/delivery/T004/sources/ground_revision2_atlas.png",
       "source_rect": [
         314,
         627,
         627,
         940
       ],
-      "sha256": "c2667a85f67d3fea95199c8ee0ef17f4d98b4776336ca11f9f9c36d15dff083d",
-      "edge_processing": "Shared tileable rice-paper dirt grain across all 24px boundary bands; 16px blend into individually illumination-normalized painted interiors."
+      "sha256": "310805a0163830b5f50f66c9c42a0ae916f4c6be3213a5a8dd571b68070213a3",
+      "edge_processing": "Full AI-painted fine-soil substrate at native tile scale, no mirrored patches; shared 24px bands, 20px smooth transition; painted feature clusters scaled 0.52 and offset to avoid dark tile-sized center slabs."
     },
     {
       "file": "art/env/env_camp_tile11_01.png",
@@ -1870,15 +1870,15 @@
         256,
         256
       ],
-      "source": "art/delivery/T004/sources/ground_repaint.png",
+      "source": "art/delivery/T004/sources/ground_revision2_atlas.png",
       "source_rect": [
         627,
         627,
         940,
         940
       ],
-      "sha256": "e7effddb617205a2b11c797f12973f91b8de404cc32d098701727987eaff3184",
-      "edge_processing": "Shared tileable rice-paper dirt grain across all 24px boundary bands; 16px blend into individually illumination-normalized painted interiors."
+      "sha256": "08f4cf45a63df93c6c9d11863dc7a6bf934679621ebaadb2e33a008e80d931b2",
+      "edge_processing": "Full AI-painted fine-soil substrate at native tile scale, no mirrored patches; shared 24px bands, 20px smooth transition; painted feature clusters scaled 0.52 and offset to avoid dark tile-sized center slabs."
     },
     {
       "file": "art/env/env_camp_tile12_01.png",
@@ -1899,15 +1899,15 @@
         256,
         256
       ],
-      "source": "art/delivery/T004/sources/ground_repaint.png",
+      "source": "art/delivery/T004/sources/ground_revision2_atlas.png",
       "source_rect": [
         940,
         627,
         1254,
         940
       ],
-      "sha256": "b0e6891d4fd266cb466eeb095d1cf7636ec0739d0695587c9b198282b5769b17",
-      "edge_processing": "Shared tileable rice-paper dirt grain across all 24px boundary bands; 16px blend into individually illumination-normalized painted interiors."
+      "sha256": "58298116d131a4976051450c2a6ea50bac6db36f38fc0fd4ef396b43835e9736",
+      "edge_processing": "Full AI-painted fine-soil substrate at native tile scale, no mirrored patches; shared 24px bands, 20px smooth transition; painted feature clusters scaled 0.52 and offset to avoid dark tile-sized center slabs."
     },
     {
       "file": "art/env/env_camp_tile13_01.png",
@@ -1928,15 +1928,15 @@
         256,
         256
       ],
-      "source": "art/delivery/T004/sources/ground_repaint.png",
+      "source": "art/delivery/T004/sources/ground_revision2_atlas.png",
       "source_rect": [
         0,
         940,
         314,
         1254
       ],
-      "sha256": "0bfef575fb4bb729b88e44d1a3219af104b07c292bee49c8f6710078a41d178b",
-      "edge_processing": "Shared tileable rice-paper dirt grain across all 24px boundary bands; 16px blend into individually illumination-normalized painted interiors."
+      "sha256": "a7e3d20499df6c255141bb2ae5cbf4d79d0c62645297ffdc40c3bc87e3a22317",
+      "edge_processing": "Full AI-painted fine-soil substrate at native tile scale, no mirrored patches; shared 24px bands, 20px smooth transition; painted feature clusters scaled 0.52 and offset to avoid dark tile-sized center slabs."
     },
     {
       "file": "art/env/env_camp_tile14_01.png",
@@ -1957,15 +1957,15 @@
         256,
         256
       ],
-      "source": "art/delivery/T004/sources/ground_repaint.png",
+      "source": "art/delivery/T004/sources/ground_revision2_atlas.png",
       "source_rect": [
         314,
         940,
         627,
         1254
       ],
-      "sha256": "d270d9835c72412ebc254b007dde66e7a827422aaecded162f34e8603e53b83c",
-      "edge_processing": "Shared tileable rice-paper dirt grain across all 24px boundary bands; 16px blend into individually illumination-normalized painted interiors."
+      "sha256": "2b42c13137e8bd20377d477a17d5c3b00eb3fb2fd6aa2e58214698001f6fd4ca",
+      "edge_processing": "Full AI-painted fine-soil substrate at native tile scale, no mirrored patches; shared 24px bands, 20px smooth transition; painted feature clusters scaled 0.52 and offset to avoid dark tile-sized center slabs."
     },
     {
       "file": "art/env/env_camp_tile15_01.png",
@@ -1986,15 +1986,15 @@
         256,
         256
       ],
-      "source": "art/delivery/T004/sources/ground_repaint.png",
+      "source": "art/delivery/T004/sources/ground_revision2_atlas.png",
       "source_rect": [
         627,
         940,
         940,
         1254
       ],
-      "sha256": "2caa1a7e9076ae812cd9ec0932afca9faaaa229ac6d5b02524e8937df04e5eb8",
-      "edge_processing": "Shared tileable rice-paper dirt grain across all 24px boundary bands; 16px blend into individually illumination-normalized painted interiors."
+      "sha256": "b44471ae99e3d1f11e1607ce8b66daa669f448204f6a914d4c9e8e006c49c160",
+      "edge_processing": "Full AI-painted fine-soil substrate at native tile scale, no mirrored patches; shared 24px bands, 20px smooth transition; painted feature clusters scaled 0.52 and offset to avoid dark tile-sized center slabs."
     },
     {
       "file": "art/env/env_camp_tile16_01.png",
@@ -2015,15 +2015,15 @@
         256,
         256
       ],
-      "source": "art/delivery/T004/sources/ground_repaint.png",
+      "source": "art/delivery/T004/sources/ground_revision2_atlas.png",
       "source_rect": [
         940,
         940,
         1254,
         1254
       ],
-      "sha256": "65abc372df57e6e44114c97574ffe49290bccad641a099fade5c6b6d2bd0f7f3",
-      "edge_processing": "Shared tileable rice-paper dirt grain across all 24px boundary bands; 16px blend into individually illumination-normalized painted interiors."
+      "sha256": "d37efd2eb38822c0323429bc8c4fdce6231a08f9de805a0788dc69b6a6bcf7f0",
+      "edge_processing": "Full AI-painted fine-soil substrate at native tile scale, no mirrored patches; shared 24px bands, 20px smooth transition; painted feature clusters scaled 0.52 and offset to avoid dark tile-sized center slabs."
     },
     {
       "file": "art/char/char_hero_head_01.png",
