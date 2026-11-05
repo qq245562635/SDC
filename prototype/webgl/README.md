@@ -20,4 +20,6 @@ WASD 移动 · 鼠标瞄准 · 左键/J 连击 · 右键/K 重击（温酒斩华
 ## 文件
 
 - `game.js`：全部逻辑，数据表在文件顶部（敌人、物品、宝箱、将魂、营门）。
-- `assets/`：`tools/extract_sprites.py` 从 `art/concept/batch1/` 切出，别手改。
+- `rig.html`：拆件拼装调试页（主角、联军兵站姿 + 摆臂，吕布关键姿势）。空格 摆臂，J 关节点，M 镜像。
+- `assets/art/`：T002 正式美术，`python3 tools/sync_art.py` 从 `art/` 生成（按 1080p 显示尺寸缩好，`manifest.js` 记原点、包围盒、关节点），别手改。主美更新美术后重跑一次。
+- `assets/key_art.jpg`：标题背景，来自第一批概念图（U06 主界面是 P1，到时替换）。
