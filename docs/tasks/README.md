@@ -7,7 +7,7 @@
 | [T001](T001-WebGL玩法原型.md) | WebGL 玩法原型 | 主程 | 完成（[PR #1](https://github.com/qq245562635/SDC/pull/1)，[在线试玩](https://qq245562635.github.io/SDC/webgl/)） |
 | [T002](../03-Demo美术需求清单.md) | Demo 美术 D01–D26（先做 P0） | 主美 | 完成（[PR #2](https://github.com/qq245562635/SDC/pull/2)） |
 | [T003](T003-原型接入正式美术.md) | 原型接入 T002 正式美术 + 拼装验证 | 主程 | 完成（[PR #4](https://github.com/qq245562635/SDC/pull/4)） |
-| [T004](T004-拆件返工.md) | 角色拆件返工：侧身、实测关节、挂点；地砖明暗 | 主美 | 待领取 |
+| [T004](T004-拆件返工.md) | 角色拆件返工：侧身、实测关节、挂点；地砖明暗 | 主美 | 进行中（[Draft PR #5](https://github.com/qq245562635/SDC/pull/5)） |
 
 状态：待领取 → 进行中 → 待验收 → 完成（或 退回）。
 
