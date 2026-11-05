@@ -1,0 +1,37 @@
+{
+  "id": "hero_poses",
+  "req": "C01",
+  "category": "char",
+  "subject": "hero",
+  "cols": 5,
+  "rows": 2,
+  "parts": [
+    "idle",
+    "run",
+    "attack1",
+    "attack2",
+    "attack3",
+    "heavy",
+    "roll",
+    "loot",
+    "hurt",
+    "down"
+  ],
+  "heights": [
+    280,
+    280,
+    280,
+    280,
+    280,
+    280,
+    280,
+    280,
+    280,
+    280
+  ],
+  "ref": "char_hero_01.png",
+  "transparent": true,
+  "prompt": "STYLE: 2D hand-drawn action comic game art, Chinese ink-wash inspired, bold dark-brown ink outlines (#2B1D16), flat colors with one hard cel-shadow tone, subtle rice-paper texture, slightly chibi proportions (head-to-body 1:3), strong readable silhouettes, ink splatter accents, top-left light source, top-down three-quarter view at 45 degrees, Late Eastern Han dynasty China setting, original designs, suitable for a top-down action roguelike.\nSame delivery-rider hero as reference. Ten full-body key poses in strict 5 columns x 2 rows: neutral idle, sprint, first dao slash, second dao slash, third overhead slash; charged heavy strike, compact forward dodge roll, crouched searching, recoiling hit, fallen on side. Keep costume consistent and all ten figures equally scaled; no arc effects baked into character.\nDelivery layout: 5 columns x 2 rows. Every cell contains exactly its stated object, optically centered with at least 10% transparent padding. Objects never cross cell boundaries. Use uniform logical cell dimensions. No visible grid, borders or labels. True transparent PNG except ground tiles which must be opaque. Keep rice-paper grain inside painted shapes only; completely transparent empty space, no paper backdrop or matte. Original designs only, no imitation, no watermark or logo. Reference image is a style and identity guide; preserve design language while making only the requested new asset. Target production game sprites, fixed top-left light.",
+  "editPrompt": "STYLE: 2D hand-drawn action comic game art, Chinese ink-wash inspired, bold dark-brown ink outlines (#2B1D16), flat colors with one hard cel-shadow tone, subtle rice-paper texture, slightly chibi proportions (head-to-body 1:3), strong readable silhouettes, ink splatter accents, top-left light source, top-down three-quarter view at 45 degrees, Late Eastern Han dynasty China setting, original designs, suitable for a top-down action roguelike.\nRemove only every dirt platform, grass tuft, rock, dust puff and ground shadow beneath or around the ten hero figures. Keep the exact same 5x2 layout, all ten poses, costume, weapons, colors and facial expressions unchanged. All space beyond body and carried equipment must be fully transparent, no backdrop. Do not crop any figure.",
+  "saved_source": "art/delivery/T002/sources/hero_poses.png"
+}

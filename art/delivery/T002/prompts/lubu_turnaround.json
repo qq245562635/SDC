@@ -1,0 +1,22 @@
+{
+  "id": "lubu_turnaround",
+  "req": "C06",
+  "category": "char",
+  "subject": "lubu",
+  "cols": 3,
+  "rows": 1,
+  "parts": [
+    "front",
+    "side",
+    "backview"
+  ],
+  "heights": [
+    560,
+    560,
+    560
+  ],
+  "ref": "key_art_01.png",
+  "transparent": true,
+  "prompt": "STYLE: 2D hand-drawn action comic game art, Chinese ink-wash inspired, bold dark-brown ink outlines (#2B1D16), flat colors with one hard cel-shadow tone, subtle rice-paper texture, slightly chibi proportions (head-to-body 1:3), strong readable silhouettes, ink splatter accents, top-left light source, top-down three-quarter view at 45 degrees, Late Eastern Han dynasty China setting, original designs, suitable for a top-down action roguelike.\nOriginal Lu Bu warlord, bronze dark iron lamellar armor, red cloak, two long pheasant feather plumes, crescent halberd. Full-body front, side, back turnaround, identical armor construction across views. Three evenly spaced figures only.\nDelivery layout: 3 columns x 1 rows. Every cell contains exactly its stated object, optically centered with at least 10% transparent padding. Objects never cross cell boundaries. Use uniform logical cell dimensions. No visible grid, borders or labels. True transparent PNG except ground tiles which must be opaque. Keep rice-paper grain inside painted shapes only; completely transparent empty space, no paper backdrop or matte. Original designs only, no imitation, no watermark or logo. Reference image is a style and identity guide; preserve design language while making only the requested new asset. Target production game sprites, fixed top-left light.\nAbsolutely no ground platforms, dirt patches or cast ground shadows under figures. Transparent everywhere beyond body, equipment and horse.",
+  "saved_source": "art/delivery/T002/sources/lubu_turnaround.png"
+}
