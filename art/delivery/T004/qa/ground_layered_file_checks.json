@@ -1,0 +1,80 @@
+{
+  "asset_count": 71,
+  "new_base_count": 4,
+  "new_decal_count": 14,
+  "reviewed_37_parts_and_16_legacy_tiles_unchanged": true,
+  "source_max_bytes": 2863106,
+  "preview_all_14_variants_used": true,
+  "decal_alpha": [
+    {
+      "file": "art/env/env_decal_grass_01.png",
+      "transparent_fraction": 0.6799,
+      "soft_alpha_pixels": 796
+    },
+    {
+      "file": "art/env/env_decal_grass_02.png",
+      "transparent_fraction": 0.7401,
+      "soft_alpha_pixels": 711
+    },
+    {
+      "file": "art/env/env_decal_stone_01.png",
+      "transparent_fraction": 0.5142,
+      "soft_alpha_pixels": 642
+    },
+    {
+      "file": "art/env/env_decal_stone_02.png",
+      "transparent_fraction": 0.6263,
+      "soft_alpha_pixels": 676
+    },
+    {
+      "file": "art/env/env_decal_rut_01.png",
+      "transparent_fraction": 0.7413,
+      "soft_alpha_pixels": 3408
+    },
+    {
+      "file": "art/env/env_decal_rut_02.png",
+      "transparent_fraction": 0.7765,
+      "soft_alpha_pixels": 3382
+    },
+    {
+      "file": "art/env/env_decal_footprint_01.png",
+      "transparent_fraction": 0.8026,
+      "soft_alpha_pixels": 2107
+    },
+    {
+      "file": "art/env/env_decal_footprint_02.png",
+      "transparent_fraction": 0.8242,
+      "soft_alpha_pixels": 2651
+    },
+    {
+      "file": "art/env/env_decal_mud_01.png",
+      "transparent_fraction": 0.538,
+      "soft_alpha_pixels": 1533
+    },
+    {
+      "file": "art/env/env_decal_mud_02.png",
+      "transparent_fraction": 0.6915,
+      "soft_alpha_pixels": 1286
+    },
+    {
+      "file": "art/env/env_decal_crack_01.png",
+      "transparent_fraction": 0.896,
+      "soft_alpha_pixels": 1403
+    },
+    {
+      "file": "art/env/env_decal_crack_02.png",
+      "transparent_fraction": 0.8356,
+      "soft_alpha_pixels": 2487
+    },
+    {
+      "file": "art/env/env_decal_ink_01.png",
+      "transparent_fraction": 0.768,
+      "soft_alpha_pixels": 1383
+    },
+    {
+      "file": "art/env/env_decal_ink_02.png",
+      "transparent_fraction": 0.6153,
+      "soft_alpha_pixels": 1487
+    }
+  ]
+}

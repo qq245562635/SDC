@@ -1,0 +1,108 @@
+{
+  "review_comment": 6655930274,
+  "measurement": "Full RGB Rec.709 weighted luma at source resolution, including props. Edge: outer 24px ring. Center: all remaining 208x208 pixels. Percent: abs(center_mean-edge_mean)/edge_mean*100; no masked soil selection.",
+  "matching_edge_pairs": 256,
+  "shared_band_px": 24,
+  "feature_scale": 0.52,
+  "feature_position_jitter": "Deterministic per-tile offsets within shared border; no mirrors",
+  "max_relative_difference_percent": 4.1024,
+  "threshold_percent": 5,
+  "tiles": [
+    {
+      "tile": 1,
+      "edge_mean_luminance": 149.956,
+      "center_mean_luminance": 149.3069,
+      "relative_difference_percent": 0.4328
+    },
+    {
+      "tile": 2,
+      "edge_mean_luminance": 149.956,
+      "center_mean_luminance": 147.8363,
+      "relative_difference_percent": 1.4135
+    },
+    {
+      "tile": 3,
+      "edge_mean_luminance": 149.956,
+      "center_mean_luminance": 148.2761,
+      "relative_difference_percent": 1.1202
+    },
+    {
+      "tile": 4,
+      "edge_mean_luminance": 149.956,
+      "center_mean_luminance": 148.0793,
+      "relative_difference_percent": 1.2515
+    },
+    {
+      "tile": 5,
+      "edge_mean_luminance": 149.956,
+      "center_mean_luminance": 147.9089,
+      "relative_difference_percent": 1.3651
+    },
+    {
+      "tile": 6,
+      "edge_mean_luminance": 149.956,
+      "center_mean_luminance": 144.74,
+      "relative_difference_percent": 3.4783
+    },
+    {
+      "tile": 7,
+      "edge_mean_luminance": 149.956,
+      "center_mean_luminance": 146.4945,
+      "relative_difference_percent": 2.3083
+    },
+    {
+      "tile": 8,
+      "edge_mean_luminance": 149.956,
+      "center_mean_luminance": 144.7606,
+      "relative_difference_percent": 3.4646
+    },
+    {
+      "tile": 9,
+      "edge_mean_luminance": 149.956,
+      "center_mean_luminance": 145.887,
+      "relative_difference_percent": 2.7135
+    },
+    {
+      "tile": 10,
+      "edge_mean_luminance": 149.956,
+      "center_mean_luminance": 143.988,
+      "relative_difference_percent": 3.9798
+    },
+    {
+      "tile": 11,
+      "edge_mean_luminance": 149.956,
+      "center_mean_luminance": 148.0554,
+      "relative_difference_percent": 1.2674
+    },
+    {
+      "tile": 12,
+      "edge_mean_luminance": 149.956,
+      "center_mean_luminance": 146.7314,
+      "relative_difference_percent": 2.1503
+    },
+    {
+      "tile": 13,
+      "edge_mean_luminance": 149.956,
+      "center_mean_luminance": 146.423,
+      "relative_difference_percent": 2.356
+    },
+    {
+      "tile": 14,
+      "edge_mean_luminance": 149.956,
+      "center_mean_luminance": 146.3244,
+      "relative_difference_percent": 2.4217
+    },
+    {
+      "tile": 15,
+      "edge_mean_luminance": 149.956,
+      "center_mean_luminance": 143.8041,
+      "relative_difference_percent": 4.1024
+    },
+    {
+      "tile": 16,
+      "edge_mean_luminance": 149.956,
+      "center_mean_luminance": 144.9148,
+      "relative_difference_percent": 3.3617
+    }
+  ]
+}

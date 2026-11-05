@@ -71,264 +71,370 @@
       "requirement": "C03",
       "role": "part",
       "size_px": [
-        100,
-        100
+        160,
+        128
       ],
       "display_scale": 0.5,
       "origin_normalized": [
-        0.5,
-        0.5
+        0.675,
+        0.8844203125
       ],
       "content_bbox": [
-        10,
-        10,
-        90,
-        90
+        4,
+        4,
+        156,
+        124
       ],
-      "source": "art/delivery/T002/sources/archer_parts.png",
-      "source_rect": [
-        0,
-        0,
-        444,
-        444
+      "source": "art/delivery/T004/sources/archer_hidden_parts.png",
+      "sha256": "423d8d95e7af0288e2b8758c2533dd4c3168487aca6a41956930c8060fa64e87",
+      "overlap_target_px": 10,
+      "character": "archer",
+      "part": "head",
+      "joint_pivot": [
+        108.0,
+        113.2058
       ],
-      "sha256": "74f00088883e5777acb2d8956d1effdcc0a439c4d77af507f4346a1664f9202f",
-      "joint_pivot_hint": [
-        0.5,
-        0.85
+      "z": 5,
+      "rest_position": [
+        17.0,
+        -168.7942
       ],
-      "overlap_target_px": 10
+      "reference_rect": [
+        111,
+        6,
+        291,
+        145
+      ],
+      "visible_source": "art/char/char_archer_idle_01.png",
+      "method": "Complete AI-repainted side cutout; measured anatomical pivots and fitted rest transforms. No baked-in neighboring limbs or weapon pixels."
     },
     {
       "file": "art/char/char_archer_body_01.png",
       "requirement": "C03",
       "role": "part",
       "size_px": [
-        114,
-        130
+        117,
+        128
       ],
       "display_scale": 0.5,
       "origin_normalized": [
-        0.5,
-        0.5
+        0.5307692307692308,
+        0.7202796875
       ],
       "content_bbox": [
-        10,
-        10,
-        104,
-        120
+        4,
+        4,
+        113,
+        124
       ],
-      "source": "art/delivery/T002/sources/archer_parts.png",
-      "source_rect": [
-        444,
-        0,
-        887,
-        444
+      "source": "art/delivery/T004/sources/archer_closed_torso_cropped.png",
+      "sha256": "76a235e6df69af7f343d170136c136cc1190abc9079a3a0fa45904ae1c9584e7",
+      "overlap_target_px": 10,
+      "character": "archer",
+      "part": "body",
+      "joint_pivot": [
+        62.1,
+        92.1958
       ],
-      "sha256": "4cc66b73a82d68b5552ca7f4432abe9826d12cb64cee3947410b4e80ecd05255",
-      "joint_pivot_hint": [
-        0.5,
-        0.85
+      "z": 4,
+      "rest_position": [
+        13.1,
+        -91.8042
       ],
-      "overlap_target_px": 10
+      "reference_rect": [
+        113,
+        33,
+        307,
+        280
+      ],
+      "visible_source": "art/char/char_archer_idle_01.png",
+      "method": "Complete AI-repainted side cutout; measured anatomical pivots and fitted rest transforms. No baked-in neighboring limbs or weapon pixels.",
+      "attach": {
+        "neck": [
+          66.0,
+          15.2058
+        ],
+        "shoulder_l": [
+          28.95,
+          46.3294
+        ],
+        "shoulder_r": [
+          105.0,
+          39.7771
+        ],
+        "hip_l": [
+          87.45,
+          111.8529
+        ],
+        "hip_r": [
+          38.7,
+          111.8529
+        ]
+      }
     },
     {
       "file": "art/char/char_archer_arm_l_01.png",
       "requirement": "C03",
       "role": "part",
       "size_px": [
-        84,
-        115
+        58,
+        77
       ],
       "display_scale": 0.5,
       "origin_normalized": [
-        0.5,
-        0.5
+        0.6887931034482759,
+        0.1731090909090909
       ],
       "content_bbox": [
-        10,
-        10,
-        74,
-        105
+        4,
+        4,
+        54,
+        73
       ],
-      "source": "art/delivery/T002/sources/archer_parts.png",
-      "source_rect": [
-        887,
-        0,
-        1330,
-        444
+      "source": "art/delivery/T004/sources/archer_hidden_parts.png",
+      "sha256": "90b29b2106293b79c048720e97cbd928ff1287efa88daf00be965815ba89910b",
+      "overlap_target_px": 10,
+      "character": "archer",
+      "part": "arm_l",
+      "joint_pivot": [
+        39.95,
+        13.3294
       ],
-      "sha256": "ba8f35738498c72603f6bddd447d975fdf94ed452967133e0a3f256c066c3ac8",
-      "joint_pivot_hint": [
-        0.5,
-        0.15
+      "z": 3,
+      "rest_position": [
+        -20.05,
+        -137.6706
       ],
-      "overlap_target_px": 10
+      "reference_rect": [
+        143,
+        115,
+        212,
+        224
+      ],
+      "visible_source": "art/char/char_archer_idle_01.png",
+      "method": "Complete AI-repainted side cutout; measured anatomical pivots and fitted rest transforms. No baked-in neighboring limbs or weapon pixels.",
+      "hand": [
+        22.9001,
+        64.4177
+      ]
     },
     {
       "file": "art/char/char_archer_arm_r_01.png",
       "requirement": "C03",
       "role": "part",
       "size_px": [
-        83,
-        115
+        54,
+        43
       ],
       "display_scale": 0.5,
       "origin_normalized": [
-        0.5,
-        0.5
+        0.24074074074074073,
+        0.32039767441860467
       ],
       "content_bbox": [
-        10,
-        10,
-        73,
-        105
+        4,
+        4,
+        50,
+        39
       ],
-      "source": "art/delivery/T002/sources/archer_parts.png",
-      "source_rect": [
-        1330,
-        0,
-        1774,
-        444
+      "source": "art/delivery/T004/sources/archer_hidden_parts.png",
+      "sha256": "a0f762c6fb60b5b31c21db02082078fbd9dafc8a6972a14e684b4f389a888134",
+      "overlap_target_px": 10,
+      "character": "archer",
+      "part": "arm_r",
+      "joint_pivot": [
+        13.0,
+        13.7771
       ],
-      "sha256": "b08fbe5bd354812a821c0539a86bc26544de143fb7912e06cb61222347df0de6",
-      "joint_pivot_hint": [
-        0.5,
-        0.15
+      "z": 7,
+      "rest_position": [
+        56.0,
+        -144.2229
       ],
-      "overlap_target_px": 10
+      "reference_rect": [
+        243,
+        128,
+        302,
+        193
+      ],
+      "visible_source": "art/char/char_archer_idle_01.png",
+      "method": "Complete AI-repainted side cutout; measured anatomical pivots and fitted rest transforms. No baked-in neighboring limbs or weapon pixels.",
+      "hand": [
+        40.4899,
+        27.4207
+      ]
     },
     {
       "file": "art/char/char_archer_leg_l_01.png",
       "requirement": "C03",
       "role": "part",
       "size_px": [
-        87,
-        110
+        44,
+        77
       ],
       "display_scale": 0.5,
       "origin_normalized": [
-        0.5,
-        0.5
+        0.4420454545454545,
+        0.1799077922077922
       ],
       "content_bbox": [
-        10,
-        10,
-        77,
-        100
+        4,
+        4,
+        40,
+        73
       ],
-      "source": "art/delivery/T002/sources/archer_parts.png",
-      "source_rect": [
-        0,
-        444,
-        444,
-        887
+      "source": "art/delivery/T004/sources/archer_hidden_parts.png",
+      "sha256": "e1c8dc44e19837ad5d7ea6f02d8499182e1d15bf38efac025ebe51784882d293",
+      "overlap_target_px": 10,
+      "character": "archer",
+      "part": "leg_l",
+      "joint_pivot": [
+        19.45,
+        13.8529
       ],
-      "sha256": "fad71d00278f82a935ccef04d6057ddf2bd56aeff28645e3a6b7971acc92b558",
-      "joint_pivot_hint": [
-        0.5,
-        0.15
+      "z": 1,
+      "rest_position": [
+        38.45,
+        -72.1471
       ],
-      "overlap_target_px": 10
+      "reference_rect": [
+        207,
+        200,
+        288,
+        283
+      ],
+      "visible_source": "art/char/char_archer_idle_01.png",
+      "method": "Complete AI-repainted side cutout; measured anatomical pivots and fitted rest transforms. No baked-in neighboring limbs or weapon pixels."
     },
     {
       "file": "art/char/char_archer_leg_r_01.png",
       "requirement": "C03",
       "role": "part",
       "size_px": [
-        89,
-        110
+        77,
+        90
       ],
       "display_scale": 0.5,
       "origin_normalized": [
-        0.5,
-        0.5
+        0.7623376623376624,
+        0.16503222222222222
       ],
       "content_bbox": [
-        10,
-        11,
-        79,
-        100
+        4,
+        4,
+        73,
+        86
       ],
-      "source": "art/delivery/T002/sources/archer_parts.png",
-      "source_rect": [
-        444,
-        444,
-        887,
-        887
+      "source": "art/delivery/T004/sources/archer_hidden_parts.png",
+      "sha256": "a5b3f1994c36634a85801841ebdd107e5b710a6fbc0f5af0de9f19813e67f660",
+      "overlap_target_px": 10,
+      "character": "archer",
+      "part": "leg_r",
+      "joint_pivot": [
+        58.7,
+        14.8529
       ],
-      "sha256": "f8f4c6f4179c0eee8447b6505f881a828fd2cc3dba4e10915bbdc19dcb05fbe1",
-      "joint_pivot_hint": [
-        0.5,
-        0.15
+      "z": 2,
+      "rest_position": [
+        -10.3,
+        -72.1471
       ],
-      "overlap_target_px": 10
+      "reference_rect": [
+        149,
+        203,
+        215,
+        294
+      ],
+      "visible_source": "art/char/char_archer_idle_01.png",
+      "method": "Complete AI-repainted side cutout; measured anatomical pivots and fitted rest transforms. No baked-in neighboring limbs or weapon pixels."
     },
     {
       "file": "art/char/char_archer_weapon_01.png",
       "requirement": "C03",
       "role": "part",
       "size_px": [
-        102,
-        200
+        53,
+        239
       ],
       "display_scale": 0.5,
       "origin_normalized": [
-        0.5,
-        0.5
+        0.5564132075471698,
+        0.5456933054393306
       ],
       "content_bbox": [
-        10,
-        10,
-        92,
-        190
+        4,
+        4,
+        49,
+        235
       ],
-      "source": "art/delivery/T002/sources/archer_parts.png",
-      "source_rect": [
-        887,
-        444,
-        1330,
-        887
+      "source": "art/delivery/T004/sources/archer_hidden_parts.png",
+      "sha256": "fd654f484795f30c88e9e96e52fe4a4a9f0f99ad3fa760016d9f08803743ad77",
+      "overlap_target_px": 10,
+      "character": "archer",
+      "part": "weapon",
+      "joint_pivot": [
+        29.4899,
+        130.4207
       ],
-      "sha256": "fbaba942209128a2b7a0aaab770dc63cb166af14d36427341e5f2ed462c124d0",
-      "joint_pivot_hint": [
-        0.5,
-        0.85
+      "z": 6,
+      "rest_position": [
+        83.4899,
+        -130.5793
       ],
-      "overlap_target_px": 10
+      "reference_rect": [
+        249,
+        28,
+        309,
+        268
+      ],
+      "visible_source": "art/char/char_archer_idle_01.png",
+      "method": "Complete AI-repainted side cutout; measured anatomical pivots and fitted rest transforms. No baked-in neighboring limbs or weapon pixels.",
+      "grip": [
+        29.4899,
+        130.4207
+      ]
     },
     {
       "file": "art/char/char_archer_back_01.png",
       "requirement": "C03",
       "role": "part",
       "size_px": [
-        107,
-        140
+        61,
+        77
       ],
       "display_scale": 0.5,
       "origin_normalized": [
-        0.5,
-        0.5
+        0.5573770491803278,
+        0.6382857142857143
       ],
       "content_bbox": [
-        10,
-        10,
-        97,
-        130
+        4,
+        4,
+        57,
+        73
       ],
-      "source": "art/delivery/T002/sources/archer_parts.png",
-      "source_rect": [
-        1330,
-        444,
-        1774,
-        887
+      "source": "art/delivery/T004/sources/archer_hidden_parts.png",
+      "sha256": "2e99d675e7100c038078aa205540cbc61cc4211a80ab47736ca519f30113acbb",
+      "overlap_target_px": 10,
+      "character": "archer",
+      "part": "back",
+      "joint_pivot": [
+        34.0,
+        49.148
       ],
-      "sha256": "f2c820ef9158b454ea68283f4394e11a603aab01e40a465b3eedb309ed2404f9",
-      "joint_pivot_hint": [
-        0.5,
-        0.85
+      "z": 0,
+      "rest_position": [
+        -45.0,
+        -160.852
       ],
-      "overlap_target_px": 10
+      "reference_rect": [
+        113,
+        71,
+        201,
+        162
+      ],
+      "visible_source": "art/char/char_archer_idle_01.png",
+      "method": "Complete AI-repainted side cutout; measured anatomical pivots and fitted rest transforms. No baked-in neighboring limbs or weapon pixels."
     },
     {
       "file": "art/char/char_archer_idle_01.png",
@@ -1474,15 +1580,15 @@
         256,
         256
       ],
-      "source": "art/delivery/T002/sources/ground.png",
+      "source": "art/delivery/T004/sources/ground_revision2_atlas.png",
       "source_rect": [
         0,
         0,
-        310,
-        312
+        314,
+        314
       ],
-      "sha256": "9217cad834e134fa8ae184166b2df7997238ee06e7818081acfb1fbcebc2a571",
-      "edge_processing": "24px smooth transition to shared packed-dirt boundary; painted interior retained"
+      "sha256": "6ca21d339c76242b3a1bd0a061cba71f65f849d257f07c835d69d24a0646d2a8",
+      "edge_processing": "Full AI-painted fine-soil substrate at native tile scale, no mirrored patches; shared 24px bands, 20px smooth transition; painted feature clusters scaled 0.52 and offset to avoid dark tile-sized center slabs."
     },
     {
       "file": "art/env/env_camp_tile02_01.png",
@@ -1503,15 +1609,15 @@
         256,
         256
       ],
-      "source": "art/delivery/T002/sources/ground.png",
+      "source": "art/delivery/T004/sources/ground_revision2_atlas.png",
       "source_rect": [
-        310,
+        314,
         0,
-        621,
-        312
+        627,
+        314
       ],
-      "sha256": "8318404abe6f92ae9b49d6b33134c410fcda363374765d2d7f6549d94d54bca5",
-      "edge_processing": "24px smooth transition to shared packed-dirt boundary; painted interior retained"
+      "sha256": "c7dac824086e8e9cfc8f2b77e2ea113dbeae6ba5ac4de4fdc7cbfa81344c7981",
+      "edge_processing": "Full AI-painted fine-soil substrate at native tile scale, no mirrored patches; shared 24px bands, 20px smooth transition; painted feature clusters scaled 0.52 and offset to avoid dark tile-sized center slabs."
     },
     {
       "file": "art/env/env_camp_tile03_01.png",
@@ -1532,15 +1638,15 @@
         256,
         256
       ],
-      "source": "art/delivery/T002/sources/ground.png",
+      "source": "art/delivery/T004/sources/ground_revision2_atlas.png",
       "source_rect": [
-        621,
+        627,
         0,
-        932,
-        312
+        940,
+        314
       ],
-      "sha256": "d2bb125619c6539c9ce469d3c9df379776132f0aa71afba914b03a0242172805",
-      "edge_processing": "24px smooth transition to shared packed-dirt boundary; painted interior retained"
+      "sha256": "408a5fcad182808a5d85611f8590ec987373f784112410f1ab74844b73ea1427",
+      "edge_processing": "Full AI-painted fine-soil substrate at native tile scale, no mirrored patches; shared 24px bands, 20px smooth transition; painted feature clusters scaled 0.52 and offset to avoid dark tile-sized center slabs."
     },
     {
       "file": "art/env/env_camp_tile04_01.png",
@@ -1561,15 +1667,15 @@
         256,
         256
       ],
-      "source": "art/delivery/T002/sources/ground.png",
+      "source": "art/delivery/T004/sources/ground_revision2_atlas.png",
       "source_rect": [
-        932,
+        940,
         0,
-        1242,
-        312
+        1254,
+        314
       ],
-      "sha256": "ef726ff8c3aa2f385ad29cf0b413e5970ecdfecfcd044dd8649d22c8e6a8f6ec",
-      "edge_processing": "24px smooth transition to shared packed-dirt boundary; painted interior retained"
+      "sha256": "54c79197e68808128a7e9d950c135145168fa6c5b599d09b30b234614cbf11ab",
+      "edge_processing": "Full AI-painted fine-soil substrate at native tile scale, no mirrored patches; shared 24px bands, 20px smooth transition; painted feature clusters scaled 0.52 and offset to avoid dark tile-sized center slabs."
     },
     {
       "file": "art/env/env_camp_tile05_01.png",
@@ -1590,15 +1696,15 @@
         256,
         256
       ],
-      "source": "art/delivery/T002/sources/ground.png",
+      "source": "art/delivery/T004/sources/ground_revision2_atlas.png",
       "source_rect": [
         0,
-        312,
-        310,
-        624
+        314,
+        314,
+        627
       ],
-      "sha256": "609a7e2b8ab6c42cedf3ddc394e1c6db7398e4892a0419d68b8d30a415910265",
-      "edge_processing": "24px smooth transition to shared packed-dirt boundary; painted interior retained"
+      "sha256": "54a3dc1d756a1891b0e0dff8e19222b2d654644cd5ae233cb51a3e2c961b3a0d",
+      "edge_processing": "Full AI-painted fine-soil substrate at native tile scale, no mirrored patches; shared 24px bands, 20px smooth transition; painted feature clusters scaled 0.52 and offset to avoid dark tile-sized center slabs."
     },
     {
       "file": "art/env/env_camp_tile06_01.png",
@@ -1619,15 +1725,15 @@
         256,
         256
       ],
-      "source": "art/delivery/T002/sources/ground.png",
+      "source": "art/delivery/T004/sources/ground_revision2_atlas.png",
       "source_rect": [
-        310,
-        312,
-        621,
-        624
+        314,
+        314,
+        627,
+        627
       ],
-      "sha256": "46bf3ceec3e72b549fe3229c3f0d5dc470a8b53f7b5e06c3aac76872bc3080c8",
-      "edge_processing": "24px smooth transition to shared packed-dirt boundary; painted interior retained"
+      "sha256": "d7ecc672b98ada9e65d770c4510020e19ab0836ed7ce4072173c054127e2abb1",
+      "edge_processing": "Full AI-painted fine-soil substrate at native tile scale, no mirrored patches; shared 24px bands, 20px smooth transition; painted feature clusters scaled 0.52 and offset to avoid dark tile-sized center slabs."
     },
     {
       "file": "art/env/env_camp_tile07_01.png",
@@ -1648,15 +1754,15 @@
         256,
         256
       ],
-      "source": "art/delivery/T002/sources/ground.png",
+      "source": "art/delivery/T004/sources/ground_revision2_atlas.png",
       "source_rect": [
-        621,
-        312,
-        932,
-        624
+        627,
+        314,
+        940,
+        627
       ],
-      "sha256": "dc0cc9313e74d299e05b1658d06d9c1106ae306441053b9269002456ca5ccdbe",
-      "edge_processing": "24px smooth transition to shared packed-dirt boundary; painted interior retained"
+      "sha256": "da1a2d62ce58164d64f59074e33be753b43737c8a58657b12846277d3ae8564f",
+      "edge_processing": "Full AI-painted fine-soil substrate at native tile scale, no mirrored patches; shared 24px bands, 20px smooth transition; painted feature clusters scaled 0.52 and offset to avoid dark tile-sized center slabs."
     },
     {
       "file": "art/env/env_camp_tile08_01.png",
@@ -1677,15 +1783,15 @@
         256,
         256
       ],
-      "source": "art/delivery/T002/sources/ground.png",
+      "source": "art/delivery/T004/sources/ground_revision2_atlas.png",
       "source_rect": [
-        932,
-        312,
-        1242,
-        624
+        940,
+        314,
+        1254,
+        627
       ],
-      "sha256": "85a0ee5fc8d68b85db788e4357db02d6006c326337870146f9d25da104d4790d",
-      "edge_processing": "24px smooth transition to shared packed-dirt boundary; painted interior retained"
+      "sha256": "4603b84c717064d450a28a6008e3f5c97c21aa7ee1eba53db78ccee018eb270b",
+      "edge_processing": "Full AI-painted fine-soil substrate at native tile scale, no mirrored patches; shared 24px bands, 20px smooth transition; painted feature clusters scaled 0.52 and offset to avoid dark tile-sized center slabs."
     },
     {
       "file": "art/env/env_camp_tile09_01.png",
@@ -1706,15 +1812,15 @@
         256,
         256
       ],
-      "source": "art/delivery/T002/sources/ground.png",
+      "source": "art/delivery/T004/sources/ground_revision2_atlas.png",
       "source_rect": [
         0,
-        624,
-        310,
-        937
+        627,
+        314,
+        940
       ],
-      "sha256": "298a2c2a4bf642ca232ea80dbf6ff9120b0655b99a435da68f3a96ce274e844d",
-      "edge_processing": "24px smooth transition to shared packed-dirt boundary; painted interior retained"
+      "sha256": "2d3a4b86ddfb0c695bed2c0bbb86bf040e7a3647be33f52fcb51c698681d5ccb",
+      "edge_processing": "Full AI-painted fine-soil substrate at native tile scale, no mirrored patches; shared 24px bands, 20px smooth transition; painted feature clusters scaled 0.52 and offset to avoid dark tile-sized center slabs."
     },
     {
       "file": "art/env/env_camp_tile10_01.png",
@@ -1735,15 +1841,15 @@
         256,
         256
       ],
-      "source": "art/delivery/T002/sources/ground.png",
+      "source": "art/delivery/T004/sources/ground_revision2_atlas.png",
       "source_rect": [
-        310,
-        624,
-        621,
-        937
+        314,
+        627,
+        627,
+        940
       ],
-      "sha256": "ab3f664bf096ea9f581a6804a43127f2243db013d9a4014cea88ea3934838ad2",
-      "edge_processing": "24px smooth transition to shared packed-dirt boundary; painted interior retained"
+      "sha256": "310805a0163830b5f50f66c9c42a0ae916f4c6be3213a5a8dd571b68070213a3",
+      "edge_processing": "Full AI-painted fine-soil substrate at native tile scale, no mirrored patches; shared 24px bands, 20px smooth transition; painted feature clusters scaled 0.52 and offset to avoid dark tile-sized center slabs."
     },
     {
       "file": "art/env/env_camp_tile11_01.png",
@@ -1764,15 +1870,15 @@
         256,
         256
       ],
-      "source": "art/delivery/T002/sources/ground.png",
+      "source": "art/delivery/T004/sources/ground_revision2_atlas.png",
       "source_rect": [
-        621,
-        624,
-        932,
-        937
+        627,
+        627,
+        940,
+        940
       ],
-      "sha256": "b6164d69a6955e0d94f95da016a817011252ed4b7194395fab2efde44967dec2",
-      "edge_processing": "24px smooth transition to shared packed-dirt boundary; painted interior retained"
+      "sha256": "08f4cf45a63df93c6c9d11863dc7a6bf934679621ebaadb2e33a008e80d931b2",
+      "edge_processing": "Full AI-painted fine-soil substrate at native tile scale, no mirrored patches; shared 24px bands, 20px smooth transition; painted feature clusters scaled 0.52 and offset to avoid dark tile-sized center slabs."
     },
     {
       "file": "art/env/env_camp_tile12_01.png",
@@ -1793,15 +1899,15 @@
         256,
         256
       ],
-      "source": "art/delivery/T002/sources/ground.png",
+      "source": "art/delivery/T004/sources/ground_revision2_atlas.png",
       "source_rect": [
-        932,
-        624,
-        1242,
-        937
+        940,
+        627,
+        1254,
+        940
       ],
-      "sha256": "672ba66645fb3a4f5e14e4b12a4f8db634fa21b705b533ed7515dcb69bef8fe1",
-      "edge_processing": "24px smooth transition to shared packed-dirt boundary; painted interior retained"
+      "sha256": "58298116d131a4976051450c2a6ea50bac6db36f38fc0fd4ef396b43835e9736",
+      "edge_processing": "Full AI-painted fine-soil substrate at native tile scale, no mirrored patches; shared 24px bands, 20px smooth transition; painted feature clusters scaled 0.52 and offset to avoid dark tile-sized center slabs."
     },
     {
       "file": "art/env/env_camp_tile13_01.png",
@@ -1822,15 +1928,15 @@
         256,
         256
       ],
-      "source": "art/delivery/T002/sources/ground.png",
+      "source": "art/delivery/T004/sources/ground_revision2_atlas.png",
       "source_rect": [
         0,
-        937,
-        310,
-        1249
+        940,
+        314,
+        1254
       ],
-      "sha256": "2305f209f2fc868f4b51288964510835b37038605847a9b89ecb4202b540585f",
-      "edge_processing": "24px smooth transition to shared packed-dirt boundary; painted interior retained"
+      "sha256": "a7e3d20499df6c255141bb2ae5cbf4d79d0c62645297ffdc40c3bc87e3a22317",
+      "edge_processing": "Full AI-painted fine-soil substrate at native tile scale, no mirrored patches; shared 24px bands, 20px smooth transition; painted feature clusters scaled 0.52 and offset to avoid dark tile-sized center slabs."
     },
     {
       "file": "art/env/env_camp_tile14_01.png",
@@ -1851,15 +1957,15 @@
         256,
         256
       ],
-      "source": "art/delivery/T002/sources/ground.png",
+      "source": "art/delivery/T004/sources/ground_revision2_atlas.png",
       "source_rect": [
-        310,
-        937,
-        621,
-        1249
+        314,
+        940,
+        627,
+        1254
       ],
-      "sha256": "c269dc686b16cf873b9baa25d8d88e57e55b348cea6f8434f00387c23e66f233",
-      "edge_processing": "24px smooth transition to shared packed-dirt boundary; painted interior retained"
+      "sha256": "2b42c13137e8bd20377d477a17d5c3b00eb3fb2fd6aa2e58214698001f6fd4ca",
+      "edge_processing": "Full AI-painted fine-soil substrate at native tile scale, no mirrored patches; shared 24px bands, 20px smooth transition; painted feature clusters scaled 0.52 and offset to avoid dark tile-sized center slabs."
     },
     {
       "file": "art/env/env_camp_tile15_01.png",
@@ -1880,15 +1986,15 @@
         256,
         256
       ],
-      "source": "art/delivery/T002/sources/ground.png",
+      "source": "art/delivery/T004/sources/ground_revision2_atlas.png",
       "source_rect": [
-        621,
-        937,
-        932,
-        1249
+        627,
+        940,
+        940,
+        1254
       ],
-      "sha256": "4f6cd6d0c922177d86af75b904c60a773341a1acaac2af2527274dd92d865729",
-      "edge_processing": "24px smooth transition to shared packed-dirt boundary; painted interior retained"
+      "sha256": "b44471ae99e3d1f11e1607ce8b66daa669f448204f6a914d4c9e8e006c49c160",
+      "edge_processing": "Full AI-painted fine-soil substrate at native tile scale, no mirrored patches; shared 24px bands, 20px smooth transition; painted feature clusters scaled 0.52 and offset to avoid dark tile-sized center slabs."
     },
     {
       "file": "art/env/env_camp_tile16_01.png",
@@ -1909,279 +2015,385 @@
         256,
         256
       ],
-      "source": "art/delivery/T002/sources/ground.png",
+      "source": "art/delivery/T004/sources/ground_revision2_atlas.png",
       "source_rect": [
-        932,
-        937,
-        1242,
-        1249
+        940,
+        940,
+        1254,
+        1254
       ],
-      "sha256": "3ea4bb7d3a25d906a3072b73b96225f5c565bbdf248f9cfd739f65efbc5d283d",
-      "edge_processing": "24px smooth transition to shared packed-dirt boundary; painted interior retained"
+      "sha256": "d37efd2eb38822c0323429bc8c4fdce6231a08f9de805a0788dc69b6a6bcf7f0",
+      "edge_processing": "Full AI-painted fine-soil substrate at native tile scale, no mirrored patches; shared 24px bands, 20px smooth transition; painted feature clusters scaled 0.52 and offset to avoid dark tile-sized center slabs."
     },
     {
       "file": "art/char/char_hero_head_01.png",
       "requirement": "C01",
       "role": "part",
       "size_px": [
-        110,
-        100
+        153,
+        111
       ],
       "display_scale": 0.5,
       "origin_normalized": [
-        0.5,
-        0.5
+        0.6862745098039216,
+        0.8738099099099099
       ],
       "content_bbox": [
-        10,
-        10,
-        100,
-        90
+        4,
+        4,
+        149,
+        107
       ],
-      "source": "art/delivery/T002/sources/hero_parts.png",
-      "source_rect": [
-        0,
-        0,
-        444,
-        444
+      "source": "art/delivery/T004/sources/hero_hidden_parts.png",
+      "sha256": "f37dee0b42194e334d101b4f1e503065d6400ba7575fa425df9063eeb0a26230",
+      "overlap_target_px": 10,
+      "character": "hero",
+      "part": "head",
+      "joint_pivot": [
+        105.0,
+        96.9929
       ],
-      "sha256": "c71069313077583c8d386325acb59c8a179f76534b2c4edb50c3376706048ccf",
-      "joint_pivot_hint": [
-        0.5,
-        0.85
+      "z": 5,
+      "rest_position": [
+        22.0,
+        -186.0071
       ],
-      "overlap_target_px": 10
+      "reference_rect": [
+        118,
+        6,
+        277,
+        120
+      ],
+      "visible_source": "art/char/char_hero_idle_01.png",
+      "method": "Complete AI-repainted side cutout; measured anatomical pivots and fitted rest transforms. No baked-in neighboring limbs or weapon pixels."
     },
     {
       "file": "art/char/char_hero_body_01.png",
       "requirement": "C01",
       "role": "part",
       "size_px": [
-        124,
-        130
+        129,
+        152
       ],
       "display_scale": 0.5,
       "origin_normalized": [
-        0.5,
-        0.5
+        0.5345736434108527,
+        0.6875559210526315
       ],
       "content_bbox": [
-        10,
-        10,
-        114,
-        120
+        4,
+        4,
+        125,
+        148
       ],
-      "source": "art/delivery/T002/sources/hero_parts.png",
-      "source_rect": [
-        444,
-        0,
-        887,
-        444
+      "source": "art/delivery/T004/sources/hero_hidden_parts.png",
+      "sha256": "4d2431dc1a238d5316ad456eb4fdb9c3358656551c897161ae4cf1495205fda4",
+      "overlap_target_px": 10,
+      "character": "hero",
+      "part": "body",
+      "joint_pivot": [
+        68.96,
+        104.5085
       ],
-      "sha256": "3c13bd12adf23dec42a5e94b3fbe0e4f72c4239157940cadc3e9947badaefa52",
-      "joint_pivot_hint": [
-        0.5,
-        0.85
+      "z": 4,
+      "rest_position": [
+        18.96,
+        -98.4915
       ],
-      "overlap_target_px": 10
+      "reference_rect": [
+        134,
+        26,
+        300,
+        287
+      ],
+      "visible_source": "art/char/char_hero_idle_01.png",
+      "method": "Complete AI-repainted side cutout; measured anatomical pivots and fitted rest transforms. No baked-in neighboring limbs or weapon pixels.",
+      "attach": {
+        "neck": [
+          72.0,
+          16.9929
+        ],
+        "shoulder_l": [
+          109.62,
+          47.3554
+        ],
+        "shoulder_r": [
+          32.86,
+          40.2113
+        ],
+        "hip_l": [
+          96.32,
+          130.2273
+        ],
+        "hip_r": [
+          35.52,
+          127.3697
+        ]
+      }
     },
     {
       "file": "art/char/char_hero_arm_l_01.png",
       "requirement": "C01",
       "role": "part",
       "size_px": [
-        76,
-        115
+        46,
+        69
       ],
       "display_scale": 0.5,
       "origin_normalized": [
-        0.5,
-        0.5
+        0.3178260869565217,
+        0.19355652173913043
       ],
       "content_bbox": [
-        10,
-        10,
-        66,
-        105
+        4,
+        4,
+        42,
+        65
       ],
-      "source": "art/delivery/T002/sources/hero_parts.png",
-      "source_rect": [
-        887,
-        0,
-        1330,
-        444
+      "source": "art/delivery/T004/sources/hero_hidden_parts.png",
+      "sha256": "1345b6a1d32f75e82686a2b749b24f95cdbbadbe4d7f647294ddc3ccc9040b6f",
+      "overlap_target_px": 10,
+      "character": "hero",
+      "part": "arm_l",
+      "joint_pivot": [
+        14.62,
+        13.3554
       ],
-      "sha256": "2cfe408427296e354de191d8fd380ee86b0d9387963ff4e1588a42f4fdb98a51",
-      "joint_pivot_hint": [
-        0.5,
-        0.15
+      "z": 3,
+      "rest_position": [
+        59.62,
+        -155.6446
       ],
-      "overlap_target_px": 10
+      "reference_rect": [
+        245,
+        104,
+        299,
+        207
+      ],
+      "visible_source": "art/char/char_hero_idle_01.png",
+      "method": "Complete AI-repainted side cutout; measured anatomical pivots and fitted rest transforms. No baked-in neighboring limbs or weapon pixels.",
+      "hand": [
+        33.66,
+        58.2754
+      ]
     },
     {
       "file": "art/char/char_hero_arm_r_01.png",
       "requirement": "C01",
       "role": "part",
       "size_px": [
-        76,
-        115
+        74,
+        85
       ],
       "display_scale": 0.5,
       "origin_normalized": [
-        0.5,
-        0.5
+        0.7008108108108108,
+        0.1789564705882353
       ],
       "content_bbox": [
-        10,
-        10,
-        66,
-        105
+        4,
+        4,
+        70,
+        81
       ],
-      "source": "art/delivery/T002/sources/hero_parts.png",
-      "source_rect": [
-        1330,
-        0,
-        1774,
-        444
+      "source": "art/delivery/T004/sources/hero_hidden_parts.png",
+      "sha256": "73490383e610ce67a7c3fdd258c3f07231c1d01beccd329e36dfa1638bdd3ce2",
+      "overlap_target_px": 10,
+      "character": "hero",
+      "part": "arm_r",
+      "joint_pivot": [
+        51.86,
+        15.2113
       ],
-      "sha256": "7c0f3afd34c0cb3c363696469518358d3b9c42e529f544694a78cad8da9c1ea5",
-      "joint_pivot_hint": [
-        0.5,
-        0.15
+      "z": 7,
+      "rest_position": [
+        -17.14,
+        -162.7887
       ],
-      "overlap_target_px": 10
+      "reference_rect": [
+        154,
+        105,
+        212,
+        201
+      ],
+      "visible_source": "art/char/char_hero_idle_01.png",
+      "method": "Complete AI-repainted side cutout; measured anatomical pivots and fitted rest transforms. No baked-in neighboring limbs or weapon pixels.",
+      "hand": [
+        33.62,
+        72.0512
+      ]
     },
     {
       "file": "art/char/char_hero_leg_l_01.png",
       "requirement": "C01",
       "role": "part",
       "size_px": [
-        72,
-        110
+        60,
+        81
       ],
       "display_scale": 0.5,
       "origin_normalized": [
-        0.5,
-        0.5
+        0.4053333333333333,
+        0.1633
       ],
       "content_bbox": [
-        10,
-        10,
-        62,
-        100
+        4,
+        4,
+        56,
+        77
       ],
-      "source": "art/delivery/T002/sources/hero_parts.png",
-      "source_rect": [
-        0,
-        444,
-        444,
-        887
+      "source": "art/delivery/T004/sources/hero_hidden_parts.png",
+      "sha256": "1f7b8cbab73a085118d68e85ee9b5ed8ef38e606bdf2f4c0f6dc7e4a017f7a58",
+      "overlap_target_px": 10,
+      "character": "hero",
+      "part": "leg_l",
+      "joint_pivot": [
+        24.32,
+        13.2273
       ],
-      "sha256": "7c1a6ee5a1135ca884a58a5514ba36cf3b34cd0389521352d472cca876671933",
-      "joint_pivot_hint": [
-        0.5,
-        0.15
+      "z": 1,
+      "rest_position": [
+        46.32,
+        -72.7727
       ],
-      "overlap_target_px": 10
+      "reference_rect": [
+        221,
+        188,
+        293,
+        282
+      ],
+      "visible_source": "art/char/char_hero_idle_01.png",
+      "method": "Complete AI-repainted side cutout; measured anatomical pivots and fitted rest transforms. No baked-in neighboring limbs or weapon pixels."
     },
     {
       "file": "art/char/char_hero_leg_r_01.png",
       "requirement": "C01",
       "role": "part",
       "size_px": [
-        69,
-        110
+        46,
+        91
       ],
       "display_scale": 0.5,
       "origin_normalized": [
-        0.5,
-        0.5
+        0.5982608695652174,
+        0.14691978021978022
       ],
       "content_bbox": [
-        10,
-        10,
-        59,
-        100
+        4,
+        4,
+        42,
+        87
       ],
-      "source": "art/delivery/T002/sources/hero_parts.png",
-      "source_rect": [
-        444,
-        444,
-        887,
-        887
+      "source": "art/delivery/T004/sources/hero_hidden_parts.png",
+      "sha256": "87621aacef539cc7eb87437822b15e3486fccf1ab86290f26e2f109189b6bc30",
+      "overlap_target_px": 10,
+      "character": "hero",
+      "part": "leg_r",
+      "joint_pivot": [
+        27.52,
+        13.3697
       ],
-      "sha256": "2e60c2834d80fec4d793f9646308d13d2f710c744e19e4f8aeb1fcccba6199ae",
-      "joint_pivot_hint": [
-        0.5,
-        0.15
+      "z": 2,
+      "rest_position": [
+        -14.48,
+        -75.6303
       ],
-      "overlap_target_px": 10
+      "reference_rect": [
+        164,
+        193,
+        238,
+        294
+      ],
+      "visible_source": "art/char/char_hero_idle_01.png",
+      "method": "Complete AI-repainted side cutout; measured anatomical pivots and fitted rest transforms. No baked-in neighboring limbs or weapon pixels."
     },
     {
       "file": "art/char/char_hero_weapon_01.png",
       "requirement": "C01",
       "role": "part",
       "size_px": [
-        157,
-        180
+        67,
+        103
       ],
       "display_scale": 0.5,
       "origin_normalized": [
-        0.5,
-        0.5
+        0.8002985074626865,
+        0.1655456310679612
       ],
       "content_bbox": [
-        10,
-        10,
-        147,
-        170
+        4,
+        4,
+        63,
+        99
       ],
-      "source": "art/delivery/T002/sources/hero_parts.png",
-      "source_rect": [
-        887,
-        444,
-        1330,
-        887
+      "source": "art/delivery/T004/sources/hero_hidden_parts.png",
+      "sha256": "1828172930ad18edcf1cb9abee225bba6d7a390b27a618c1353cc8d1181e2ec4",
+      "overlap_target_px": 10,
+      "character": "hero",
+      "part": "weapon",
+      "joint_pivot": [
+        53.62,
+        17.0512
       ],
-      "sha256": "230cb83a14207f7bc6e5b6a41416e7cfff37deb36ff774808954e092d1acf7e8",
-      "joint_pivot_hint": [
-        0.5,
-        0.85
+      "z": 6,
+      "rest_position": [
+        -35.38,
+        -105.9488
       ],
-      "overlap_target_px": 10
+      "reference_rect": [
+        119,
+        159,
+        199,
+        281
+      ],
+      "visible_source": "art/char/char_hero_idle_01.png",
+      "method": "Complete AI-repainted side cutout; measured anatomical pivots and fitted rest transforms. No baked-in neighboring limbs or weapon pixels.",
+      "grip": [
+        53.62,
+        17.0512
+      ]
     },
     {
       "file": "art/char/char_hero_back_01.png",
       "requirement": "C01",
       "role": "part",
       "size_px": [
-        127,
-        120
+        58,
+        74
       ],
       "display_scale": 0.5,
       "origin_normalized": [
-        0.5,
-        0.5
+        0.7586206896551724,
+        0.42598783783783783
       ],
       "content_bbox": [
-        10,
-        10,
-        117,
-        110
+        4,
+        4,
+        54,
+        70
       ],
-      "source": "art/delivery/T002/sources/hero_parts.png",
-      "source_rect": [
-        1330,
-        444,
-        1774,
-        887
+      "source": "art/delivery/T004/sources/hero_hidden_parts.png",
+      "sha256": "d45d3c1351280f7303e6733dde104abed4578f604e3457557d93ca7157bf292a",
+      "overlap_target_px": 10,
+      "character": "hero",
+      "part": "back",
+      "joint_pivot": [
+        44.0,
+        31.5231
       ],
-      "sha256": "1c4c27c21210e8283904694e4150305157264985bce039795a7ff8b0ea9b6018",
-      "joint_pivot_hint": [
-        0.5,
-        0.85
+      "z": 0,
+      "rest_position": [
+        -17.0,
+        -164.4769
       ],
-      "overlap_target_px": 10
+      "reference_rect": [
+        136,
+        79,
+        217,
+        181
+      ],
+      "visible_source": "art/char/char_hero_idle_01.png",
+      "method": "Complete AI-repainted side cutout; measured anatomical pivots and fitted rest transforms. No baked-in neighboring limbs or weapon pixels."
     },
     {
       "file": "art/char/char_hero_idle_01.png",
@@ -5505,693 +5717,984 @@
       "requirement": "C02",
       "role": "part",
       "size_px": [
-        93,
-        100
+        142,
+        139
       ],
       "display_scale": 0.5,
       "origin_normalized": [
-        0.5,
-        0.5
+        0.5915492957746479,
+        0.8943597122302158
       ],
       "content_bbox": [
-        10,
-        10,
-        83,
-        90
+        4,
+        4,
+        138,
+        135
       ],
-      "source": "art/concept/batch1/char_soldier_01.png",
-      "source_rect": [
-        840,
-        92,
-        1002,
-        270
+      "source": "art/delivery/T004/sources/soldier_hidden_parts.png",
+      "sha256": "157ea76a2cbceb4c31eba4dac93690650dce24bd04d31a670c496c2c1b869a32",
+      "overlap_target_px": 10,
+      "character": "soldier_blue",
+      "part": "head",
+      "joint_pivot": [
+        84.0,
+        124.316
       ],
-      "sha256": "fb500f68925e480367a23ecf3d16c0d5b35f2632cc340cc516e508e5eeadbdf4",
-      "joint_pivot_hint": [
-        0.5,
-        0.85
+      "z": 5,
+      "rest_position": [
+        -5.0,
+        -157.684
       ],
-      "overlap_target_px": 10
+      "reference_rect": [
+        126,
+        7,
+        261,
+        152
+      ],
+      "visible_source": "art/char/char_soldier_blue_idle_01.png",
+      "method": "Complete AI-repainted side cutout; measured anatomical pivots and fitted rest transforms. No baked-in neighboring limbs or weapon pixels."
     },
     {
       "file": "art/char/char_soldier_blue_body_01.png",
       "requirement": "C02",
       "role": "part",
       "size_px": [
-        108,
-        130
+        157,
+        128
       ],
       "display_scale": 0.5,
       "origin_normalized": [
-        0.5,
-        0.5
+        0.5579617834394904,
+        0.70888125
       ],
       "content_bbox": [
-        10,
-        10,
-        98,
-        120
+        4,
+        4,
+        153,
+        124
       ],
-      "source": "art/concept/batch1/char_soldier_01.png",
-      "source_rect": [
-        1006,
-        108,
-        1182,
-        326
+      "source": "art/delivery/T004/sources/soldier_closed_torso_cropped.png",
+      "sha256": "a7546b91f76f5185176fad9e24aa002d8fdd9417519624fcea8ac2548c92f45a",
+      "overlap_target_px": 10,
+      "character": "soldier_blue",
+      "part": "body",
+      "joint_pivot": [
+        87.6,
+        90.7368
       ],
-      "sha256": "2583ff9b309d0650240d5138a1667a27dba84a8bef63b4c589da3da4dab0d3f8",
-      "joint_pivot_hint": [
-        0.5,
-        0.85
+      "z": 4,
+      "rest_position": [
+        -10.4,
+        -83.2632
       ],
-      "overlap_target_px": 10
+      "reference_rect": [
+        103,
+        61,
+        330,
+        284
+      ],
+      "visible_source": "art/char/char_soldier_blue_idle_01.png",
+      "method": "Complete AI-repainted side cutout; measured anatomical pivots and fitted rest transforms. No baked-in neighboring limbs or weapon pixels.",
+      "attach": {
+        "neck": [
+          93.0,
+          16.316
+        ],
+        "shoulder_l": [
+          140.88,
+          36.7008
+        ],
+        "shoulder_r": [
+          45.48,
+          36.7008
+        ],
+        "hip_l": [
+          120.72,
+          109.8274
+        ],
+        "hip_r": [
+          58.08,
+          109.5038
+        ]
+      }
     },
     {
       "file": "art/char/char_soldier_blue_arm_l_01.png",
       "requirement": "C02",
       "role": "part",
       "size_px": [
-        79,
-        110
+        56,
+        56
       ],
       "display_scale": 0.5,
       "origin_normalized": [
-        0.5,
-        0.5
+        0.7478571428571429,
+        0.4768
       ],
       "content_bbox": [
-        10,
-        11,
-        69,
-        100
+        4,
+        4,
+        52,
+        52
       ],
-      "source": "art/concept/batch1/char_soldier_01.png",
-      "source_rect": [
-        1196,
-        104,
-        1276,
-        224
+      "source": "art/delivery/T004/sources/soldier_hidden_parts.png",
+      "sha256": "ce1760d15322a6398690ad6e8e6cd6e2bead3d5040cf09d49ad72aec063b9a45",
+      "overlap_target_px": 10,
+      "character": "soldier_blue",
+      "part": "arm_l",
+      "joint_pivot": [
+        41.88,
+        26.7008
       ],
-      "sha256": "bc59a1b53657347d491a54d9539a3ea7c03ee1ea8ddd01c9165d166833296193",
-      "joint_pivot_hint": [
-        0.5,
-        0.15
+      "z": 3,
+      "rest_position": [
+        42.88,
+        -137.2992
       ],
-      "overlap_target_px": 10
+      "reference_rect": [
+        204,
+        123,
+        282,
+        205
+      ],
+      "visible_source": "art/char/char_soldier_blue_idle_01.png",
+      "method": "Complete AI-repainted side cutout; measured anatomical pivots and fitted rest transforms. No baked-in neighboring limbs or weapon pixels.",
+      "hand": [
+        21.7112,
+        47.2553
+      ]
     },
     {
       "file": "art/char/char_soldier_blue_arm_r_01.png",
       "requirement": "C02",
       "role": "part",
       "size_px": [
-        78,
-        110
+        54,
+        80
       ],
       "display_scale": 0.5,
       "origin_normalized": [
-        0.5,
-        0.5
+        0.6385185185185185,
+        0.18375999999999998
       ],
       "content_bbox": [
-        10,
-        11,
-        68,
-        100
+        4,
+        4,
+        50,
+        76
       ],
-      "source": "art/concept/batch1/char_soldier_01.png",
-      "source_rect": [
-        1306,
-        102,
-        1384,
+      "source": "art/delivery/T004/sources/soldier_near_arm_cropped.png",
+      "sha256": "f9bb7ff446822b56072115748451aefca3ab58a76c09d9b9c689524890768046",
+      "overlap_target_px": 10,
+      "character": "soldier_blue",
+      "part": "arm_r",
+      "joint_pivot": [
+        34.48,
+        14.7008
+      ],
+      "z": 7,
+      "rest_position": [
+        -52.52,
+        -137.2992
+      ],
+      "reference_rect": [
+        115,
+        135,
+        192,
         224
       ],
-      "sha256": "706860250f71ec0bf92682386e844422a8df9d9174b6b2de939f8373a2851702",
-      "joint_pivot_hint": [
-        0.5,
-        0.15
-      ],
-      "overlap_target_px": 10
+      "visible_source": "art/char/char_soldier_blue_idle_01.png",
+      "method": "Complete AI-repainted side cutout; measured anatomical pivots and fitted rest transforms. No baked-in neighboring limbs or weapon pixels.",
+      "hand": [
+        37.9636,
+        65.7684
+      ]
     },
     {
       "file": "art/char/char_soldier_blue_leg_l_01.png",
       "requirement": "C02",
       "role": "part",
       "size_px": [
-        82,
-        110
+        68,
+        75
       ],
       "display_scale": 0.5,
       "origin_normalized": [
-        0.5,
-        0.5
+        0.3341176470588235,
+        0.18436533333333335
       ],
       "content_bbox": [
-        10,
-        10,
-        72,
-        100
+        4,
+        4,
+        64,
+        71
       ],
-      "source": "art/concept/batch1/char_soldier_01.png",
-      "source_rect": [
-        1204,
-        220,
-        1286,
-        340
+      "source": "art/delivery/T004/sources/soldier_hidden_parts.png",
+      "sha256": "d9e1d121814bb97e91541d0fce44bd36d8c074c30f5107b4dc9e70ebe40ea5b8",
+      "overlap_target_px": 10,
+      "character": "soldier_blue",
+      "part": "leg_l",
+      "joint_pivot": [
+        22.72,
+        13.8274
       ],
-      "sha256": "a59faec48b116be47283776cff232ce5ddc225a683bddd3a5d74d5ed3c2c8b60",
-      "joint_pivot_hint": [
-        0.5,
-        0.15
+      "z": 1,
+      "rest_position": [
+        22.72,
+        -64.1726
       ],
-      "overlap_target_px": 10
+      "reference_rect": [
+        208,
+        198,
+        271,
+        282
+      ],
+      "visible_source": "art/char/char_soldier_blue_idle_01.png",
+      "method": "Complete AI-repainted side cutout; measured anatomical pivots and fitted rest transforms. No baked-in neighboring limbs or weapon pixels."
     },
     {
       "file": "art/char/char_soldier_blue_leg_r_01.png",
       "requirement": "C02",
       "role": "part",
       "size_px": [
-        85,
-        110
+        124,
+        79
       ],
       "display_scale": 0.5,
       "origin_normalized": [
-        0.5,
-        0.5
+        0.7103225806451613,
+        0.1709341772151899
       ],
       "content_bbox": [
-        10,
-        10,
-        75,
-        100
+        4,
+        4,
+        120,
+        75
       ],
-      "source": "art/concept/batch1/char_soldier_01.png",
-      "source_rect": [
-        1300,
-        222,
-        1386,
-        340
+      "source": "art/delivery/T004/sources/soldier_hidden_parts.png",
+      "sha256": "99747984d337b00804cfa3c4e356983d38f57a52274f2dad8b31e5d6a6969bea",
+      "overlap_target_px": 10,
+      "character": "soldier_blue",
+      "part": "leg_r",
+      "joint_pivot": [
+        88.08,
+        13.5038
       ],
-      "sha256": "0e9e18089b8153551b01c070caae15e082d590331b4cbc31f9d0b2537be5c89b",
-      "joint_pivot_hint": [
-        0.5,
-        0.15
+      "z": 2,
+      "rest_position": [
+        -39.92,
+        -64.4962
       ],
-      "overlap_target_px": 10
+      "reference_rect": [
+        99,
+        208,
+        187,
+        292
+      ],
+      "visible_source": "art/char/char_soldier_blue_idle_01.png",
+      "method": "Complete AI-repainted side cutout; measured anatomical pivots and fitted rest transforms. No baked-in neighboring limbs or weapon pixels."
     },
     {
       "file": "art/char/char_soldier_blue_weapon_01.png",
       "requirement": "C02",
       "role": "part",
       "size_px": [
-        100,
-        300
+        221,
+        181
       ],
       "display_scale": 0.5,
       "origin_normalized": [
-        0.5,
-        0.5
+        0.21702986425339366,
+        0.7666762430939227
       ],
       "content_bbox": [
-        10,
-        10,
-        90,
-        290
+        4,
+        4,
+        217,
+        177
       ],
-      "source": "art/concept/batch1/char_soldier_01.png",
-      "source_rect": [
-        1412,
-        0,
-        1514,
-        348
+      "source": "art/delivery/T004/sources/soldier_hidden_parts.png",
+      "sha256": "fd5f8e33657eec2aa0e8a0c0a3b93b4251789b5023ce9a74521001a3fa748951",
+      "overlap_target_px": 10,
+      "character": "soldier_blue",
+      "part": "weapon",
+      "joint_pivot": [
+        47.9636,
+        138.7684
       ],
-      "sha256": "39311ab09d02bfff55c68a3cd387eeac4c49176ce0c3a0b4cea613a9212bfa2d",
-      "joint_pivot_hint": [
-        0.5,
-        0.85
+      "z": 6,
+      "rest_position": [
+        -49.0364,
+        -86.2316
       ],
-      "overlap_target_px": 10
+      "reference_rect": [
+        107,
+        65,
+        330,
+        253
+      ],
+      "visible_source": "art/char/char_soldier_blue_idle_01.png",
+      "method": "Complete AI-repainted side cutout; measured anatomical pivots and fitted rest transforms. No baked-in neighboring limbs or weapon pixels.",
+      "grip": [
+        47.9636,
+        138.7684
+      ]
     },
     {
       "file": "art/char/char_soldier_yellow_head_01.png",
       "requirement": "C02",
       "role": "part",
       "size_px": [
-        94,
-        100
+        142,
+        139
       ],
       "display_scale": 0.5,
       "origin_normalized": [
-        0.5,
-        0.5
+        0.5915492957746479,
+        0.8943597122302158
       ],
       "content_bbox": [
-        10,
-        10,
-        84,
-        90
+        4,
+        4,
+        138,
+        135
       ],
-      "source": "art/concept/batch1/char_soldier_01.png",
-      "source_rect": [
-        844,
-        430,
-        1004,
-        602
+      "source": "art/delivery/T004/sources/soldier_hidden_parts.png",
+      "sha256": "f7c100480e70922e71cf49f93d56212d501d3b2ddb3baac6e7508aa549eb9fbe",
+      "overlap_target_px": 10,
+      "character": "soldier_yellow",
+      "part": "head",
+      "joint_pivot": [
+        84.0,
+        124.316
       ],
-      "sha256": "b177b558878b592b9f8393f09323495adfeea5d9dfbadd143a4bda30883a8ee3",
-      "joint_pivot_hint": [
-        0.5,
-        0.85
+      "z": 5,
+      "rest_position": [
+        -5.0,
+        -156.684
       ],
-      "overlap_target_px": 10
+      "reference_rect": [
+        126,
+        8,
+        261,
+        152
+      ],
+      "visible_source": "art/char/char_soldier_yellow_idle_01.png",
+      "method": "Complete AI-repainted side cutout; measured anatomical pivots and fitted rest transforms. No baked-in neighboring limbs or weapon pixels."
     },
     {
       "file": "art/char/char_soldier_yellow_body_01.png",
       "requirement": "C02",
       "role": "part",
       "size_px": [
-        111,
-        130
+        157,
+        128
       ],
       "display_scale": 0.5,
       "origin_normalized": [
-        0.5,
-        0.5
+        0.5579617834394904,
+        0.70888125
       ],
       "content_bbox": [
-        10,
-        10,
-        101,
-        120
+        4,
+        4,
+        153,
+        124
       ],
-      "source": "art/concept/batch1/char_soldier_01.png",
-      "source_rect": [
-        1008,
-        446,
-        1182,
-        654
+      "source": "art/delivery/T004/sources/soldier_closed_torso_cropped.png",
+      "sha256": "b55ef4203e6fab74d2a1c4a0dfe6da0b76311498302cd37303ef76c4bf657439",
+      "overlap_target_px": 10,
+      "character": "soldier_yellow",
+      "part": "body",
+      "joint_pivot": [
+        87.6,
+        90.7368
       ],
-      "sha256": "afe49e1429c28ec2a7a83ad5caea64958b8cc9a79bcee8f9b7e0bd5334e934e6",
-      "joint_pivot_hint": [
-        0.5,
-        0.85
+      "z": 4,
+      "rest_position": [
+        -10.4,
+        -82.2632
       ],
-      "overlap_target_px": 10
+      "reference_rect": [
+        104,
+        60,
+        331,
+        285
+      ],
+      "visible_source": "art/char/char_soldier_yellow_idle_01.png",
+      "method": "Complete AI-repainted side cutout; measured anatomical pivots and fitted rest transforms. No baked-in neighboring limbs or weapon pixels.",
+      "attach": {
+        "neck": [
+          93.0,
+          16.316
+        ],
+        "shoulder_l": [
+          140.88,
+          36.7008
+        ],
+        "shoulder_r": [
+          45.48,
+          36.7008
+        ],
+        "hip_l": [
+          120.72,
+          109.8274
+        ],
+        "hip_r": [
+          58.08,
+          109.5038
+        ]
+      }
     },
     {
       "file": "art/char/char_soldier_yellow_arm_l_01.png",
       "requirement": "C02",
       "role": "part",
       "size_px": [
-        81,
-        110
+        56,
+        56
       ],
       "display_scale": 0.5,
       "origin_normalized": [
-        0.5,
-        0.5
+        0.7478571428571429,
+        0.4768
       ],
       "content_bbox": [
-        10,
-        10,
-        71,
-        100
+        4,
+        4,
+        52,
+        52
       ],
-      "source": "art/concept/batch1/char_soldier_01.png",
-      "source_rect": [
-        1200,
-        442,
-        1278,
-        558
+      "source": "art/delivery/T004/sources/soldier_hidden_parts.png",
+      "sha256": "91e9fc5175d32d35632c1171649d0c14b93caf0f441a288180d7c07999b04807",
+      "overlap_target_px": 10,
+      "character": "soldier_yellow",
+      "part": "arm_l",
+      "joint_pivot": [
+        41.88,
+        26.7008
       ],
-      "sha256": "eb078db1afc8b63d35bd65cd8094ce3766be0003ccaae26dea949843d1a24ab3",
-      "joint_pivot_hint": [
-        0.5,
-        0.15
+      "z": 3,
+      "rest_position": [
+        42.88,
+        -136.2992
       ],
-      "overlap_target_px": 10
+      "reference_rect": [
+        204,
+        123,
+        282,
+        205
+      ],
+      "visible_source": "art/char/char_soldier_yellow_idle_01.png",
+      "method": "Complete AI-repainted side cutout; measured anatomical pivots and fitted rest transforms. No baked-in neighboring limbs or weapon pixels.",
+      "hand": [
+        21.7112,
+        47.2553
+      ]
     },
     {
       "file": "art/char/char_soldier_yellow_arm_r_01.png",
       "requirement": "C02",
       "role": "part",
       "size_px": [
-        80,
-        110
+        54,
+        80
       ],
       "display_scale": 0.5,
       "origin_normalized": [
-        0.5,
-        0.5
+        0.6385185185185185,
+        0.18375999999999998
       ],
       "content_bbox": [
-        10,
-        10,
-        70,
-        100
+        4,
+        4,
+        50,
+        76
       ],
-      "source": "art/concept/batch1/char_soldier_01.png",
-      "source_rect": [
-        1306,
-        442,
-        1384,
-        558
+      "source": "art/delivery/T004/sources/soldier_near_arm_cropped.png",
+      "sha256": "667e049b4f216889004b334fbd47d77fa7cc557e3368bad38d1eaf7ab1b02f3c",
+      "overlap_target_px": 10,
+      "character": "soldier_yellow",
+      "part": "arm_r",
+      "joint_pivot": [
+        34.48,
+        14.7008
       ],
-      "sha256": "33e6fcc63af954b5b3840ef92268b281ba5f692ad8372d48ddabfdeef157443c",
-      "joint_pivot_hint": [
-        0.5,
-        0.15
+      "z": 7,
+      "rest_position": [
+        -52.52,
+        -136.2992
       ],
-      "overlap_target_px": 10
+      "reference_rect": [
+        115,
+        135,
+        192,
+        224
+      ],
+      "visible_source": "art/char/char_soldier_yellow_idle_01.png",
+      "method": "Complete AI-repainted side cutout; measured anatomical pivots and fitted rest transforms. No baked-in neighboring limbs or weapon pixels.",
+      "hand": [
+        37.9636,
+        65.7684
+      ]
     },
     {
       "file": "art/char/char_soldier_yellow_leg_l_01.png",
       "requirement": "C02",
       "role": "part",
       "size_px": [
-        84,
-        110
+        68,
+        75
       ],
       "display_scale": 0.5,
       "origin_normalized": [
-        0.5,
-        0.5
+        0.3341176470588235,
+        0.18436533333333335
       ],
       "content_bbox": [
-        10,
-        10,
-        74,
-        100
+        4,
+        4,
+        64,
+        71
       ],
-      "source": "art/concept/batch1/char_soldier_01.png",
-      "source_rect": [
-        1204,
-        552,
-        1286,
-        668
+      "source": "art/delivery/T004/sources/soldier_hidden_parts.png",
+      "sha256": "d9e1d121814bb97e91541d0fce44bd36d8c074c30f5107b4dc9e70ebe40ea5b8",
+      "overlap_target_px": 10,
+      "character": "soldier_yellow",
+      "part": "leg_l",
+      "joint_pivot": [
+        22.72,
+        13.8274
       ],
-      "sha256": "ad9fe01ef902158fb893e604ddcbf205041b8757209ab8c03c604bf8179256c0",
-      "joint_pivot_hint": [
-        0.5,
-        0.15
+      "z": 1,
+      "rest_position": [
+        22.72,
+        -63.1726
       ],
-      "overlap_target_px": 10
+      "reference_rect": [
+        208,
+        199,
+        271,
+        282
+      ],
+      "visible_source": "art/char/char_soldier_yellow_idle_01.png",
+      "method": "Complete AI-repainted side cutout; measured anatomical pivots and fitted rest transforms. No baked-in neighboring limbs or weapon pixels."
     },
     {
       "file": "art/char/char_soldier_yellow_leg_r_01.png",
       "requirement": "C02",
       "role": "part",
       "size_px": [
-        87,
-        110
+        124,
+        79
       ],
       "display_scale": 0.5,
       "origin_normalized": [
-        0.5,
-        0.5
+        0.7103225806451613,
+        0.1709341772151899
       ],
       "content_bbox": [
-        10,
-        10,
-        77,
-        100
+        4,
+        4,
+        120,
+        75
       ],
-      "source": "art/concept/batch1/char_soldier_01.png",
-      "source_rect": [
-        1300,
-        552,
-        1386,
-        668
+      "source": "art/delivery/T004/sources/soldier_hidden_parts.png",
+      "sha256": "99747984d337b00804cfa3c4e356983d38f57a52274f2dad8b31e5d6a6969bea",
+      "overlap_target_px": 10,
+      "character": "soldier_yellow",
+      "part": "leg_r",
+      "joint_pivot": [
+        88.08,
+        13.5038
       ],
-      "sha256": "c292bbafc274715aaedf4199b42ead5efa5b5ef4d84623bd81026a783a6dcf9d",
-      "joint_pivot_hint": [
-        0.5,
-        0.15
+      "z": 2,
+      "rest_position": [
+        -39.92,
+        -63.4962
       ],
-      "overlap_target_px": 10
+      "reference_rect": [
+        98,
+        208,
+        187,
+        293
+      ],
+      "visible_source": "art/char/char_soldier_yellow_idle_01.png",
+      "method": "Complete AI-repainted side cutout; measured anatomical pivots and fitted rest transforms. No baked-in neighboring limbs or weapon pixels."
     },
     {
       "file": "art/char/char_soldier_yellow_weapon_01.png",
       "requirement": "C02",
       "role": "part",
       "size_px": [
-        103,
-        300
+        221,
+        181
       ],
       "display_scale": 0.5,
       "origin_normalized": [
-        0.5,
-        0.5
+        0.21702986425339366,
+        0.7666762430939227
       ],
       "content_bbox": [
-        10,
-        10,
-        93,
-        290
+        4,
+        4,
+        217,
+        177
       ],
-      "source": "art/concept/batch1/char_soldier_01.png",
-      "source_rect": [
-        1414,
-        346,
-        1512,
-        678
+      "source": "art/delivery/T004/sources/soldier_hidden_parts.png",
+      "sha256": "ae922dfc1b2edc494dd27d6e874313376333af9c5f049db542ddb345ed34efca",
+      "overlap_target_px": 10,
+      "character": "soldier_yellow",
+      "part": "weapon",
+      "joint_pivot": [
+        47.9636,
+        138.7684
       ],
-      "sha256": "e5c37398809c925973959006f15543cd7accc3b2e98c99937e3c0a26e34f52aa",
-      "joint_pivot_hint": [
-        0.5,
-        0.85
+      "z": 6,
+      "rest_position": [
+        -49.0364,
+        -85.2316
       ],
-      "overlap_target_px": 10
+      "reference_rect": [
+        107,
+        66,
+        329,
+        253
+      ],
+      "visible_source": "art/char/char_soldier_yellow_idle_01.png",
+      "method": "Complete AI-repainted side cutout; measured anatomical pivots and fitted rest transforms. No baked-in neighboring limbs or weapon pixels.",
+      "grip": [
+        47.9636,
+        138.7684
+      ]
     },
     {
       "file": "art/char/char_soldier_red_head_01.png",
       "requirement": "C02",
       "role": "part",
       "size_px": [
-        94,
-        100
+        142,
+        139
       ],
       "display_scale": 0.5,
       "origin_normalized": [
-        0.5,
-        0.5
+        0.5915492957746479,
+        0.8943597122302158
       ],
       "content_bbox": [
-        10,
-        10,
-        84,
-        90
+        4,
+        4,
+        138,
+        135
       ],
-      "source": "art/concept/batch1/char_soldier_01.png",
-      "source_rect": [
-        848,
-        762,
-        1010,
-        936
+      "source": "art/delivery/T004/sources/soldier_hidden_parts.png",
+      "sha256": "c7fb48da2371ef76a5a1bd8b3dc951b63b2e755fcb0bee9563e3378f34470bb8",
+      "overlap_target_px": 10,
+      "character": "soldier_red",
+      "part": "head",
+      "joint_pivot": [
+        84.0,
+        124.316
       ],
-      "sha256": "18cb535cb532f2df62703e1bfaccee97a60eaff060f046c9318c2e3e98dc7993",
-      "joint_pivot_hint": [
-        0.5,
-        0.85
+      "z": 5,
+      "rest_position": [
+        -5.0,
+        -156.684
       ],
-      "overlap_target_px": 10
+      "reference_rect": [
+        126,
+        8,
+        261,
+        152
+      ],
+      "visible_source": "art/char/char_soldier_red_idle_01.png",
+      "method": "Complete AI-repainted side cutout; measured anatomical pivots and fitted rest transforms. No baked-in neighboring limbs or weapon pixels."
     },
     {
       "file": "art/char/char_soldier_red_body_01.png",
       "requirement": "C02",
       "role": "part",
       "size_px": [
-        107,
-        130
+        157,
+        128
       ],
       "display_scale": 0.5,
       "origin_normalized": [
-        0.5,
-        0.5
+        0.5579617834394904,
+        0.70888125
       ],
       "content_bbox": [
-        10,
-        10,
-        97,
-        120
+        4,
+        4,
+        153,
+        124
       ],
-      "source": "art/concept/batch1/char_soldier_01.png",
-      "source_rect": [
-        1014,
-        780,
-        1188,
-        1000
+      "source": "art/delivery/T004/sources/soldier_closed_torso_cropped.png",
+      "sha256": "ac3e0ed1dffa9df1507b9464c75355148c1caa9eb9b32786860ffd534a97a822",
+      "overlap_target_px": 10,
+      "character": "soldier_red",
+      "part": "body",
+      "joint_pivot": [
+        87.6,
+        90.7368
       ],
-      "sha256": "6831d4d080ce8c1c31e2ec31b8220412176380dd5f42d70394cde1ce721b6f34",
-      "joint_pivot_hint": [
-        0.5,
-        0.85
+      "z": 4,
+      "rest_position": [
+        -10.4,
+        -82.2632
       ],
-      "overlap_target_px": 10
+      "reference_rect": [
+        104,
+        59,
+        332,
+        285
+      ],
+      "visible_source": "art/char/char_soldier_red_idle_01.png",
+      "method": "Complete AI-repainted side cutout; measured anatomical pivots and fitted rest transforms. No baked-in neighboring limbs or weapon pixels.",
+      "attach": {
+        "neck": [
+          93.0,
+          16.316
+        ],
+        "shoulder_l": [
+          140.88,
+          36.7008
+        ],
+        "shoulder_r": [
+          45.48,
+          36.7008
+        ],
+        "hip_l": [
+          120.72,
+          109.8274
+        ],
+        "hip_r": [
+          58.08,
+          109.5038
+        ]
+      }
     },
     {
       "file": "art/char/char_soldier_red_arm_l_01.png",
       "requirement": "C02",
       "role": "part",
       "size_px": [
-        80,
-        110
+        56,
+        56
       ],
       "display_scale": 0.5,
       "origin_normalized": [
-        0.5,
-        0.5
+        0.7478571428571429,
+        0.4768
       ],
       "content_bbox": [
-        10,
-        10,
-        70,
-        100
+        4,
+        4,
+        52,
+        52
       ],
-      "source": "art/concept/batch1/char_soldier_01.png",
-      "source_rect": [
-        1204,
-        776,
-        1284,
-        898
+      "source": "art/delivery/T004/sources/soldier_hidden_parts.png",
+      "sha256": "dd7d8cef9c39dadbdd8c42c3478c032e5bceda4f2f6d851468047d471286877e",
+      "overlap_target_px": 10,
+      "character": "soldier_red",
+      "part": "arm_l",
+      "joint_pivot": [
+        41.88,
+        26.7008
       ],
-      "sha256": "e00a74630c4f7ce5395044363e6b608ba0cd5e39b19a9f7ab0058f9c5d3f32da",
-      "joint_pivot_hint": [
-        0.5,
-        0.15
+      "z": 3,
+      "rest_position": [
+        42.88,
+        -136.2992
       ],
-      "overlap_target_px": 10
+      "reference_rect": [
+        204,
+        123,
+        282,
+        205
+      ],
+      "visible_source": "art/char/char_soldier_red_idle_01.png",
+      "method": "Complete AI-repainted side cutout; measured anatomical pivots and fitted rest transforms. No baked-in neighboring limbs or weapon pixels.",
+      "hand": [
+        21.7112,
+        47.2553
+      ]
     },
     {
       "file": "art/char/char_soldier_red_arm_r_01.png",
       "requirement": "C02",
       "role": "part",
       "size_px": [
-        82,
-        110
+        54,
+        80
       ],
       "display_scale": 0.5,
       "origin_normalized": [
-        0.5,
-        0.5
+        0.6385185185185185,
+        0.18375999999999998
       ],
       "content_bbox": [
-        10,
-        10,
-        71,
-        100
+        4,
+        4,
+        50,
+        76
       ],
-      "source": "art/concept/batch1/char_soldier_01.png",
-      "source_rect": [
-        1312,
-        776,
-        1394,
-        898
+      "source": "art/delivery/T004/sources/soldier_near_arm_cropped.png",
+      "sha256": "04d49622774b66d83135fb8820df0474e62e42733bba4cce469798df81d91eea",
+      "overlap_target_px": 10,
+      "character": "soldier_red",
+      "part": "arm_r",
+      "joint_pivot": [
+        34.48,
+        14.7008
       ],
-      "sha256": "cf8abe33445993e48fc72edb1cc807d681864204118bd240e640c9bc9d66d8cb",
-      "joint_pivot_hint": [
-        0.5,
-        0.15
+      "z": 7,
+      "rest_position": [
+        -52.52,
+        -136.2992
       ],
-      "overlap_target_px": 10
+      "reference_rect": [
+        115,
+        135,
+        192,
+        224
+      ],
+      "visible_source": "art/char/char_soldier_red_idle_01.png",
+      "method": "Complete AI-repainted side cutout; measured anatomical pivots and fitted rest transforms. No baked-in neighboring limbs or weapon pixels.",
+      "hand": [
+        37.9636,
+        65.7684
+      ]
     },
     {
       "file": "art/char/char_soldier_red_leg_l_01.png",
       "requirement": "C02",
       "role": "part",
       "size_px": [
-        83,
-        110
+        68,
+        75
       ],
       "display_scale": 0.5,
       "origin_normalized": [
-        0.5,
-        0.5
+        0.3341176470588235,
+        0.18436533333333335
       ],
       "content_bbox": [
-        10,
-        10,
-        73,
-        100
+        4,
+        4,
+        64,
+        71
       ],
-      "source": "art/concept/batch1/char_soldier_01.png",
-      "source_rect": [
-        1210,
-        892,
-        1292,
-        1010
+      "source": "art/delivery/T004/sources/soldier_hidden_parts.png",
+      "sha256": "d9e1d121814bb97e91541d0fce44bd36d8c074c30f5107b4dc9e70ebe40ea5b8",
+      "overlap_target_px": 10,
+      "character": "soldier_red",
+      "part": "leg_l",
+      "joint_pivot": [
+        22.72,
+        13.8274
       ],
-      "sha256": "397760cdfee27b7724ddbc71922ea78c71a3ae09cc692e0436f9c72ca7a97fbf",
-      "joint_pivot_hint": [
-        0.5,
-        0.15
+      "z": 1,
+      "rest_position": [
+        22.72,
+        -63.1726
       ],
-      "overlap_target_px": 10
+      "reference_rect": [
+        208,
+        198,
+        272,
+        282
+      ],
+      "visible_source": "art/char/char_soldier_red_idle_01.png",
+      "method": "Complete AI-repainted side cutout; measured anatomical pivots and fitted rest transforms. No baked-in neighboring limbs or weapon pixels."
     },
     {
       "file": "art/char/char_soldier_red_leg_r_01.png",
       "requirement": "C02",
       "role": "part",
       "size_px": [
-        87,
-        110
+        124,
+        79
       ],
       "display_scale": 0.5,
       "origin_normalized": [
-        0.5,
-        0.5
+        0.7103225806451613,
+        0.1709341772151899
       ],
       "content_bbox": [
-        10,
-        10,
-        77,
-        100
+        4,
+        4,
+        120,
+        75
       ],
-      "source": "art/concept/batch1/char_soldier_01.png",
-      "source_rect": [
-        1306,
-        894,
-        1392,
-        1010
+      "source": "art/delivery/T004/sources/soldier_hidden_parts.png",
+      "sha256": "99747984d337b00804cfa3c4e356983d38f57a52274f2dad8b31e5d6a6969bea",
+      "overlap_target_px": 10,
+      "character": "soldier_red",
+      "part": "leg_r",
+      "joint_pivot": [
+        88.08,
+        13.5038
       ],
-      "sha256": "14345723674540545a68c58482baa1a1dfd481e7b7a73c8a1802ba0585a93be2",
-      "joint_pivot_hint": [
-        0.5,
-        0.15
+      "z": 2,
+      "rest_position": [
+        -39.92,
+        -63.4962
       ],
-      "overlap_target_px": 10
+      "reference_rect": [
+        99,
+        208,
+        187,
+        293
+      ],
+      "visible_source": "art/char/char_soldier_red_idle_01.png",
+      "method": "Complete AI-repainted side cutout; measured anatomical pivots and fitted rest transforms. No baked-in neighboring limbs or weapon pixels."
     },
     {
       "file": "art/char/char_soldier_red_weapon_01.png",
       "requirement": "C02",
       "role": "part",
       "size_px": [
-        100,
-        300
+        221,
+        181
       ],
       "display_scale": 0.5,
       "origin_normalized": [
-        0.5,
-        0.5
+        0.21702986425339366,
+        0.7666762430939227
       ],
       "content_bbox": [
-        10,
-        10,
-        90,
-        290
+        4,
+        4,
+        217,
+        177
       ],
-      "source": "art/concept/batch1/char_soldier_01.png",
-      "source_rect": [
-        1416,
-        670,
-        1516,
-        1016
+      "source": "art/delivery/T004/sources/soldier_hidden_parts.png",
+      "sha256": "31a6b244d32e09db188afb02313c8bc258816b3af4624da24e79cc0e19533213",
+      "overlap_target_px": 10,
+      "character": "soldier_red",
+      "part": "weapon",
+      "joint_pivot": [
+        47.9636,
+        138.7684
       ],
-      "sha256": "49b2cc3dfa36fb3092211d0aaee5b0251c4baf42f1badc5b9096fb373d039ace",
-      "joint_pivot_hint": [
-        0.5,
-        0.85
+      "z": 6,
+      "rest_position": [
+        -49.0364,
+        -85.2316
       ],
-      "overlap_target_px": 10
+      "reference_rect": [
+        107,
+        65,
+        331,
+        253
+      ],
+      "visible_source": "art/char/char_soldier_red_idle_01.png",
+      "method": "Complete AI-repainted side cutout; measured anatomical pivots and fitted rest transforms. No baked-in neighboring limbs or weapon pixels.",
+      "grip": [
+        47.9636,
+        138.7684
+      ]
     },
     {
       "file": "art/ui/ui_hud_health_frame_01.png",
