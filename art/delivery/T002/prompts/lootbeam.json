@@ -1,0 +1,29 @@
+{
+  "id": "lootbeam",
+  "req": "V05",
+  "category": "vfx",
+  "subject": "lootbeam",
+  "cols": 6,
+  "rows": 1,
+  "parts": [
+    "white",
+    "green",
+    "blue",
+    "purple",
+    "gold",
+    "red"
+  ],
+  "heights": [
+    384,
+    384,
+    384,
+    384,
+    384,
+    384
+  ],
+  "ref": null,
+  "transparent": true,
+  "prompt": "STYLE: 2D hand-drawn action comic game art, Chinese ink-wash inspired, bold dark-brown ink outlines (#2B1D16), flat colors with one hard cel-shadow tone, subtle rice-paper texture, slightly chibi proportions (head-to-body 1:3), strong readable silhouettes, ink splatter accents, top-left light source, top-down three-quarter view at 45 degrees, Late Eastern Han dynasty China setting, original designs, suitable for a top-down action roguelike.\nSix separate vertical soft loot rarity beam textures left-to-right: white, green, blue, purple, gold, red. Bright foot center, upward taper and fade to transparent. Red legendary beam has extra ink-brush spark particles within its own cell. All six same height and base position. No chests or ground.\nDelivery layout: 6 columns x 1 rows. Every cell contains exactly its stated object, optically centered with at least 10% transparent padding. Objects never cross cell boundaries. Use uniform logical cell dimensions. No visible grid, borders or labels. True transparent PNG except ground tiles which must be opaque. Keep rice-paper grain inside painted shapes only; completely transparent empty space, no paper backdrop or matte. Original designs only, no imitation, no watermark or logo.  Target production game sprites, fixed top-left light.",
+  "editPrompt": "STYLE: 2D hand-drawn action comic game art, Chinese ink-wash inspired, bold dark-brown ink outlines (#2B1D16), flat colors with one hard cel-shadow tone, subtle rice-paper texture, slightly chibi proportions (head-to-body 1:3), strong readable silhouettes, ink splatter accents, top-left light source, top-down three-quarter view at 45 degrees, Late Eastern Han dynasty China setting, original designs, suitable for a top-down action roguelike.\nReframe all six loot beams to fit entirely within image: leave generous fully transparent padding above every beam tip and below each beam base, and clear transparent gaps between the six columns. Make the upper tip of each beam gradually fade completely to transparent BEFORE reaching top edge. Preserve white/green/blue/purple/gold/red order, ink brush sparks and bottom light sources. Exactly six isolated complete effects on true transparent background, no clipping.",
+  "saved_source": "art/delivery/T002/sources/lootbeam.png"
+}

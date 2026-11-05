@@ -1,0 +1,22 @@
+{
+  "id": "slash",
+  "req": "V01",
+  "category": "vfx",
+  "subject": "slash",
+  "cols": 3,
+  "rows": 1,
+  "parts": [
+    "combo1",
+    "combo2",
+    "combo3"
+  ],
+  "heights": [
+    256,
+    256,
+    256
+  ],
+  "ref": null,
+  "transparent": true,
+  "prompt": "STYLE: 2D hand-drawn action comic game art, Chinese ink-wash inspired, bold dark-brown ink outlines (#2B1D16), flat colors with one hard cel-shadow tone, subtle rice-paper texture, slightly chibi proportions (head-to-body 1:3), strong readable silhouettes, ink splatter accents, top-left light source, top-down three-quarter view at 45 degrees, Late Eastern Han dynasty China setting, original designs, suitable for a top-down action roguelike.\nThree isolated brush slash arc textures, strict 3x1 grid: first thin white crescent with rough ink edge; second wider white sweeping crescent; third heavy gold crescent with ink flecks. Soft alpha at ends, bold readable brush paths, NO weapons or characters, no ground.\nDelivery layout: 3 columns x 1 rows. Every cell contains exactly its stated object, optically centered with at least 10% transparent padding. Objects never cross cell boundaries. Use uniform logical cell dimensions. No visible grid, borders or labels. True transparent PNG except ground tiles which must be opaque. Keep rice-paper grain inside painted shapes only; completely transparent empty space, no paper backdrop or matte. Original designs only, no imitation, no watermark or logo.  Target production game sprites, fixed top-left light.",
+  "saved_source": "art/delivery/T002/sources/slash.png"
+}
