@@ -321,24 +321,6 @@ function makeTextures(scene) {
   const g = scene.make.graphics({ add: false });
   g.fillStyle(C.ink, 1); g.fillCircle(6, 6, 6); g.generateTexture('ink', 12, 12); g.clear();
   g.fillStyle(0xffffff, 1); g.fillCircle(4, 4, 4); g.generateTexture('dot', 8, 8); g.clear();
-  // 宝驹占位：朝右的小毛驴 + 两个褡裢，等美术出图替换
-  const ink = C.ink, fur = 0x8B6A4E, dark = 0x5E4433;
-  g.lineStyle(3, ink, 1);
-  g.fillStyle(dark, 1);
-  for (const lx of [26, 36, 58, 68]) { g.fillRect(lx, 50, 7, 22); g.strokeRect(lx, 50, 7, 22); }
-  g.lineBetween(14, 34, 6, 50); // 尾巴
-  g.fillStyle(fur, 1); g.fillEllipse(46, 42, 62, 32); g.strokeEllipse(46, 42, 62, 32);
-  g.fillTriangle(66, 36, 76, 14, 84, 30); // 脖子
-  g.fillStyle(fur, 1); g.fillEllipse(84, 22, 26, 18); g.strokeEllipse(84, 22, 26, 18);
-  g.fillStyle(0xC9B49A, 1); g.fillEllipse(93, 25, 12, 11);
-  g.fillStyle(dark, 1); g.fillTriangle(76, 16, 72, 0, 81, 12); g.fillTriangle(82, 14, 84, 0, 88, 13);
-  g.fillStyle(ink, 1); g.fillCircle(86, 19, 2);
-  // 褡裢：背上一条带子，两侧各挂一个口袋
-  g.fillStyle(0x6E4526, 1); g.fillRect(36, 24, 22, 6);
-  g.fillStyle(0x2F5D8A, 1); g.fillRect(28, 30, 20, 22); g.strokeRect(28, 30, 20, 22);
-  g.fillStyle(C.red, 1); g.fillRect(46, 30, 20, 22); g.strokeRect(46, 30, 20, 22);
-  g.lineStyle(2, C.paper, 0.8); g.lineBetween(28, 40, 48, 40); g.lineBetween(46, 40, 66, 40);
-  g.generateTexture('pet_donkey', 100, 74); g.clear();
   g.destroy();
 
   scene.textures.createCanvas('ground', W, H);
@@ -452,7 +434,7 @@ class Run extends Phaser.Scene {
     this.run = { room: 0, kills: 0, souls: [], bag: [], pet: [], safe: [], bagLv: 1, correction: 0, warned: {}, t0: this.time.now };
     // 宝驹：不挡路、不挨打，跟在主角身后
     this.pet = { x: hero.x - 70, y: hero.y + 4, faceX: 1, follow: false, moving: false };
-    this.pet.spr = this.add.image(this.pet.x, this.pet.y, 'pet_donkey').setOrigin(0.5, 0.97);
+    this.pet.spr = art(this, this.pet.x, this.pet.y, 'baoju_idle'); // T010 美术朝右，朝左用镜像
     this.enemies = []; this.arrows = []; this.chests = []; this.drops = []; this.doors = []; this.roomObjs = [];
     this.hitstop = 0; this.paused = false; this.panel = null; this.mouseAim = false;
     this.over = false;
@@ -1588,6 +1570,7 @@ class Run extends Phaser.Scene {
       zones.push({ to, x: ox, y: oy, cols: c, rows: r });
       for (const it of items) {
         const [w, h] = itemWH(it), x = ox + it.x * CELL, y = oy + it.y * CELL;
+        p.add(this.add.rectangle(x, y, w * CELL, h * CELL, 0x2B1D16).setOrigin(0)); // 实心底盖住格子框，大件不透出十字线
         this.drawItem(p, it, x, y, w * CELL, h * CELL);
         if (it === sel) selBox(x, y, w * CELL, h * CELL);
       }
@@ -2122,7 +2105,13 @@ class Run extends Phaser.Scene {
       .setColor(load > LOAD_FREE ? '#F0A04B' : '#CDB78A');
     // 宝驹
     const p = this.pet;
-    if (!this.over) p.spr.setPosition(p.x, p.y - (p.moving && !this.paused ? Math.abs(Math.sin(this.time.now / 110)) * 3 : 0)).setFlipX(p.faceX < 0).setDepth(p.y);
+    // 驮位有东西用满载图（只有一张）；空驮时走路在待机、行走两张间切换，约每秒 6 次
+    if (!this.over) {
+      const walk = p.moving && !this.paused;
+      const key = run.pet.length ? 'baoju_loaded' : walk && Math.floor(this.time.now / 167) % 2 ? 'baoju_walk' : 'baoju_idle';
+      if (p.spr.texture.key !== key) p.spr.setTexture(key);
+      p.spr.setPosition(p.x, p.y - (walk ? Math.abs(Math.sin(this.time.now / 110)) * 3 : 0)).setFlipX(p.faceX < 0).setDepth(p.y);
+    }
     this.soulText.setText(run.souls.length ? '将魂：' + run.souls.map(id => SOULS.find(s => s.id === id).n).join('  ') : '');
     // 怒气
     g.fillStyle(C.ink, 1); g.fillRect(166, 84, 128, 10);
