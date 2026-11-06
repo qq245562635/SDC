@@ -10,6 +10,7 @@ T004 地面（role=ground_base / ground_decal）key 保留序号，例如 env_de
 贴花另带 z、rot（none / discrete / free）、deg（允许角度）、sc（缩放范围）。
   window.GROUND = { base: [key...], decals: [key...] }
 旧的 E01 地砖（env_camp_tile）不再同步。
+T010 宝驹（小毛驴）的待机、行走、满载三张图直接追加，key 为 baoju_idle / baoju_walk / baoju_loaded。
 d = 1080p 显示像素 / 图片像素：一般缩好是 1；大 UI 面板保留原图，d = 0.5。
 key = 文件名去掉类别前缀和 _01，例如 char_hero_idle_01.png → hero_idle。
 游戏里再统一乘 1280/1920，所以图片不会被拉伸。
@@ -74,6 +75,9 @@ def main():
                                     'parts': [key_of(Path(f).name) for f in r['parts']]}
         meta['assets'] = [parts.pop(a['file'], a) for a in meta['assets']] + list(parts.values())
         meta['assets'] += [a for a in m4['assets'] if a.get('role') in GROUND_ROLES]
+    t010 = art / 'delivery' / 'T010' / 'assets.json'
+    if t010.exists():
+        meta['assets'] += json.loads(t010.read_text(encoding='utf-8'))['assets']
 
     OUT.mkdir(parents=True, exist_ok=True)
     for f in OUT.iterdir():
